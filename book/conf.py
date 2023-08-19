@@ -20,6 +20,7 @@ language = 'en'
 extensions = [
     'myst_parser',
     'sphinx_copybutton',
+    'sphinx_design',
 ]
 
 templates_path = ['_templates']
@@ -45,9 +46,9 @@ html_theme_options = {
 # Allows writing ```mermaid instead of ```{mermaid}, keeping compatibility with GitLab
 #myst_fence_as_directive = ['mermaid']
 
-myst_enable_extensions = ['attrs_inline', 'attrs_block']
+myst_enable_extensions = ['attrs_inline', 'attrs_block', 'colon_fence']
 
-#myst_heading_anchors = 4
+myst_heading_anchors = 4
 
 myst_words_per_minute = 150
 
