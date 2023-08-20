@@ -24,7 +24,7 @@ and might prove useful in the future.
 {attribution="GCC Documentation"}
 > A macro is a fragment of code which has been given a name. Whenever the name is used, it is replaced by the contents of the macro.
 
-That's it, you now understand most of what their is to understand about the C preprocessor...
+That's it, you now understand most of what there is to understand about the C preprocessor...
 
 ...but the devil is in the details, so before jumping into the next chapter, we'll review our knowledge of C compilation.
 
@@ -53,11 +53,23 @@ _Source_ : {bdg-link-primary-line}`cppreference <https://en.cppreference.com/w/c
 
 ### Tokenizing
 
-To best undestand what kind of input phase 4 is working with, we must detail what _phase 3_ does (_how_ it does it however is outside the scope of this book)
+To best undestand what kind of input phase 4 is working with, we must detail what _phase 3_ does.
+(However, _how_ it does it is outside the scope of this book)
 
 A tokenizer can be viewed as a black box that
  - takes as input a sequence of character
- - outputs a series of _tokens_, that is a group of characters with a label
+ - outputs a series of _tokens_, where a token is a group of characters with an assigned type.
+
+This particular tokenizer recognizes and can emit the following types of tokens:
+
+| Type | Description | Examples
+| :--- | :---------- | :------
+| inclusion  | the name of a file the content of which shall be pasted | {bdg-secondary-line}`<math.h>` {bdg-secondary-line}`"libft.h"`
+| identifier | a keyword or name (type, variable, function, ...) | {bdg-primary-line}`size_t` {bdg-primary-line}`strlen` {bdg-primary-line}`while`
+| preprocessing number | integer and floating constants | {bdg-danger-line}`42` {bdg-danger-line}`1.61` {bdg-danger-line}`3.E-12`
+| operator or ponctuator |  | {bdg-dark-line}`+` {bdg-dark-line}`{` {bdg-dark-line}`<<=`
+| string or character literal |  | {bdg-success-line}`Nice name` {bdg-success-line}`A`
+| remaining non-whitespace |  |
 
 It's easier to understand with an example:
 
@@ -97,12 +109,13 @@ Phase 3 Output
 A stream of tokens
 :::
 
-```{admonition} Notation
-| Type | Examples
-| :--- | :------
-| identifier | {bdg-primary-line}`size_t` {bdg-primary-line}`strlen` {bdg-primary-line}`while`
-| inclusion | {bdg-secondary-line}`<math.h>` {bdg-secondary-line}`"libft.h"`
-| operator or ponctuator | {bdg-dark-line}`+` {bdg-dark-line}`{` {bdg-dark-line}`<<=`
-| string or character literal | {bdg-success-line}`Nice name` {bdg-success-line}`A`
-| remaining non-whitespace  | {bdg-danger-line}`4`
+```{important}
+The characters `"` and `'` are never emmited as tokens, their presence in the source code affects the type of the token that will be emitted:
+
+| Input | Output
+| :---- | :-----
+| `print(my_name)`{l=C} | {bdg-primary-line}`print` {bdg-dark-line}`(` {bdg-primary-line}`my_name` {bdg-dark-line}`)`
+| `print("my_name")`{l=C} | {bdg-primary-line}`print` {bdg-dark-line}`(` {bdg-success-line}`my_name` {bdg-dark-line}`)`
+| `x = a;`{l=C} | {bdg-primary-line}`x` {material-regular}`space_bar` {bdg-dark-line}`=` {material-regular}`space_bar` {bdg-primary-line}`a` {bdg-dark-line}`;`
+| `x = 'a';`{l=C} | {bdg-primary-line}`x` {material-regular}`space_bar` {bdg-dark-line}`=` {material-regular}`space_bar` {bdg-success-line}`a` {bdg-dark-line}`;`
 ```
