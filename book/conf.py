@@ -3,7 +3,13 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
+import sys
 import os
+
+from sphinx.highlighting import lexers
+
+sys.path.append('../extra/pygment')
+from lexer import CustomLexer as PreproLexer
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -55,3 +61,7 @@ myst_words_per_minute = 150
 #
 
 # mermaid_output_format = 'svg'
+
+# -- Pygment customization ---------------------------------------------------
+
+lexers['prepro'] = PreproLexer()

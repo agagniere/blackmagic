@@ -90,18 +90,27 @@ If adjacent newlines are encountered, a single one may be emitted.
 
 It's easier to understand with an example:
 
-```{code-block} C
+::::{tab-set}
+
+:::{tab-item} Compiler view
+
+```{literalinclude} ../samples/01_hello.c
 :caption: Source file
 :lineno-start: 1
-
-#include <stdio.h>
-
-/* What did you expect ? */
-int main()
-{
-	printf("Hello world\n");
-}
+:language: C
 ```
+:::
+
+:::{tab-item} Preprocessor view
+
+```{literalinclude} ../samples/01_hello.c
+:caption: Source file
+:lineno-start: 1
+:language: prepro
+```
+:::
+
+::::
 
 :::{card}
 Phase 3 input
