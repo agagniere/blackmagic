@@ -7,10 +7,33 @@
 ** Fundamentals
 */
 
-#define C_ARRAY_LENGTH(A) (sizeof(A) / sizeof(*(A)))
+// start array length
+/** The number of elements of a C array */
+#define PREPRO_ARRAY_LENGTH(A) (sizeof(A) / sizeof(*(A)))
+// end array length
 
-#define PP_STR(M)         _PP_STR(M)
-#define PP_CAT(A, B)      _PP_CAT(A, B)
+// start stringize
+/** Evaluates as a string literal from @p TEXT, not evaluating any macro inside */
+#define PREPRO_STRINGIZE_NOEVAL(TEXT) #TEXT
+
+/** Evaluates as a string literal from @p EXPRESSION, after having evaluated its macros */
+#define PREPRO_STRINGIZE(EXPRESSION) PREPRO_STRINGIZE_NOEVAL(EXPRESSION)
+// end stringize
+
+// start concatenate
+/**
+ * Evaluates as a single identifier token, that is @p TEXT1 concatenated with @p TEXT2,
+ * not evaluating any macro inside
+ */
+#define PREPRO_CONCAT_NOEVAL(TEXT1, TEXT2) TEXT1 ## TEXT2
+/**
+ * Evaluates as a single identifier token,
+ * that is the evaluation of @p EXPRESSION1 concatenated with the evaluation of @p EXPRESSION2
+ */
+#define PREPRO_CONCAT(EXPRESSION1, EXPRESSION2) PREPRO_CONCAT_NOEVAL(EXPRESSION1, EXPRESSION2)
+// end concatenate
+
+
 #define PP_MAX(A, B)      (A > B ? A : B)
 #define PP_MIN(A, B)      (A < B ? A : B)
 
