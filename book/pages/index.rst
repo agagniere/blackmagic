@@ -6,5 +6,8 @@ Black Magic
    :start-line: 2
 
 .. toctree::
+   :maxdepth: 2
+
    intro
+   00_compilation
    01_simple
