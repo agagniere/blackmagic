@@ -1,9 +1,9 @@
-# Let's start simple
+# The preprocessor operators
 
-## Concatenation
+We have seen [previously](intro.md#tokenizer) that the input of the preprocessor is a stream of tokens, each with a type.
 
-At the base of many advances tricks lies a very simple principle:
+It should be of no surprise then, that the
 
-Because preprocessing happens before
+## `#`: Create String literals
 
-## String literals
+## `##`: Concatenate 2 tokens

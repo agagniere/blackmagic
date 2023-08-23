@@ -37,19 +37,20 @@ we'll have to learn a bit about what each phase does, and how they are integrate
 ### Phases of translation
 
 The C Standard defines 8 phases of translation, where the output of a phase is the input of the next :
-1. Interpret the encoding of the source files (_e.g._ replacing `\r\n` with `\n`)
+1. Interpret the encoding of the source files (_e.g._ replace `\r\n` with `\n`)
 1. Delete newlines preceded by `\`
-1. {#phase3}
-   Tokensize: group characters that belong together, assiging a "type" to each group. ([More on that later](#tokenizing))
-1. {#phase4}
+3. {#phase3}
+   **Tokensizing**: group characters that belong together, assiging a "type" to each group. ([More on that later](#tokenizing))
+4. {#phase4}
    **Prepocessing**:
-   1. Preprocessor is executed
+   1. The preprocessor is executed
    1. Each file introduced with the `#include`{l=C} directive goes through phases 1 through 4, recursively.
    1. At the end of this phase, all preprocessor directives are removed from the source.
-1. Escape sequences in string literals are interpreted (_e.g._ the 2 adjacent characters `\` `n` are replaced by a single byte with the value 10)
-1. {#phase6}
+1. Escape sequences in string literals are interpreted (_e.g._ the two adjacent characters `\` `n` are replaced by a single byte with the value 10)
+6. {#phase6}
    Adjacent string literals are concatenated
-1. **Compilation**: the tokens are syntactically and semantically analyzed and translated as a translation unit.
+7. {#phase7}
+   **Compilation**: the tokens are syntactically and semantically analyzed and translated as a translation unit.
 1. **Linking**: Translation units and library components needed to satisfy external references are collected into a program image which contains information needed for execution in its execution environment (the OS).
 
 _Source_ : {bdg-link-primary-line}`cppreference <https://en.cppreference.com/w/c/language/translation_phases>`
@@ -59,6 +60,30 @@ The word "preprocessing" can be used more generally to refer to all the steps be
 
 In the GNU toolchain, the `cpp` ("The C Preprocessor") program handles phases 1 to 4.
 ```
+
+:::{tip}
+It is possible to ask the compiler to only do specific phases :
+
+```mermaid
+sequenceDiagram
+    box Preprocessing
+    participant p1 as Phases<br/>1 to 3
+    participant p4 as Phase 4:<br/>Preprocessor
+    participant p5 as Phases<br/>5 and 6
+    end
+    participant p7 as Phase 7:<br/>Compilation
+    participant p8 as Phase 8:<br/>Linking
+
+    note over p1, p8: cc source.c -o executable
+    note over p1, p7: cc -c source.c -o compiled.o
+    note over p1, p4: cc -E source.c -o processed.i
+    note over p1, p4: cpp source.c -o processed.i
+    note over p5, p7: cc -c processed.i -o compiled.o
+    note over p8: cc compiled.o -o executable
+    note over p8: ld compiled.o -o executable
+    note over p5, p8: cc processed.i -o executable
+```
+:::
 
 ### Tokenizing
 
@@ -148,5 +173,21 @@ The characters `"` and `'` are never emmited as tokens, their presence in the so
 ### Preprocessor
 
 Let's recap what we have learned so far about the C preprocessor:
- - It is a step
+ - It is a preliminary compilation step, happening before the compilation proper ([phase 7](phase7))
  - Its input is a stream of tokens
+
+What that  means, is that the preprocessor manipulates text, not values:
+ - It cannot use the result of expressions like `1 + 3`{l=C}, `sizeof(int)`{l=C}, or `strlen("Hello")`{l=C}[^strlen] that are evaluated during [phase 7](phase7).
+ - What it _can_ do is more akin to string manipulation that math: it is meant to modify / generate code, not to do computation
+
+[^strlen]: While in theory not different from other functions, `strlen` _may_ be computed at compile-time in practice, as an inlined compiler built-in, when its input is a string literal.
+
+#### Directives
+
+As mentioned in the intro, interacting with the preprocessor is done by starting a line with the `#` character, followed by a preprocessing directive:
+
+`#include <filename>`{l=C}
+:
+	1. Look for a file called _filename_ in folders provided to the preprocessor[^include] with the `-I` flag
+
+[^include]: Here we are refering to the preprocessor program, often called `cpp`, that handles phases 1 to 4. More often than not it is called by the compiler, with the relevant flags being forwared as-is.

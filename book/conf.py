@@ -27,6 +27,7 @@ extensions = [
     'myst_parser',
     'sphinx_copybutton',
     'sphinx_design',
+    'sphinxcontrib.mermaid'
 ]
 
 templates_path = ['_templates']
@@ -50,9 +51,9 @@ html_theme_options = {
 # -- Myst Parser Options -----------------------------------------------------
 
 # Allows writing ```mermaid instead of ```{mermaid}, keeping compatibility with GitLab
-#myst_fence_as_directive = ['mermaid']
+myst_fence_as_directive = ['mermaid']
 
-myst_enable_extensions = ['attrs_inline', 'attrs_block', 'colon_fence']
+myst_enable_extensions = ['attrs_inline', 'attrs_block', 'colon_fence', 'deflist']
 
 myst_heading_anchors = 4
 
