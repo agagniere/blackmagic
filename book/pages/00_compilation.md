@@ -10,7 +10,7 @@ The C Standard defines 8 phases of translation, where the output of a phase is t
 1. Interpret the encoding of the source files (_e.g._ replace `\r\n` with `\n`)
 1. Delete newlines preceded by `\`
 3. {#phase3}
-   **Tokensizing**: group characters that belong together, assiging a "type" to each group. ([More on that later](#tokenizing))
+   **Tokenizing**: group characters that belong together, assiging a "type" to each group. ([More on that later](#tokenizing))
 4. {#phase4}
    **Preprocessing**:
    1. The preprocessor is executed
@@ -66,16 +66,15 @@ A tokenizer can be viewed as a black box that
 
 This particular tokenizer recognizes and can emit the following types of tokens:
 
-| Type | Description | Examples
-| :--- | :---------- | :------
-| inclusion  | the name of a file the content of which shall be pasted | {bdg-secondary-line}`<math.h>` {bdg-secondary-line}`"libft.h"`
-| identifier | a keyword or name (type, variable, function, ...) | {bdg-primary-line}`size_t` {bdg-primary-line}`strlen` {bdg-primary-line}`while`
-| preprocessing number | integer and floating constants | {bdg-danger-line}`42` {bdg-danger-line}`1.61` {bdg-danger-line}`3.E-12`
-| operator or ponctuator |  | {bdg-dark-line}`+` {bdg-dark-line}`{` {bdg-dark-line}`<<=`
-| string or character literal |  | {bdg-success-line}`Nice name` {bdg-success-line}`A`
-| remaining non-whitespace |  |
-| space | | {material-regular}`space_bar`
-| newline | | {material-regular}`keyboard_return`
+| Type                        | Description                                             | Examples                                                                        |
+|:----------------------------|:--------------------------------------------------------|:--------------------------------------------------------------------------------|
+| inclusion                   | the name of a file the content of which shall be pasted | {bdg-secondary-line}`<math.h>` {bdg-secondary-line}`"libft.h"`                  |
+| identifier                  | a keyword or name (type, variable, function, ...)       | {bdg-primary-line}`size_t` {bdg-primary-line}`strlen` {bdg-primary-line}`while` |
+| preprocessing number        | integer and floating constants                          | {bdg-danger-line}`42` {bdg-danger-line}`1.61` {bdg-danger-line}`3.E-12`         |
+| operator or ponctuator      |                                                         | {bdg-dark-line}`+` {bdg-dark-line}`{` {bdg-dark-line}`<<=`                      |
+| string or character literal |                                                         | {bdg-success-line}`Nice name` {bdg-success-line}`A`                             |
+| space                       |                                                         | {material-regular}`space_bar`                                                   |
+| newline                     |                                                         | {material-regular}`keyboard_return`                                             |
 
 ```{note}
 When a comment is encountered, a single space ({material-regular}`space_bar`) is emitted.
@@ -86,7 +85,6 @@ If adjacent newlines are encountered, a single one may be emitted.
 It's easier to understand with an example:
 
 ::::{tab-set}
-
 :::{tab-item} Compiler view
 
 ```{literalinclude} ../samples/01_hello.c
@@ -95,7 +93,6 @@ It's easier to understand with an example:
 :language: C
 ```
 :::
-
 :::{tab-item} Preprocessor view
 
 ```{literalinclude} ../samples/01_hello.c
@@ -104,7 +101,6 @@ It's easier to understand with an example:
 :language: prepro
 ```
 :::
-
 ::::
 
 :::{card}
@@ -131,13 +127,12 @@ A stream of tokens
 
 ```{important}
 The characters `"` and `'` are never emmited as tokens, their presence in the source code affects the type of the token that will be emitted:
-
-| Input | Output
-| :---- | :-----
-| `print(my_name)`{l=C} | {bdg-primary-line}`print` {bdg-dark-line}`(` {bdg-primary-line}`my_name` {bdg-dark-line}`)`
-| `print("my_name")`{l=C} | {bdg-primary-line}`print` {bdg-dark-line}`(` {bdg-success-line}`my_name` {bdg-dark-line}`)`
-| `x = a;`{l=C} | {bdg-primary-line}`x` {material-regular}`space_bar` {bdg-dark-line}`=` {material-regular}`space_bar` {bdg-primary-line}`a` {bdg-dark-line}`;`
-| `x = 'a';`{l=C} | {bdg-primary-line}`x` {material-regular}`space_bar` {bdg-dark-line}`=` {material-regular}`space_bar` {bdg-success-line}`a` {bdg-dark-line}`;`
+| Input                   | Output                                                                                                                                        |
+|:------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------|
+| `print(my_name)`{l=C}   | {bdg-primary-line}`print` {bdg-dark-line}`(` {bdg-primary-line}`my_name` {bdg-dark-line}`)`                                                   |
+| `print("my_name")`{l=C} | {bdg-primary-line}`print` {bdg-dark-line}`(` {bdg-success-line}`my_name` {bdg-dark-line}`)`                                                   |
+| `x = a;`{l=C}           | {bdg-primary-line}`x` {material-regular}`space_bar` {bdg-dark-line}`=` {material-regular}`space_bar` {bdg-primary-line}`a` {bdg-dark-line}`;` |
+| `x = 'a';`{l=C}         | {bdg-primary-line}`x` {material-regular}`space_bar` {bdg-dark-line}`=` {material-regular}`space_bar` {bdg-success-line}`a` {bdg-dark-line}`;` |
 ```
 
 ## Preprocessor
@@ -156,18 +151,60 @@ What that  means, is that the preprocessor manipulates text, not values:
 
 As mentioned in the intro, interacting with the preprocessor is done by starting a line with the `#` character, followed by a preprocessing directive:
 
-`#include <filename>`{l=C}
-:
-	1. Look for a file called _filename_ in folders provided to the preprocessor[^include] with the `-I` flag
+#### File inclusion
+
+`#include <`{l=C} _filename_ `>`{l=C}
+: Look for a file called _filename_ in folders provided to the preprocessor[^include] with the `-I` flag, and in standard folders configured at compiler installation
 
 `#include "`{l=c} _filename_ `"`{l=C}
 : Same as above, but look into the current directory first
 
+_Source_ : {bdg-link-primary-line}`cppreference <https://en.cppreference.com/w/c/preprocessor/include>`
 
-`#if` _condition_ _code A_ `#else` _code B_ `#endif`
-: Blabla
+:::{tip}
+To list the folders where you compiler's preprocessor looks for files, you can execute the following command:
+```bash
+$(cc -print-prog-name=cpp) -v < /dev/null
+```
+```{code-block} shell-session
+:caption: Sample output
+:emphasize-lines: 1, 10
 
-`#ifdef MACRO`{l=C}
-: Equivalent to `#if defined(MACRO)`{l=C}, see
+$ `cc -print-prog-name=cpp` -v < /dev/null
+ ...
+ #include "..." search starts here:
+ #include <...> search starts here:
+  /usr/lib/gcc/x86_64-linux-gnu/11/include
+  /usr/local/include
+  /usr/include/x86_64-linux-gnu
+  /usr/include
+ ...
+$ `cc -print-prog-name=cpp` -I ~/mylib/include -iquote ./include -v < /dev/null
+ ...
+ #include "..." search starts here:
+  ./include
+ #include <...> search starts here:
+  /home/user/mylib/include
+  /usr/lib/gcc/x86_64-linux-gnu/11/include
+  /usr/local/include
+  /usr/include/x86_64-linux-gnu
+  /usr/include
+ ...
+```
+_Source_: {bdg-link-secondary-line}`stack overflow <https://stackoverflow.com/questions/344317/where-does-gcc-look-for-c-and-c-header-files>`
+:::
+
+#### Conditional inclusion
+
+{#if}
+`#if`{l=C} _condition_ _A_ `#else`{l=C} _B_ `#endif`{l=C}
+: nnnn
+
+`#ifdef`{l=C} _MACRO_
+: Equivalent to `#if defined(MACRO)`{l=C}, see [`#if`{l=C}](if)
+
+`#ifndef`{l=C} _MACRO_
+: Equivalent to `#if !defined(MACRO)`{l=C}, see [`#if`{l=C}](if)
+
 
 [^include]: Here we are refering to the preprocessor program, often called `cpp`, that handles phases 1 to 4. More often than not it is called by the compiler, with the relevant flags being forwared as-is.
