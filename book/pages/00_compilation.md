@@ -25,14 +25,19 @@ The C Standard defines 8 phases of translation, where the output of a phase is t
 
 _Source_ : {bdg-link-primary-line}`cppreference <https://en.cppreference.com/w/c/language/translation_phases>`
 
-```{note}
+:::{dropdown} Terminology
+:icon: info
+:color: primary
+
 The word "preprocessing" can be used more generally to refer to all the steps before compilation (phases 1 to 6).
 
 In the GNU toolchain, the `cpp` ("The C Preprocessor") program handles phases 1 to 4.
-```
+:::
 
-:::{tip}
-It is possible to ask the compiler to only do specific phases :
+:::{dropdown} It is possible to ask the compiler to only do specific phases
+:open:
+:icon: light-bulb
+:color: success
 
 ```mermaid
 sequenceDiagram

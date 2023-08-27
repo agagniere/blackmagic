@@ -1,11 +1,11 @@
 # Preprocessor
 
 Let's recap what we have learned so far about the C preprocessor:
- - It is a preliminary compilation step, happening before the compilation proper ([phase 7](00_compilation.md#phase7))
+ - It is a preliminary compilation step, happening before the compilation proper ([phase 7](phase7))
  - Its input is a stream of tokens
 
 What that  means, is that the preprocessor manipulates text, not values:
- - It cannot use the result of expressions like `1 + 3`{l=C}, `sizeof(int)`{l=C}, or `strlen("Hello")`{l=C}[^strlen] that are evaluated during [phase 7](00_compilation.md#phase7).
+ - It cannot use the result of expressions like `1 + 3`{l=C}, `sizeof(int)`{l=C}, or `strlen("Hello")`{l=C}[^strlen] that are evaluated during [phase 7](phase7).
  - What it _can_ do is more akin to string manipulation that math: it is meant to modify / generate code, not to do computation
 
 [^strlen]: While in theory not different from other functions, `strlen` _may_ be computed at compile-time in practice, as an inlined compiler built-in, when its input is a string literal.
@@ -24,10 +24,10 @@ As mentioned in the intro, interacting with the preprocessor is done by starting
 
 _Source_ : {bdg-link-primary-line}`cppreference <https://en.cppreference.com/w/c/preprocessor/include>`
 
-::::{dropdown} Which directories does my compiler looks into ?
+::::{dropdown} Which directories does my compiler look into ?
 :color: success
 :icon: light-bulb
-:animate: fade-in
+:animate: fade-in-slide-down
 
 To list the folders where you compiler's preprocessor looks for files, you can execute the following command:
 ```bash
@@ -63,14 +63,31 @@ _Source_: {bdg-link-secondary-line}`stack overflow <https://stackoverflow.com/qu
 
 ### Conditional inclusion
 
-{#if}
 `#if`{l=C} _condition_ _A_ `#else`{l=C} _B_ `#endif`{l=C}
-: nnnn
+: Evaluates _condition_ (so at preprocessor-time), then replaces the whole `#if`{l=C}...`#endif`{l=C} block with _A_ or _B_ depending on the result.
 
 `#ifdef`{l=C} _MACRO_
-: Equivalent to `#if defined(MACRO)`{l=C}, see [`#if`{l=C}](if)
+: Equivalent to `#if defined(MACRO)`{l=C}
 
 `#ifndef`{l=C} _MACRO_
-: Equivalent to `#if !defined(MACRO)`{l=C}, see [`#if`{l=C}](if)
+: Equivalent to `#if !defined(MACRO)`{l=C}
+
+`#elif`{l=C} condition2 _B_ `#endif`{l=C}
+: Convenient way to chain multiple conditions without nesting, equivalent to:
+  ```C
+  #else
+  #  if condition2
+  B
+  #  endif
+  #endif
+  ```
+
+`#elifdef`{l=C} _MACRO_
+: Added in C23 for constistency, equivalent to `#elif defined(MACRO)`{l=C}
+
+`#elifndef`{l=C} _MACRO_
+: Added in C23 for constistency, equivalent to `#elif !defined(MACRO)`{l=C}
+
+_Source_: {bdg-link-primary-line}`cppreference <https://en.cppreference.com/w/c/preprocessor/conditional>`
 
 [^include]: Here we are refering to the preprocessor program, often called `cpp`, that handles phases 1 to 4. More often than not it is called by the compiler, with the relevant flags being forwared as-is.

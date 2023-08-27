@@ -127,6 +127,6 @@ $(SphinxMan) $(SphinxHtml): $(SphinxFolder)/%: $(Pages) $(SourceCode) Makefile c
 	PROJECT_VERSION=$(Version) $(Sphinx) -M $(*D) "$(SourceFolder)" "$(SphinxFolder)" $(SphinxOptions) $(O)
 
 #
-#$(SphinxPdf): $(Pages) $(SourceCode) Makefile conf.py | $(VenvActivate)
-#	test -z "$(VIRTUAL_ENV)" && . $|
-#	PROJECT_VERSION=$(Version) $(Sphinx) -M latexpdf "$(SourceFolder)" "$(SphinxFolder)" $(SphinxOptions) $(O)
+$(SphinxPdf): $(Pages) $(SourceCode) Makefile conf.py | $(VenvActivate)
+	test -z "$(VIRTUAL_ENV)" && . $|
+	PROJECT_VERSION=$(Version) $(Sphinx) -M latexpdf "$(SourceFolder)" "$(SphinxFolder)" $(SphinxOptions) $(O)
