@@ -8,6 +8,6 @@ Black Magic
 .. toctree::
    :maxdepth: 2
 
-   intro
    00_compilation
-   01_simple
+   01_preprocessor
+   02_simple
