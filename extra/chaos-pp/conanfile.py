@@ -1,22 +1,28 @@
-from conans import ConanFile
+import os
+from conan import ConanFile
+from conan.tools.files import copy
+from conan.tools.scm import Git
 
 class ChaosConan(ConanFile):
-    name = "chaos-pp"
-    version = "master"
-    license = "BSL-1.0"
-    author = "Paul Mensonides"
-    url = "https://github.com/rofl0r/chaos-pp"
-    description = "chaos preprocessor library. this is what boost preprocessor derived from."
-    topics = ("header-only", "preprocessor", "macros")
+    name = 'chaos-pp'
+    version = 'master'
+    description = 'chaos preprocessor library. this is what boost preprocessor derived from.'
+    license = 'BSL-1.0'
+    author = 'Paul Mensonides'
+    topics = ('header-only', 'preprocessor', 'macros')
+    url = 'https://github.com/rofl0r/chaos-pp'
     no_copy_source = True
 
     def source(self):
-        self.run(f"git clone {self.url} .")
+        Git(self).clone(self.url, '.')
 
     def package(self):
-        self.copy("*", src = "chaos", dst = "include/chaos")
-        self.copy('README')
-        self.copy('LICENSE')
+        copy(self, '*.h',
+             os.path.join(self.source_folder, 'chaos'),
+             os.path.join(self.package_folder, 'include', 'chaos'))
+        copy(self, 'README', self.source_folder, self.package_folder)
+        copy(self, 'LICENSE', self.source_folder, self.package_folder)
 
-    def package_id(self):
-        self.info.header_only()
+    def package_info(self):
+        self.cpp_info.bindirs = []
+        self.cpp_info.libdirs = []
