@@ -10,19 +10,26 @@ What that  means, is that the preprocessor manipulates text, not values:
 
 [^strlen]: While in theory not different from other functions, `strlen` _may_ be computed at compile-time in practice, as an inlined compiler built-in, when its input is a string literal.
 
-## Directives
+Interacting with the preprocessor is done by starting a line with the `#` character, followed by a preprocessing directive.
 
-As mentioned in the intro, interacting with the preprocessor is done by starting a line with the `#` character, followed by a preprocessing directive:
+## Directives
 
 ### File inclusion
 
 `#include <`{l=C} _filename_ `>`{l=C}
-: Look for a file called _filename_ in folders provided to the preprocessor[^include] with the `-I` flag, and in standard folders configured at compiler installation
+: Look for a file called _filename_ in folders provided to the preprocessor[^include] with the `-I` flag, and in standard folders configured at compiler installation.
+  Once the file is found, its content is pasted verbatim in place of the `#include`{l=C} line
+
+[^include]: Here we are refering to the preprocessor program, often called `cpp`, that handles phases 1 to 4. More often than not it is called by the compiler, with the relevant flags being forwared as-is.
 
 `#include "`{l=c} _filename_ `"`{l=C}
 : Same as above, but look into the current directory first
 
 _Source_ : {bdg-link-primary-line}`cppreference <https://en.cppreference.com/w/c/preprocessor/include>`
+
+```{note}
+No assumption is made about the content of the included file, it technically doesn't have to be valid C, or even code at all...
+```
 
 ::::{dropdown} Which directories does my compiler look into ?
 :color: success
@@ -61,6 +68,16 @@ $ `cc -print-prog-name=cpp` -I ~/mylib/include -iquote ./include -v < /dev/null
 _Source_: {bdg-link-secondary-line}`stack overflow <https://stackoverflow.com/questions/344317/where-does-gcc-look-for-c-and-c-header-files>`
 ::::
 
+### Macros
+
+`#define` _identifier_ _replacement_
+: After this line, anytime _identifier_ appears in the source code, it will be replaced by _replacement_
+
+`#define` _identifier_
+: Equivalent to `#define identifier 1`{l=C}
+
+_Source_: {bdg-link-primary-line}`cppreference <https://en.cppreference.com/w/c/preprocessor/replace>`
+
 ### Conditional inclusion
 
 `#if`{l=C} _condition_ _A_ `#else`{l=C} _B_ `#endif`{l=C}
@@ -90,4 +107,31 @@ _Source_: {bdg-link-secondary-line}`stack overflow <https://stackoverflow.com/qu
 
 _Source_: {bdg-link-primary-line}`cppreference <https://en.cppreference.com/w/c/preprocessor/conditional>`
 
-[^include]: Here we are refering to the preprocessor program, often called `cpp`, that handles phases 1 to 4. More often than not it is called by the compiler, with the relevant flags being forwared as-is.
+::::{dropdown} How is the condition evaluated ?
+:icon: alert
+:color: secondary
+:animate: fade-in-slide-down
+
+The `#if`{l=C} block needs to be resolved at preprocessor-time, so its condition is evaluated with limited capabilities:
+- the preprocessor only knows macros
+- all unknown identifiers are replaced with `0`{l=C}
+
+:::{danger}
+It means that a typo is silently ignored
+:::
+
+::::
+
+## The operators
+
+We have seen [previously](00_compilation.md#tokenizing) that the input of the preprocessor is a stream of tokens, each with a type.
+
+It should be of no surprise then, that the 2 preprocessor operators are about manipulating tokens.
+
+`#`
+: Set token type to string literal
+: {bdg-primary-line}`name` {octicon}`arrow-right` {bdg-success-line}`name`
+
+`##`
+: Concatenate 2 tokens
+: {bdg-primary-line}`some` {bdg-primary-line}`thing` {octicon}`arrow-right` {bdg-primary-line}`something`
