@@ -9,9 +9,9 @@ SourceFolder  := pages
 SampleFolder  := samples
 
 # Input Files
-Pages         != find $(SourceFolder) -type f \( -name '*.md' -o -name '*.rst' \)
+Pages         := $(shell find $(SourceFolder) -type f \( -name '*.md' -o -name '*.rst' \))
 Pages         += ../README.md
-SourceCode    != find $(SampleFolder) ../include -type f -name '*.[ch]'
+SourceCode    := $(shell find $(SampleFolder) ../include -type f -name '*.[ch]')
 
 # Generated Folders
 SphinxFolder  := sphinx
@@ -29,12 +29,15 @@ SphinxPdf     := $(SphinxFolder)/latex/blackmagic.pdf
 
 # Samples are small programs whose output we want to include in the documentation
 Samples      := $(wildcard $(SampleFolder)/*.c)
+ProcessedSamples := $(Samples:$(SampleFolder)/%.c=$(PreproFolder)/%.i)
 #Executables  := $(Samples:$(SampleFolder)/%.c=$(ExecFolder)/%.exe)
 #Outputs      := $(Samples:$(SampleFolder)/%.c=$(OutputFolder)/%.txt)
 
 #CPPFLAGS     +=
 #LDFLAGS      +=
 #LDLIBS       +=
+
+OPEN ?= xdg-open
 
 SphinxOptions ?= -c . -n
 Sphinx        ?= sphinx-build
@@ -77,7 +80,7 @@ man: $(SphinxMan) ## Generate and open the documentation in the terminal
 pdf: $(SphinxPdf) ## Generate and open the documentation as a PDF
 
 doxygen_html html pdf:
-	xdg-open $< 2>/dev/null
+	$(OPEN) $< 2>/dev/null
 
 .PHONY: doxygen_html html man pdf
 
@@ -103,6 +106,12 @@ env: $(VenvActivate) ## Install the python virtual environment with dependencies
 $(DoxygenHtml): Doxyfile.cfg $(Pages) $(SourceCode) Makefile
 	PROJECT_VERSION=$(Version) doxygen $<
 
+$(ProcessedSamples): $(PreproFolder)/%.i: $(SampleFolder)/%.c | $(PreproFolder)
+	temp="$(@D)/_raw_$(@F)" ; \
+	$(CC) -E $(CPPFLAGS) $< -o "$$temp" ; \
+	discard=$$(grep "$<" "$$temp" -n | cut -d':' -f1 | tail -1) ; \
+	tail +$$(( $$discard + 1 )) "$$temp" | clang-format > $@
+
 # Compile code samples
 #$(Executables): $(ExecFolder)/%.exe: $(SampleFolder)/%.c | $(ExecFolder)
 #	$(CC) $(CFLAGS) $(CPPFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
@@ -122,7 +131,7 @@ $(VenvActivate): requirements.txt
 	pip install --requirement $<
 
 # Run sphinx to generate documentation
-$(SphinxMan) $(SphinxHtml): $(SphinxFolder)/%: $(Pages) $(SourceCode) Makefile conf.py | $(VenvActivate)
+$(SphinxMan) $(SphinxHtml): $(SphinxFolder)/%: $(Pages) $(SourceCode) $(ProcessedSamples) Makefile conf.py | $(VenvActivate)
 	test -z "$(VIRTUAL_ENV)" && . $|
 	PROJECT_VERSION=$(Version) $(Sphinx) -M $(*D) "$(SourceFolder)" "$(SphinxFolder)" $(SphinxOptions) $(O)
 

@@ -6,7 +6,7 @@ Let's recap what we have learned so far about the C preprocessor:
 
 What that  means, is that the preprocessor manipulates text, not values:
  - It cannot use the result of expressions like `1 + 3`{l=C}, `sizeof(int)`{l=C}, or `strlen("Hello")`{l=C}[^strlen] that are evaluated during [phase 7](phase7).
- - What it _can_ do is more akin to string manipulation that math: it is meant to modify / generate code, not to do computation
+ - What it _can_ do is more akin to string manipulation than math: it is meant to modify / generate code, not to do computation
 
 [^strlen]: While in theory not different from other functions, `strlen` _may_ be computed at compile-time in practice, as an inlined compiler built-in, when its input is a string literal.
 
@@ -70,10 +70,10 @@ _Source_: {bdg-link-secondary-line}`stack overflow <https://stackoverflow.com/qu
 
 ### Macros
 
-`#define` _identifier_ _replacement_
+`#define`{l=C} _identifier_ _replacement_
 : After this line, anytime _identifier_ appears in the source code, it will be replaced by _replacement_
 
-`#define` _identifier_
+`#define`{l=C} _identifier_
 : Equivalent to `#define identifier 1`{l=C}
 
 _Source_: {bdg-link-primary-line}`cppreference <https://en.cppreference.com/w/c/preprocessor/replace>`
@@ -113,11 +113,31 @@ _Source_: {bdg-link-primary-line}`cppreference <https://en.cppreference.com/w/c/
 :animate: fade-in-slide-down
 
 The `#if`{l=C} block needs to be resolved at preprocessor-time, so its condition is evaluated with limited capabilities:
-- the preprocessor only knows macros
+- the preprocessor only knows the value of macros
 - all unknown identifiers are replaced with `0`{l=C}
 
+Said differently, anything that is not a macro is replaced by `0`{l=C}, even if it has a value known at compile time.
+
+For instance, it is not possible to compare the value of an enumerator in the condition of an `#if`{l=C}:
+```C
+enum log_level
+{
+	log_level_error,
+	log_level_warning,
+	log_level_info,
+	log_level_debug
+};
+
+#if LOG_LEVEL >= log_level_info
+# define log_info(...) log_log(log_level_info, __VA_ARGS__)
+#else
+# define log_info(...)
+#endif
+```
+will compare `LOG_LEVEL` to 0 and not to 2.
+
 :::{danger}
-It means that a typo is silently ignored
+It means that typos are silently ignored.
 :::
 
 ::::

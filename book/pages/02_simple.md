@@ -1,9 +1,31 @@
-# The preprocessor operators
+# Getting started with macros
 
-We have seen [previously](intro.md#tokenizer) that the input of the preprocessor is a stream of tokens, each with a type.
+## First steps: using existing macros
 
-It should be of no surprise then, that the
+Before defining our own macros, let's see how they are used.
 
-## `#`: Create String literals
+The most basic usage of macros is constants:
+::::{tab-set}
 
-## `##`: Concatenate 2 tokens
+:::{tab-item} Compiler view
+```{literalinclude} ../samples/02_constants.c
+:language: C
+:tab-width: 4
+```
+:::
+
+:::{tab-item} Preprocessor view
+```{literalinclude} ../samples/02_constants.c
+:language: prepro
+:tab-width: 4
+```
+:::
+
+:::{tab-item} Preprocessed
+```{literalinclude} ../preprocessed/02_constants.i
+:language: C
+:start-at: 'int main'
+:tab-width: 4
+```
+:::
+::::
