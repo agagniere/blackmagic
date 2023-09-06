@@ -113,31 +113,14 @@ _Source_: {bdg-link-primary-line}`cppreference <https://en.cppreference.com/w/c/
 :animate: fade-in-slide-down
 
 The `#if`{l=C} block needs to be resolved at preprocessor-time, so its condition is evaluated with limited capabilities:
-- the preprocessor only knows the value of macros
-- all unknown identifiers are replaced with `0`{l=C}
+- only integer literals and macros that evaluate to an integer literal can be used in the condition
+- all identifiers unknown to the preprocessor are replaced with `0`{l=C}
 
-Said differently, anything that is not a macro is replaced by `0`{l=C}, even if it has a value known at compile time.
-
-For instance, it is not possible to compare the value of an enumerator in the condition of an `#if`{l=C}:
-```C
-enum log_level
-{
-	log_level_error,
-	log_level_warning,
-	log_level_info,
-	log_level_debug
-};
-
-#if LOG_LEVEL >= log_level_info
-# define log_info(...) log_log(log_level_info, __VA_ARGS__)
-#else
-# define log_info(...)
-#endif
-```
-will compare `LOG_LEVEL` to 0 and not to 2.
+Said differently:
+anything that is not a macro is replaced by `0`{l=C}, even if it has a value known at compile time (_e.g._ comparing to an enumerator is actually comparing to 0).
 
 :::{danger}
-It means that typos are silently ignored.
+It means that typos are silently replaced by `0`{l=C}
 :::
 
 ::::

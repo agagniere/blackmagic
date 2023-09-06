@@ -1,0 +1,93 @@
+﻿---
+Language: Cpp
+LineEnding: LF
+
+# ----- Tabs -----
+TabWidth: '4'
+UseTab: ForIndentation
+IndentCaseLabels: 'false'
+IndentPPDirectives: AfterHash
+IndentWidth: '4'
+IndentWrappedFunctionNames: 'false'
+
+# ----- Line length -----
+ColumnLimit: '80'
+PenaltyBreakAssignment: '20'
+PenaltyBreakBeforeFirstCallParameter: '40'
+PenaltyBreakComment: '10'
+PenaltyBreakFirstLessLess: '15'
+PenaltyBreakString: '30'
+PenaltyExcessCharacter: '1'
+PenaltyReturnTypeOnItsOwnLine: '15'
+ReflowComments: 'false'
+
+# ----- Macros -----
+AlignConsecutiveMacros: 'true'
+AttributeMacros: []
+ForEachMacros: []
+IfMacros: []
+MacroBlockBegin: "^[sc]crBegin"
+MacroBlockEnd: "^[sc]cr(Finish|End)"
+# StatementMacros:[]
+
+# ----- Misc -----
+AlignAfterOpenBracket: 'Align'
+AlignConsecutiveAssignments: 'true'
+AlignConsecutiveDeclarations: 'true'
+AlignEscapedNewlines: Left
+AlignOperands: 'true'
+AlignTrailingComments: 'true'
+AllowAllArgumentsOnNextLine: 'true'
+AllowAllConstructorInitializersOnNextLine: 'true'
+AllowAllParametersOfDeclarationOnNextLine: 'false'
+AllowShortBlocksOnASingleLine: 'false'
+AllowShortCaseLabelsOnASingleLine: 'true'
+AllowShortLoopsOnASingleLine: 'false'
+BinPackArguments: 'false'
+BinPackParameters: 'false'
+BreakBeforeBraces: Allman
+BreakBeforeTernaryOperators: 'true'
+BreakConstructorInitializers: AfterColon
+BreakInheritanceList: AfterColon
+CompactNamespaces: 'true'
+ConstructorInitializerAllOnOneLineOrOnePerLine: 'true'
+ContinuationIndentWidth: '0'
+Cpp11BracedListStyle: 'true'
+DerivePointerAlignment: 'false'
+FixNamespaceComments: 'true'
+KeepEmptyLinesAtTheStartOfBlocks: 'false'
+MaxEmptyLinesToKeep: '1'
+NamespaceIndentation: None
+PointerAlignment: 'Left'
+SeparateDefinitionBlocks: Always
+SortUsingDeclarations: 'true'
+SpaceAfterCStyleCast: 'false'
+SpaceAfterLogicalNot: 'false'
+SpaceAfterTemplateKeyword: 'false'
+SpaceBeforeAssignmentOperators: 'true'
+SpaceBeforeCpp11BracedList: 'false'
+SpaceBeforeCtorInitializerColon: 'true'
+SpaceBeforeInheritanceColon: 'true'
+SpaceBeforeParens: ControlStatements
+SpaceBeforeRangeBasedForLoopColon: 'true'
+SpaceInEmptyParentheses: 'false'
+SpacesBeforeTrailingComments: '1'
+SpacesInAngles: 'false'
+SpacesInCStyleCastParentheses: 'false'
+SpacesInContainerLiterals: 'false'
+SpacesInParentheses: 'false'
+SpacesInSquareBrackets: 'false'
+
+
+# ----- Includes -----
+SortIncludes: 'true'
+IncludeBlocks: Regroup
+IncludeIsMainRegex: '$'
+IncludeCategories:
+  - Regex:           '^<(assert|complex|w?ctype|errno|float|inttypes|limits|locale|(tg)?math|signal|string|threads|time|[uw]char|.*std.*)\.h>$'
+    Priority:        9
+  - Regex:           '^<'
+    Priority:        5
+  - Regex:           '^"'
+    Priority:        1
+...
