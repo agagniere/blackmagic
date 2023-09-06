@@ -1,6 +1,6 @@
 ﻿---
 Language: Cpp
-LineEnding: LF
+# LineEnding: LF
 
 # ----- Tabs -----
 TabWidth: '4'
@@ -23,11 +23,11 @@ ReflowComments: 'false'
 
 # ----- Macros -----
 AlignConsecutiveMacros: 'true'
-AttributeMacros: []
-ForEachMacros: []
-IfMacros: []
-MacroBlockBegin: "^[sc]crBegin"
-MacroBlockEnd: "^[sc]cr(Finish|End)"
+# AttributeMacros: []
+# ForEachMacros: []
+# IfMacros: []
+# MacroBlockBegin: "^[sc]crBegin"
+# MacroBlockEnd: "^[sc]cr(Finish|End)"
 # StatementMacros:[]
 
 # ----- Misc -----
@@ -77,7 +77,6 @@ SpacesInCStyleCastParentheses: 'false'
 SpacesInContainerLiterals: 'false'
 SpacesInParentheses: 'false'
 SpacesInSquareBrackets: 'false'
-
 
 # ----- Includes -----
 SortIncludes: 'true'

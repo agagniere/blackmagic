@@ -37,7 +37,8 @@ ProcessedSamples := $(Samples:$(SampleFolder)/%.c=$(PreproFolder)/%.i)
 #LDFLAGS      +=
 #LDLIBS       +=
 
-OPEN ?= xdg-open
+Open        ?= xdg-open
+ClangFormat ?= clang-format
 
 SphinxOptions ?= -c . -n
 Sphinx        ?= sphinx-build
@@ -80,7 +81,7 @@ man: $(SphinxMan) ## Generate and open the documentation in the terminal
 pdf: $(SphinxPdf) ## Generate and open the documentation as a PDF
 
 doxygen_html html pdf:
-	$(OPEN) $< 2>/dev/null
+	$(Open) $< 2>/dev/null
 
 .PHONY: doxygen_html html man pdf
 
@@ -110,7 +111,7 @@ $(ProcessedSamples): $(PreproFolder)/%.i: $(SampleFolder)/%.c | $(PreproFolder)
 	temp="$(@D)/_raw_$(@F)" ; \
 	$(CC) -E $(CPPFLAGS) $< -o "$$temp" ; \
 	discard=$$(grep "$<" "$$temp" -n | cut -d':' -f1 | tail -1) ; \
-	tail +$$(( $$discard + 1 )) "$$temp" | clang-format > $@
+	tail +$$(( $$discard + 1 )) "$$temp" | $(ClangFormat) > $@
 
 # Compile code samples
 #$(Executables): $(ExecFolder)/%.exe: $(SampleFolder)/%.c | $(ExecFolder)
