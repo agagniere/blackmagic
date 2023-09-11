@@ -1,6 +1,5 @@
 #include <unistd.h> // STDERR_FILENO
-#include <stdlib.h> // EXIT_
-/* Source code starts here: */
+#include <stdlib.h> // EXIT_*
 
 int main(int arg_count, char** arg_values)
 {
