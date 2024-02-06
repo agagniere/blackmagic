@@ -119,7 +119,7 @@ $(Executables): $(ExecFolder)/%.exe: $(SampleFolder)/%.c | $(ExecFolder)
 
 # Execute them
 $(Outputs): $(OutputFolder)/%.txt: $(ExecFolder)/%.exe | $(OutputFolder)
-	./$< > $@
+	-./$< > $@
 
 # Create folders for generated files
 $(ExecFolder) $(OutputFolder) $(PreproFolder):
