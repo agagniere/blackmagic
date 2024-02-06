@@ -109,7 +109,7 @@ $(DoxygenHtml): Doxyfile.cfg $(Pages) $(SourceCode) Makefile
 
 $(ProcessedSamples): $(PreproFolder)/%.i: $(SampleFolder)/%.c | $(PreproFolder)
 	temp="$(@D)/_raw_$(@F)" ; \
-	$(CC) -E $(CPPFLAGS) $< -o "$$temp" ; \
+	$(CC) -E $(CPPFLAGS) -P $< -o "$$temp" ; \
 	discard=$$(grep "int main" "$$temp" -n | cut -d':' -f1 | tail -1) ; \
 	tail +$$(( $$discard + 1 )) "$$temp" | $(ClangFormat) > $@
 
