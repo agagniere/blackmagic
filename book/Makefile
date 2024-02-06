@@ -28,10 +28,10 @@ SphinxHtml    := $(SphinxFolder)/html/index.html
 SphinxPdf     := $(SphinxFolder)/latex/blackmagic.pdf
 
 # Samples are small programs whose output we want to include in the documentation
-Samples      := $(wildcard $(SampleFolder)/*.c)
+Samples          := $(wildcard $(SampleFolder)/*.c)
 ProcessedSamples := $(Samples:$(SampleFolder)/%.c=$(PreproFolder)/%.i)
-#Executables  := $(Samples:$(SampleFolder)/%.c=$(ExecFolder)/%.exe)
-#Outputs      := $(Samples:$(SampleFolder)/%.c=$(OutputFolder)/%.txt)
+Executables      := $(Samples:$(SampleFolder)/%.c=$(ExecFolder)/%.exe)
+Outputs          := $(Samples:$(SampleFolder)/%.c=$(OutputFolder)/%.txt)
 
 #CPPFLAGS     +=
 #LDFLAGS      +=
@@ -91,7 +91,7 @@ clean: ## Remove the compiled samples and their outputs
 	$(RM) -r $(OutputFolder) $(ExecFolder)
 
 doc_clean: clean ## Remove all generated documentation
-	$(RM) -r $(SphinxFolder) $(DoxygenFolder) $(PreproFolder)
+	$(RM) -r $(SphinxFolder) $(DoxygenFolder) $(PreproFolder) $(OutputFolder) $(ExecFolder)
 
 full_clean: doc_clean ## Remove all generated files, including python local environment
 	$(RM) -r $(VenvFolder)
@@ -114,12 +114,12 @@ $(ProcessedSamples): $(PreproFolder)/%.i: $(SampleFolder)/%.c | $(PreproFolder)
 	tail +$$(( $$discard + 1 )) "$$temp" | $(ClangFormat) > $@
 
 # Compile code samples
-#$(Executables): $(ExecFolder)/%.exe: $(SampleFolder)/%.c | $(ExecFolder)
-#	$(CC) $(CFLAGS) $(CPPFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+$(Executables): $(ExecFolder)/%.exe: $(SampleFolder)/%.c | $(ExecFolder)
+	$(CC) $(CFLAGS) $(CPPFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
 
 # Execute them
-#$(Outputs): $(OutputFolder)/%.txt: $(ExecFolder)/%.exe | $(OutputFolder)
-#	./$< > $@
+$(Outputs): $(OutputFolder)/%.txt: $(ExecFolder)/%.exe | $(OutputFolder)
+	./$< > $@
 
 # Create folders for generated files
 $(ExecFolder) $(OutputFolder) $(PreproFolder):
@@ -132,11 +132,11 @@ $(VenvActivate): requirements.txt
 	pip install --requirement $<
 
 # Run sphinx to generate documentation
-$(SphinxMan) $(SphinxHtml): $(SphinxFolder)/%: $(Pages) $(SourceCode) $(ProcessedSamples) Makefile conf.py | $(VenvActivate)
+$(SphinxMan) $(SphinxHtml): $(SphinxFolder)/%: $(Pages) $(SourceCode) $(ProcessedSamples) $(Outputs) Makefile conf.py | $(VenvActivate)
 	test -z "$(VIRTUAL_ENV)" && . $|
 	PROJECT_VERSION=$(Version) $(Sphinx) -M $(*D) "$(SourceFolder)" "$(SphinxFolder)" $(SphinxOptions) $(O)
 
 #
-$(SphinxPdf): $(Pages) $(SourceCode) Makefile conf.py | $(VenvActivate)
+$(SphinxPdf): $(Pages) $(SourceCode) $(ProcessedSamples) $(Outputs) Makefile conf.py | $(VenvActivate)
 	test -z "$(VIRTUAL_ENV)" && . $|
 	PROJECT_VERSION=$(Version) $(Sphinx) -M latexpdf "$(SourceFolder)" "$(SphinxFolder)" $(SphinxOptions) $(O)

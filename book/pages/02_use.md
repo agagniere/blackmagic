@@ -1,10 +1,8 @@
-# Getting started with macros
-
-## First steps: using existing macros
+# Getting started: using existing macros
 
 Before defining our own macros, let's see how they are used.
 
-### Constants
+## Constants
 
 The most basic usage of macros is constants:
 ::::{tab-set}
@@ -36,11 +34,11 @@ As you can see in the preprocessed tab, those constants are evaluated before com
 Why wasn't a constant used instead ? For instance, `extern FILE *const stderr;`{l=C} is a constant, why wasn't `STDERR_FILENO`{l=C} defined as `extern int const stderr_fileno;`{l=C} ?
 
 Differences include:
- * A constant has to be defined in a `.c` source file (extra effort)
- * that will be compiled into a library (extra disk usage)
+ * A constant has to be defined in a `.c` source file
+ * that will be compiled into a library
  * So to use it one must link to that library
  * It can't be inlined as the value isn't known at compile-time
- * At run-time, the constant's value needs to be fetched (extra instruction)
+ * At run-time, the constant's value needs to be fetched (extra instruction(s))
  * In the case of dynamic libraries (`.so`/`.dll`), the value can be changed between runs.
  * Also, the value of a macro can depend on macros defined by the user when including the header, while a constant has the same value for all users.
 
@@ -49,8 +47,6 @@ So, using macros saves a few instructions and bytes, which might seem pointless 
 There is an ill-advised third option: define the constant as static and define it in the header. It will create a copy with its own address in each compilation unit that includes it.
 :::
 
-### Function-like
+## Function-like
 
-
-
-## Defining our first macros
+Macros can also take parameters:

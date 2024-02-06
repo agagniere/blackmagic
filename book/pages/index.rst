@@ -12,5 +12,5 @@ Black Magic
    faq
    00_compilation
    01_preprocessor
-   02_simple
+   02_use
    quotes

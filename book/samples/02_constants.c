@@ -1,5 +1,7 @@
-#include <unistd.h> // STDERR_FILENO
+#include <stdio.h>  // dprintf
 #include <stdlib.h> // EXIT_*
+#include <string.h> // strchr
+#include <unistd.h> // STDERR_FILENO
 
 int main(int arg_count, char** arg_values)
 {

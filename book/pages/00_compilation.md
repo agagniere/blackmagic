@@ -63,10 +63,12 @@ sequenceDiagram
 ## Tokenizing
 
 To best undestand what kind of input [phase 4](phase4) is working with, we must detail what [phase 3](phase3) does.
-(However, _how_ it does it is outside the scope of this book)
+(However, _how_ it does it is outside the scope of this book[^fsm])
+
+[^fsm]: If you are interested, learn about finite state machines with this excellent lecture : [Theory of computation](https://youtube.com/playlist?list=PLbtzT1TYeoMjNOGEiaRmm_vMIwUAidnQz&si=iNoQkSVbbMKVzr_P)
 
 A tokenizer can be viewed as a black box that
- - takes as input a sequence of character
+ - takes as input a sequence of characters
  - outputs a series of _tokens_, where a token is a group of characters with an assigned type.
 
 This particular tokenizer recognizes and can emit the following types of tokens:

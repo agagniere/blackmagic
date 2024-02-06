@@ -20,7 +20,7 @@ Interacting with the preprocessor is done by starting a line with the `#` charac
 : Look for a file called _filename_ in folders provided to the preprocessor[^include] with the `-I` flag, and in standard folders configured at compiler installation.
   Once the file is found, its content is pasted verbatim in place of the `#include`{l=C} line
 
-[^include]: Here we are refering to the preprocessor program, often called `cpp`, that handles phases 1 to 4. More often than not it is called by the compiler, with the relevant flags being forwared as-is.
+[^include]: Here we are refering to the preprocessor program, often called `cpp`, that handles phases 1 to 4. More often than not it is called by the compiler, with the relevant flags being forwarded as-is.
 
 `#include "`{l=c} _filename_ `"`{l=C}
 : Same as above, but look into the current directory first
