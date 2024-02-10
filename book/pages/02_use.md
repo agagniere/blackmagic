@@ -50,3 +50,23 @@ There is an ill-advised third option: define the constant as static and define i
 ## Function-like
 
 Macros can also take parameters:
+::::{tab-set}
+:::{tab-item} Compiler view
+```{literalinclude} ../samples/02_functionlike.c
+:language: C
+:tab-width: 4
+```
+:::
+:::{tab-item} Preprocessor view
+```{literalinclude} ../samples/02_functionlike.c
+:language: prepro
+:tab-width: 4
+```
+:::
+:::{tab-item} Preprocessed
+```{literalinclude} ../preprocessed/02_functionlike.i
+:language: C
+:tab-width: 4
+```
+:::
+::::
