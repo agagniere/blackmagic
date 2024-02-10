@@ -1,3 +1,7 @@
+*.exe
+*.i
+*.o
+*.txt
 .env
 preprocessed
 sphinx

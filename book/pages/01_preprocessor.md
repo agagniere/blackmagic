@@ -10,7 +10,7 @@ What that  means, is that the preprocessor manipulates text, not values:
 
 [^strlen]: While in theory not different from other functions, `strlen` _may_ be computed at compile-time in practice, as an inlined compiler built-in, when its input is a string literal.
 
-Interacting with the preprocessor is done by starting a line with the `#` character, followed by a preprocessing directive.
+Interacting with the preprocessor is done by starting a line with the `#` character, followed by a preprocessing directive. (Any number of spaces can be present before and after the `#` character)
 
 ## Directives
 
@@ -89,7 +89,7 @@ _Source_: {bdg-link-primary-line}`cppreference <https://en.cppreference.com/w/c/
 `#ifndef`{l=C} _MACRO_
 : Equivalent to `#if !defined(MACRO)`{l=C}
 
-`#elif`{l=C} condition2 _B_ `#endif`{l=C}
+`#elif`{l=C} _condition2_ _B_ `#endif`{l=C}
 : Convenient way to chain multiple conditions without nesting, equivalent to:
   ```C
   #else
@@ -138,3 +138,6 @@ It should be of no surprise then, that the 2 preprocessor operators are about ma
 `##`
 : Concatenate 2 tokens
 : {bdg-primary-line}`some` {bdg-primary-line}`thing` {octicon}`arrow-right` {bdg-primary-line}`something`
+
+It is only when expanding a macro that the preprocessor takes these operators into account.
+It means they can only be used within the definition of a macro.
