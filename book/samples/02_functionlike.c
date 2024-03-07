@@ -2,7 +2,8 @@
 
 #if __has_include("linux/stddef.h")
 # include <linux/stddef.h> // sizeof_field
-#else
+#endif
+#ifndef sizeof_field
 # define sizeof_field(Type, Member) sizeof(((Type){}).Member)
 #endif
 #include <stddef.h>       // offsetof
