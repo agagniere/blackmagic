@@ -94,3 +94,11 @@ Macros can also take parameters:
 ```
 :::
 ::::
+
+:::{card}
+Output
+^^^
+```{include} ../outputs/02_functionlike.txt
+:languag: md
+```
+:::
