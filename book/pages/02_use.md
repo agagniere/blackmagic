@@ -47,6 +47,30 @@ So, using macros saves a few instructions and bytes, which might seem pointless 
 There is an ill-advised third option: define the constant as static and define it in the header. It will create a copy with its own address in each compilation unit that includes it.
 :::
 
+## Debugging constants
+
+The C standard requires compilers to define certain special macros, without the need to include any header, including:
+
+- `__FILE__` expands to the name of the file currently compiled, as a C string literal
+- `__LINE__` expands to the line number currently compiled
+
+_Source_: {bdg-link-primary-line}`GNU <https://gcc.gnu.org/onlinedocs/cpp/Standard-Predefined-Macros.html>`
+
+Additionnally, the GNU C extension include:
+- `__FUNCTION__` expands the name of the current function, as a constant character array
+- `__PRETTY_FUNCTION__` is similar but includes the whole signature, including return type and parameters
+
+_Source_: {bdg-link-primary-line}`GNU <https://gcc.gnu.org/onlinedocs/gcc/Function-Names.html>`
+
+:::{dropdown} Not as trivial as it seems
+:icon: info
+:color: secondary
+:animate: fade-in-slide-down
+
+While those macros look pretty straightforward,
+:::
+
+
 ## Function-like
 
 Macros can also take parameters:
