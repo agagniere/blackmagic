@@ -26,11 +26,21 @@ The most basic usage of macros is constants:
 :::
 ::::
 
+:::{dropdown} Output
+:color: info
+:icon: play
+:animate: fade-in-slide-down
+```{include} ../outputs/02_constants.txt
+:languag: md
+```
+:::
+
 As you can see in the preprocessed tab, those constants are evaluated before compilation, and replaced by a plain literal.
 
 :::{dropdown} Why are macros used in this situation ?
 :color: primary
 :icon: question
+:animate: fade-in-slide-down
 Why wasn't a constant used instead ? For instance, `extern FILE *const stderr;`{l=C} is a constant, why wasn't `STDERR_FILENO`{l=C} defined as `extern int const stderr_fileno;`{l=C} ?
 
 Differences include:
@@ -95,9 +105,10 @@ Macros can also take parameters:
 :::
 ::::
 
-:::{card}
-Output
-^^^
+:::{dropdown} Output
+:color: info
+:icon: play
+:animate: fade-in-slide-down
 ```{include} ../outputs/02_functionlike.txt
 :languag: md
 ```
