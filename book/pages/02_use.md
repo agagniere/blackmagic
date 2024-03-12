@@ -31,7 +31,6 @@ The most basic usage of macros is constants:
 :icon: play
 :animate: fade-in-slide-down
 ```{include} ../outputs/02_constants.txt
-:languag: md
 ```
 :::
 
@@ -67,10 +66,13 @@ The C standard requires compilers to define certain special macros, without the 
 _Source_: {bdg-link-primary-line}`GNU <https://gcc.gnu.org/onlinedocs/cpp/Standard-Predefined-Macros.html>`
 
 Additionnally, the GNU C extension include:
-- `__FUNCTION__` expands the name of the current function, as a constant character array
+- `__FILE_NAME__` similar to `__FILE__` but only includes the file name, excluding the path
+- `__FUNCTION__` (also `__func__`) is a magic constant character array that contains the name of the current function
 - `__PRETTY_FUNCTION__` is similar but includes the whole signature, including return type and parameters
 
-_Source_: {bdg-link-primary-line}`GNU <https://gcc.gnu.org/onlinedocs/gcc/Function-Names.html>`
+_Source_: {bdg-link-primary-line}`GNU <https://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html>`
+{bdg-link-primary-line}`GNU <https://gcc.gnu.org/onlinedocs/gcc/Function-Names.html>`
+{bdg-link-secondary-line}`Clang <https://clang.llvm.org/docs/LanguageExtensions.html#builtin-macros>`
 
 :::{dropdown} Not as trivial as it seems
 :icon: info
@@ -80,6 +82,34 @@ _Source_: {bdg-link-primary-line}`GNU <https://gcc.gnu.org/onlinedocs/gcc/Functi
 While those macros look pretty straightforward,
 :::
 
+::::{tab-set}
+:::{tab-item} Compiler view
+```{literalinclude} ../samples/02_debug.c
+:language: C
+:tab-width: 4
+```
+:::
+:::{tab-item} Preprocessor view
+```{literalinclude} ../samples/02_debug.c
+:language: prepro
+:tab-width: 4
+```
+:::
+:::{tab-item} Preprocessed
+```{literalinclude} ../preprocessed/02_debug.i
+:language: C
+:tab-width: 4
+```
+:::
+::::
+
+:::{dropdown} Output
+:color: info
+:icon: play
+:animate: fade-in-slide-down
+```{literalinclude} ../outputs/02_debug.txt
+```
+:::
 
 ## Function-like
 
@@ -110,6 +140,5 @@ Macros can also take parameters:
 :icon: play
 :animate: fade-in-slide-down
 ```{include} ../outputs/02_functionlike.txt
-:languag: md
 ```
 :::

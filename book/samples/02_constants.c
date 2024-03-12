@@ -6,7 +6,8 @@
 /* Reducing the amount of magic numbers */
 int main(int arg_count, char** arg_values, char** environment)
 {
-	char* equal;
+	char*    equal;
+	unsigned max = 7;
 
 	dprintf(STDOUT_FILENO, "# Environment\n| Name | Value |\n|:-|:-|\n");
 	do
@@ -18,6 +19,6 @@ int main(int arg_count, char** arg_values, char** environment)
 		}
 		*equal = '\0';
 		dprintf(STDOUT_FILENO, "|`%s`|`%1.30s`|\n", *environment, equal + 1);
-	} while (*++environment);
+	} while (--max > 0 && *++environment);
 	return EXIT_SUCCESS;
 }

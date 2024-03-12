@@ -111,7 +111,7 @@ $(DoxygenHtml): Doxyfile.cfg $(Pages) $(SourceCode) Makefile
 $(ProcessedSamples): $(PreproFolder)/%.i: $(SampleFolder)/%.c | $(PreproFolder)
 	temp="$(@D)/_raw_$(@F)" ; \
 	$(CC) -E $(CPPFLAGS) -CC $< -o "$$temp" ; \
-	discard=$$(grep "$(<F)" "$$temp" -n | cut -d':' -f1 | tail -1) ; \
+	discard=$$(grep -E "^[#].*?$(<F)" "$$temp" -n | cut -d':' -f1 | tail -1) ; \
 	tail +$$(( $$discard + 1 )) "$$temp" | $(ClangFormat) > $@
 
 # Compile code samples
