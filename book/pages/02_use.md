@@ -75,7 +75,7 @@ Such behavior can only be achieved from within the compiler, and we will not be 
 
 The C standard requires compilers to define certain special macros, without the need to include any header, including:
 - `__FILE__` expands to the name of the file currently compiled, as a C string literal
-- `__LINE__` expands to the line number currently compiled
+- `__LINE__` expands to the line number currently compiled, as an integer literal
 
 _Source_: {bdg-link-primary-line}`GNU <https://gcc.gnu.org/onlinedocs/cpp/Standard-Predefined-Macros.html>`
 
