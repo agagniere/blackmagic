@@ -70,8 +70,10 @@ There is an ill-advised third option: define the constant as static and define i
 
 ## Debugging constants
 
-The C standard requires compilers to define certain special macros, without the need to include any header, including:
+Speaking of existing macro constants we can use, there exist certain macro constants, whose value is not always the same...
+Such behavior can only be achieved from within the compiler, and we will not be able to create our own.
 
+The C standard requires compilers to define certain special macros, without the need to include any header, including:
 - `__FILE__` expands to the name of the file currently compiled, as a C string literal
 - `__LINE__` expands to the line number currently compiled
 
@@ -79,21 +81,20 @@ _Source_: {bdg-link-primary-line}`GNU <https://gcc.gnu.org/onlinedocs/cpp/Standa
 
 Additionnally, the GNU C extension include:
 - `__FILE_NAME__` similar to `__FILE__` but only includes the file name, excluding the path
+
+_Source_: {bdg-link-primary-line}`GNU <https://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html>`
+{bdg-link-secondary-line}`Clang <https://clang.llvm.org/docs/LanguageExtensions.html#builtin-macros>`
+
+While we're at it, let's also mention:
 - `__FUNCTION__` (also `__func__`) is a magic constant character array that contains the name of the current function
 - `__PRETTY_FUNCTION__` is similar but includes the whole signature, including return type and parameters
 
-:::{dropdown} `__FILE__` and `__FUNCTION__` have a different nature
-:open:
-:icon: alert
-:color: secondary
-`__FUNCTION__` and `__PRETTY_FUNCTION__` are not macros, but runtime constants. As the GNU documentation puts it:
+:::{warning}
+They are not macros, but runtime constants. As the GNU documentation puts it:
 > These identifiers are variables, not preprocessor macros, and may not be used to initialize char arrays or be concatenated with string literals.
 :::
 
-_Source_: {bdg-link-primary-line}`GNU <https://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html>`
-{bdg-link-primary-line}`GNU <https://gcc.gnu.org/onlinedocs/gcc/Function-Names.html>`
-{bdg-link-secondary-line}`Clang <https://clang.llvm.org/docs/LanguageExtensions.html#builtin-macros>`
-
+_Source_: {bdg-link-primary-line}`GNU <https://gcc.gnu.org/onlinedocs/gcc/Function-Names.html>`
 
 ::::{tab-set}
 :::{tab-item} Compiler view

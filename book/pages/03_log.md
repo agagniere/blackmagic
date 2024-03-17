@@ -17,7 +17,7 @@ log_error("Failed to open `%s`: %s", file_name, strerror(errno));
 ```
 
 And want something of the form:
-```{code-block} C
+```{code-block} Markdown
 :caption: What is written to standard output in markdown format
 | DEBUG | `folder/file.c` | `main` | 12 | Hello world ! |
 | ERROR | `folder/file.c` | `foobar` | 42 | Failed to open `baz.csv`: No such file or directory |

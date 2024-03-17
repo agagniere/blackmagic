@@ -10,6 +10,7 @@
 #	define sizeof_field(Type, Member) sizeof(((Type){}).Member)
 #endif
 
+/** Learn about the memory layout of the termios struct */
 int main()
 {
 	printf("# Termios structure\n| Name | Position | Size |\n|:-|-:|-:|\n");
