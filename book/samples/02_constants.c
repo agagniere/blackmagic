@@ -1,13 +1,13 @@
 #include <stdio.h>  // dprintf
-#include <stdlib.h> // NULL, EXIT_*
+#include <stdlib.h> // atoi, NULL, EXIT_*
 #include <string.h> // strchr
 #include <unistd.h> // *_FILENO
 
-/* Reducing the amount of magic numbers */
+/* Output the environment as a markdown table */
 int main(int arg_count, char** arg_values, char** environment)
 {
 	char*    equal;
-	unsigned max = 7;
+	unsigned max = arg_count > 1 ? atoi(arg_values[1]) : 7;
 
 	dprintf(STDOUT_FILENO, "# Environment\n| Name | Value |\n|:-|:-|\n");
 	do

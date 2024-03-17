@@ -34,7 +34,19 @@ The most basic usage of macros is constants:
 ```
 :::
 
-As you can see in the preprocessed tab, those constants are evaluated before compilation, and replaced by a plain literal.
+As you can see in the preprocessed tab, those constants are evaluated before compilation, and replaced by plain literals:
+
+:::{card}
+Macros used in the example
+^^^
+| Macro                | Expansion         |
+|:---------------------|:------------------|
+| `STDOUT_FILENO`{l=C} | `1`{l=C}          |
+| `STDERR_FILENO`{l=C} | `2`{l=C}          |
+| `EXIT_FAILURE`{l=C}  | `1`{l=C}          |
+| `EXIT_SUCCESS`{l=C}  | `0`{l=C}          |
+| `NULL`{l=C}          | `((void*)0)`{l=C} |
+:::
 
 :::{dropdown} Why are macros used in this situation ?
 :color: primary
@@ -70,17 +82,18 @@ Additionnally, the GNU C extension include:
 - `__FUNCTION__` (also `__func__`) is a magic constant character array that contains the name of the current function
 - `__PRETTY_FUNCTION__` is similar but includes the whole signature, including return type and parameters
 
+:::{dropdown} `__FILE__` and `__FUNCTION__` have a different nature
+:open:
+:icon: alert
+:color: secondary
+`__FUNCTION__` and `__PRETTY_FUNCTION__` are not macros, but runtime constants. As the GNU documentation puts it:
+> These identifiers are variables, not preprocessor macros, and may not be used to initialize char arrays or be concatenated with string literals.
+:::
+
 _Source_: {bdg-link-primary-line}`GNU <https://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html>`
 {bdg-link-primary-line}`GNU <https://gcc.gnu.org/onlinedocs/gcc/Function-Names.html>`
 {bdg-link-secondary-line}`Clang <https://clang.llvm.org/docs/LanguageExtensions.html#builtin-macros>`
 
-:::{dropdown} Not as trivial as it seems
-:icon: info
-:color: secondary
-:animate: fade-in-slide-down
-
-While those macros look pretty straightforward,
-:::
 
 ::::{tab-set}
 :::{tab-item} Compiler view
