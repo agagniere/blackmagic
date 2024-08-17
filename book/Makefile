@@ -62,7 +62,7 @@ PP_section := $(Bold)
 default: help ## When no target is provided, display the help
 
 help: ## Display this help.
-	@awk 'BEGIN {FS = ":.*##"; printf "\nThis Makefile allows one to build this project\'s documentation.\n\nUsage:\n  make $(PP_command)<target>$(EOC)\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  $(PP_command)%-15s$(EOC) %s\n", $$1, $$2 } /^##@/ { printf "\n$(PP_section)%s$(EOC):\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
+	@awk 'BEGIN {FS = ":.*##"; printf "\nThis Makefile allows one to build the documentation of this project.\n\nUsage:\n  make $(PP_command)<target>$(EOC)\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  $(PP_command)%-15s$(EOC) %s\n", $$1, $$2 } /^##@/ { printf "\n$(PP_section)%s$(EOC):\n", substr($$0, 5) }' $(MAKEFILE_LIST)
 
 raw_help: ## Display the help without color
 	@$(MAKE) help --no-print-directory PP_command= PP_section= EOC=
