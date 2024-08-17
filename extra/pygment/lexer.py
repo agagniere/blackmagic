@@ -10,7 +10,7 @@ class CustomLexer(RegexLexer):
         'phase3': [
             (r'\w+', Name),
             (r'\d[0-9a-zA-Z+-.]*', Number),
-            (r"'[^']+'", String.Char),
+            (r"'[^']{0,4}'", String.Char),
             (r'"[^"]*"', String),
         ],
         'detect_comment': [
@@ -18,14 +18,12 @@ class CustomLexer(RegexLexer):
             (r'//.*?$', Comment.Single),
         ],
         'detect_prepro' : [
-            (r'^(#)(\s*)(include)(\s+)([<"][\w/.]+[">])(\s*)([/].*)?',
+            (r'^(#)(\s*)(include)(\s+)([<"][\w/.]+[">])',
              bygroups(Comment.Hashbang,
                       Whitespace,
                       Keyword,
                       Whitespace,
-                      Comment.PreprocFile,
-                      Whitespace,
-                      Whitespace)),
+                      Comment.PreprocFile)),
             (r'^(#)(\s*)(define)(\s+)(\w+)(\s+)',
              bygroups(Comment.Hashbang,
                       Whitespace,
@@ -67,12 +65,14 @@ class CustomLexer(RegexLexer):
         ],
         'prepro' : [
             include('detect_comment'),
-            (r'(\w+)(\s*)([(])', bygroups(Name.Function, Whitespace, Punctuation)),
+            (r'([A-Z_]+)(\s*)([(])', bygroups(Name.Function, Whitespace, Punctuation)),
             (r'[A-Z_]+\b', Name.Constant),
             (r'\w+', Name),
             (r'[#]+', Operator),
             (r'[)(,]+', Punctuation),
             (words(('__VA_ARGS__', '__VA_OPT__'), suffix=r'\b'), Name.Variable.Magic),
+            include('phase3'),
+            (r'\\\n', Comment, '#push'),
         ],
         'comment' : [
             (r'[^*]+', Comment.Multiline),
