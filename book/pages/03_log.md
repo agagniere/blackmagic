@@ -83,7 +83,7 @@ printf("ERROR"  "|`"  "folder/file.c"  "`|`"  "foobar"  "`|"  "42"  "|"  "Failed
 
 In addition to the user-provided string, a variable part of the log output is the name of the file the log is from.
 
-We don't want the user to have to provide it, as it would then have no guarantee of beiing up to date and would therefore be useless.
+We don't want the user to have to provide it, as it would then have no guarantee of being up to date and would therefore be useless.
 
 Luckily, the compiler can provide this information, as we have seen in the [last chapter](02_use.md#debugging-constants).
 Most conveniently, it is provided as a string literal, allowing us to concatenate it with the rest of the string at compile-time:

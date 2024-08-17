@@ -70,11 +70,22 @@ _Source_: {bdg-link-secondary-line}`stack overflow <https://stackoverflow.com/qu
 
 ### Macros
 
+#### Object-like
+
 `#define`{l=C} _identifier_ _replacement_
 : After this line, anytime _identifier_ appears in the source code, it will be replaced by _replacement_
 
 `#define`{l=C} _identifier_
-: Equivalent to `#define identifier 1`{l=C}
+: Equivalent to `#define identifier 1`{l=prepro}
+
+#### Function-like
+
+`#define`{l=C} _identifier_`(`{l=C}_parameters_`)`{l=C} _replacement_
+: After this line, anytime _identifier_(_values_) appears in the source code, it will be replaced by _replacement_, replacing any occurence of a _parameter_ by the _value_ provided by the caller.
+
+`#define`{l=C} _identifier_`(`{l=C}_parameters_`, ...)`{l=C} _replacement_
+: Similar to the previous definition, but zero or more extra parameters can be supplied. The identifier `__VA_ARGS__`{l=C} will be replaced by those extra parameters.
+Additionally, `__VA_OPT__(x)`{l=C} will be replaced by nothing if zero extra parameters were supplied, or by `x`{l=C} if at least one extra parameter was supplied.
 
 _Source_: {bdg-link-primary-line}`cppreference <https://en.cppreference.com/w/c/preprocessor/replace>`
 
@@ -139,5 +150,6 @@ It should be of no surprise then, that the 2 preprocessor operators are about ma
 : Concatenate 2 tokens
 : {bdg-primary-line}`some` {bdg-primary-line}`thing` {octicon}`arrow-right` {bdg-primary-line}`something`
 
-It is only when expanding a macro that the preprocessor takes these operators into account.
-It means they can only be used within the definition of a macro.
+Those operators can only be used on parameters of function-like macros.
+
+_Source_: {bdg-link-primary-line}`cppreference <https://en.cppreference.com/w/c/preprocessor/replace>`
