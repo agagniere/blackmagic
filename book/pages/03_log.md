@@ -97,7 +97,7 @@ printf("ERROR"  "|`"  __FILE__  "`|`"  "foobar"  "`|"  "42"  "|"  "Failed to ope
 In this instance, we use `__FILE__` and not `__FILE_NAME__`, to be able to differentiate files that have the same name in different directories, like `arrays/push.c` and `deque/push.c`.
 :::
 
-## Format a string at run-time
+## Current function and line
 
 OK, the file name was easy, but what about the function name ?
 
@@ -137,25 +137,21 @@ Step 5 - Single-parameter macros
 :::
 :::::
 
-That is nice, but there is a major problem: We can only log a string literal, known at compile time.
-That means we cannot display the current value of a variable.
+That is nice, but we also want to be able to pass additional arguments to printf, to include values of run-time variables.
 
-How did we solve this problem with the `__func__`{l=C} variable ? We used the formating feature of [printf](https://en.cppreference.com/w/c/io/fprintf) (short for "print formatted", after all).
+Printf can take a [variable number of arguments](https://en.cppreference.com/w/c/io/fprintf), making it what is called a "variadic function".
+It is made possible by [a language feature](https://en.cppreference.com/w/c/variadic), that affects how parameters are placed on the stack and accessed by the callee.
 
-Why can't we do it here ? Because our macro `log_error`{l=C} currently only takes one parameter, while formatting involves adding more parameters as needed to printf.
-
-How can printf do that ? It uses a [language feature that makes it variadic](https://en.cppreference.com/w/c/variadic) (simply meaning it takes a variable number of arguments).
-
-Can macros do it too ? Well it turns out there is another language feature for macros to be variadic as well.
+Fortunatly, the C language also features a way for macros to be variadic, which is the next trick we'll be using.
 
 ## Define a variadic macro
-
-A variadic macro is a function-like macro that takes a variable number of arguments.
 
 :::::{dropdown} How to define and use variadic macros ?
 :icon: question
 :color: primary
 :open:
+
+A variadic macro is a function-like macro that takes a variable number of arguments.
 
 ::::{card}
 To define a variadic macro we just need to add an ellipsis (`...`{l=C}) after the mandatory arguments, if any:
@@ -176,8 +172,16 @@ The extra arguments can then be pasted using the `__VA_ARGS__` identifier:
 :output: none
 :::
 ::::
-:::::
 
+::::{card}
+The magic macro `__VA_OPT__` can be used to remove certain characters when `__VA_ARGS__` is empty:
+^^^
+:::{preprocessed} 03_vm3
+:no-compiler-view:
+:output: none
+:::
+::::
+:::::
 
 
 ## Convert the line number to a string literal
