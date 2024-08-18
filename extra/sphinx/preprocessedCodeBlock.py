@@ -41,11 +41,13 @@ class PreprocessedCodeBlock(SphinxDirective):
     required_arguments = 1
     optional_arguments = 0
     option_spec = {
-        #'sync': directives.flag
+        'no-compiler-view': directives.flag,
+        'no-preprocessed': directives.flag,
+        'no-output': directives.flag,
     }
 
-    def literal_include(self, name: str, filename: str, options: dict):
-        return LiteralInclude(name,
+    def literal_include(self, filename: str, options: dict):
+        return LiteralInclude(self.name,
                               [filename],
                               options,
                               self.content,
@@ -58,25 +60,31 @@ class PreprocessedCodeBlock(SphinxDirective):
     def run(self) -> list[nodes.Node]:
         filename = self.arguments[0]
 
-        compiler_view = self.literal_include('compiler-view',
-                                             f'../samples/{filename}.c',
-                                             {'language': 'C', 'linenos': True})
-        prepro_view = self.literal_include('prepro-view',
-                                           f'../samples/{filename}.c',
-                                           {'language': 'prepro', 'linenos': True})
-        preprocessed = self.literal_include('preprocessed',
-                                           f'../preprocessed/{filename}.i',
-                                           {'language': 'C'})
-        output = Include(self.name,
-                         [f'../outputs/{filename}.txt'],
-                         {'parser':MystParser},
-                         self.content, self.lineno, self.content_offset,
-                         self.block_text, self.state, self.state_machine).run()
+        views = []
 
-        return create_tab_set([('Compiler view', compiler_view),
-                               ('Preprocessor view', prepro_view),
-                               ('Preprocessed', preprocessed),
-                               ('Output', output)])
+        if 'no-compiler-view' not in self.options:
+            views += [('Compiler view',
+                       self.literal_include(f'../samples/{filename}.c',
+                                            {'language': 'C', 'linenos': True}))]
+
+        views += [('Preprocessor view',
+                   self.literal_include(f'../samples/{filename}.c',
+                                        {'language': 'prepro', 'linenos': True}))]
+
+        if 'no-preprocessed' not in self.options:
+            views += [('Preprocessed',
+                       self.literal_include(f'../preprocessed/{filename}.i',
+                                            {'language': 'C'}))]
+
+        if 'no-output' not in self.options:
+            views += [('Output',
+                       Include(self.name,
+                             [f'../outputs/{filename}.txt'],
+                             {'parser': MystParser},
+                             self.content, self.lineno, self.content_offset,
+                             self.block_text, self.state, self.state_machine).run())]
+
+        return create_tab_set(views)
 
 
 def setup(app: Sphinx) -> ExtensionMetadata:

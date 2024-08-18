@@ -91,22 +91,12 @@ If adjacent newlines are encountered, a single one may be emitted.
 
 It's easier to understand with an example:
 
-::::{tab-set}
-:::{tab-item} Compiler view
-
-```{literalinclude} ../samples/01_hello.c
-:caption: Source file
-:lineno-start: 1
-:language: C
-```
-:::
-:::{tab-item} Preprocessor view
-
-```{literalinclude} ../samples/01_hello.c
-:caption: Source file
-:lineno-start: 1
-:language: prepro
-```
+::::{card}
+Source file
+^^^
+:::{preprocessed} 01_hello
+:no-preprocessed:
+:no-output:
 :::
 ::::
 
