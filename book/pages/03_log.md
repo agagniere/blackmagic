@@ -149,7 +149,6 @@ Fortunatly, the C language also features a way for macros to be variadic, which 
 :::::{dropdown} How to define and use variadic macros ?
 :icon: question
 :color: primary
-:open:
 
 A variadic macro is a function-like macro that takes a variable number of arguments.
 
@@ -183,6 +182,46 @@ The magic macro `__VA_OPT__` can be used to remove certain characters when `__VA
 ::::
 :::::
 
+Let's not rush it, as it is tempting to simply add `...` and `__VA_ARGS__` like so:
+```prepro
+#define log_log(LEVEL, MESSAGE, ...) \
+    printf("|" LEVEL "|`" __FILE__ "`|`%s`|%i|" MESSAGE "\n", __func__, __LINE__, __VA_ARGS__)
+
+#define log_error(MESSAGE, ...) log_log("ERROR", MESSAGE, __VA_ARGS__)
+
+log_error("Failed to open %s: %s", filename, error);
+```
+
+This code causes a compilation error when passing no additional parameters: `log_error("Out of memory");`{l=C} expands to `printf("[...]", __func__, __LINE__, );`{l=C} with an extraneous comma !
+
+To solve this issue we will use the magic macro `__VA_OPT__`{l=prepro} to remove the comma when `__VA_ARGS__`{l=prepro} is empty:
+
+:::{preprocessed} 03_variadic_macro
+:output: none
+:::
+
+::::{dropdown} History lesson
+:icon: info
+:color: primary
+
+`__VA_OPT__`{l=C} was introduced in C23. Before that, there was no portable way to remove characters when `__VA_ARGS__`{l=C} is empty.
+
+But because removing a comma when there are no arguments is such a common need, GNU introduced a syntax to specifically remove a comma before `__VA_ARGS__`{l=C} (and nothing else !)
+
+:::{preprocessed} 03_vm_gnu
+:no-compiler-view:
+:output: none
+:::
+
+_Source_: {bdg-link-secondary-line}`GNU <https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/Variadic-Macros.html>`
+
+A portable workaround was to always have at least one mandatory argument, and not giving it a name:
+:::{preprocessed} 03_vm_portable
+:no-compiler-view:
+:::
+
+But as you can tell, it adds a lot of limitations.
+::::
 
 ## Convert the line number to a string literal
 
