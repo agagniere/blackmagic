@@ -57,6 +57,25 @@ printf("ERROR|`folder/file.c`|`foobar`|42|Failed to open `%s`: %s\n", file_name,
 Starting from this, let's use increasingly andvanced tricks to end-up with the desired interface,
 while remaining functionnaly equivalent to the simplest solution.
 
+:::{dropdown} Bonus feature
+:icon: light-bulb
+:color: success
+
+{#bonus}
+It could be useful to have a way to automatically include in the log what the computation was, in addition to its result.
+
+An example would be to write:
+```C
+log_eval(2 + 2);
+log_eval(strlen(a) - strlen(b));
+```
+and expect logs that contain:
+```
+2 + 2 = 4
+strlen(a) - strlen(b) = 8
+```
+:::
+
 ## Split string literals
 
 The first trick we can use is not specific to macros: we have seen, in the list of [phases of translation](00_compilation.md#phases-of-translation), that during phase 6, "Adjacent string literals are concatenated".
@@ -197,7 +216,7 @@ This code causes a compilation error when passing no additional parameters: `log
 To solve this issue we will use the magic macro `__VA_OPT__`{l=prepro} to remove the comma when `__VA_ARGS__`{l=prepro} is empty:
 
 :::{preprocessed} 03_variadic_macro
-:output: none
+:output: markdown
 :::
 
 ::::{dropdown} History lesson
@@ -223,13 +242,31 @@ A portable workaround was to always have at least one mandatory argument, and no
 But as you can tell, it adds a lot of limitations.
 ::::
 
+## Bonus feature: Log an expression and its result
+
+With the logging macros of the previous section, we can already log the value of a variable with its name:
+```C
+int answer = 12;
+
+log_debug("answer = %i", answer);
+```
+But that requires repeating the name of the variable twice, could there be a way to obtain a string from an identifier ?
+
+Well of course ! And we've seen it [here](01_preprocessor.md#the-operators), the preprocessor has the `#` operator, that turns an identifer into a string literal.
+Let's try it:
+:::{preprocessed} 03_eval1
+:output: markdown
+:::
+
 ## Convert the line number to a string literal
 
-In the previous step, we started to use `__LINE__` to retrieve the line number, and placed it in the log line at run-time.
+In a previous step, we started to use `__LINE__` to retrieve the line number, and placed it in the log line at run-time.
 
 But why do it at run-time ? `__LINE__` is a macro that expands to an integer literal, meaning its value is accessible at compile-time. It just isn't a string, so we cannot concatenate it as-is.
 
-This is where [preprocessing operators](01_preprocessor.md#the-operators) come in: the `#` operator changes the type of tokens.
+This is where [preprocessing operators](01_preprocessor.md#the-operators) come in: in particular the `#` operator, that changes the type of tokens.
+
+However let's not forget that this operator cannot be placed in source code directly, it can only apply to a parameter of a macro.
 
 ::::{dropdown} Illustration
 :color: info
@@ -248,23 +285,18 @@ Preprocessing input
 {bdg-dark-line}`)` {bdg-dark-line}`;` {material-regular}`keyboard_return`
 :::
 
-What the `#` operator can do is transform the integer literal {bdg-danger-line}`42` into the string literal {bdg-success-line}`42`, just as if the code was:
+What the `#` operator can do is transform the integer literal {bdg-danger-line}`42` into the string literal {bdg-success-line}`42` (as if `"42"` was written instead of `42`)
+
+
 ```C
-printf("arg = %i\n", "42");
+#define STRINGIZE(TEXT) #TEXT
+
+printf("arg = %s\n", STRINGIZE(42));
 ```
 
-Once that's done, we no longer need printf to format the integer in the string
+Once that's done, we no longer need printf to format the integer in the string:
+
+```C
+printf("arg = " STRINGIZE(42) "\n");
+```
 ::::
-
-```{code-block} C
-:caption: Step 5 - Concatenate the line number at compile-time
-printf("DEBUG"  "|`"  __FILE__  "`|`%s`|%i|"  "Hello world !"            "\n", __func__, __LINE__);
-printf("ERROR"  "|`"  __FILE__  "`|`%s`|%i|"  "Failed to open `%s`: %s"  "\n", __func__, __LINE__, file_name, strerror(errno));
-```
-
-## Define a macro
-
-We can now place the boiler-plate in a macro to be reused and not repeated:
-```{code-block} C
-:caption: Step 6
-```
