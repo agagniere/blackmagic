@@ -1,3 +1,5 @@
+#include <stdio.h> // printf
+
 #define logger(MESSAGE, ...) printf("[log] " MESSAGE "\n", ##__VA_ARGS__)
 #define TWICE(...)           __VA_ARGS__, ##__VA_ARGS__
 
