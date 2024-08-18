@@ -1,5 +1,6 @@
-from pygments.lexer import RegexLexer, bygroups, words, include
+from pygments.lexer import RegexLexer, bygroups, include, words
 from pygments.token import *
+
 
 class CustomLexer(RegexLexer):
     name = 'Prepro'
