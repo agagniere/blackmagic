@@ -88,7 +88,7 @@ doxygen_html html pdf:
 ##@ Remove generated files
 
 clean: ## Remove the compiled samples and their outputs
-	$(RM) -r $(OutputFolder) $(ExecFolder)
+	$(RM) -r $(OutputFolder) $(ExecFolder) $(PreproFolder)
 
 doc_clean: clean ## Remove all generated documentation
 	$(RM) -r $(SphinxFolder) $(DoxygenFolder) $(PreproFolder) $(OutputFolder) $(ExecFolder)

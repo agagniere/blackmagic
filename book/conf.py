@@ -9,7 +9,9 @@ import os
 from sphinx.highlighting import lexers
 
 sys.path.append('../extra/pygment')
+sys.path.append('../extra/sphinx')
 from lexer import CustomLexer as PreproLexer
+
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -27,7 +29,8 @@ extensions = [
     'myst_parser',
     'sphinx_copybutton',
     'sphinx_design',
-    'sphinxcontrib.mermaid'
+    'sphinxcontrib.mermaid',
+    'preprocessedCodeBlock'
 ]
 
 templates_path = ['_templates']
@@ -52,15 +55,11 @@ html_theme_options = {
 
 # Allows writing ```mermaid instead of ```{mermaid}, keeping compatibility with GitLab
 myst_fence_as_directive = ['mermaid']
-
 myst_enable_extensions = ['attrs_inline', 'attrs_block', 'colon_fence', 'deflist']
-
 myst_heading_anchors = 4
-
 myst_words_per_minute = 150
 
-#
-
+# -- Mermaid options
 # mermaid_output_format = 'svg'
 
 # -- Pygment customization ---------------------------------------------------
