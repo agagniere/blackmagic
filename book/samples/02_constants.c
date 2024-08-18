@@ -9,7 +9,7 @@ int main(int arg_count, char** arg_values, char** environment)
 	char*    equal;
 	unsigned max = arg_count > 1 ? atoi(arg_values[1]) : 7;
 
-	dprintf(STDOUT_FILENO, "# Environment\n| Name | Value |\n|:-|:-|\n");
+	dprintf(STDOUT_FILENO, "__Environment__:\n| Name | Value |\n|:-|:-|\n");
 	do
 	{
 		if ((equal = strchr(*environment, '=')) == NULL)

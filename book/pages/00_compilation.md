@@ -96,7 +96,7 @@ Source file
 ^^^
 :::{preprocessed} 01_hello
 :no-preprocessed:
-:no-output:
+:output: none
 :::
 ::::
 

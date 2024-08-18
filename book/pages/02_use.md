@@ -5,33 +5,9 @@ Before defining our own macros, let's see how they are used.
 ## Constants
 
 The most basic usage of macros is constants:
-::::{tab-set}
-:::{tab-item} Compiler view
-```{literalinclude} ../samples/02_constants.c
-:language: C
-:tab-width: 4
-```
-:::
-:::{tab-item} Preprocessor view
-```{literalinclude} ../samples/02_constants.c
-:language: prepro
-:tab-width: 4
-```
-:::
-:::{tab-item} Preprocessed
-```{literalinclude} ../preprocessed/02_constants.i
-:language: C
-:tab-width: 4
-```
-:::
-::::
 
-:::{dropdown} Output
-:color: info
-:icon: play
-:animate: fade-in-slide-down
-```{include} ../outputs/02_constants.txt
-```
+:::{preprocessed} 02_constants
+:output: markdown
 :::
 
 As you can see in the preprocessed tab, those constants are evaluated before compilation, and replaced by plain literals:
@@ -96,63 +72,12 @@ They are not macros, but runtime constants. As the GNU documentation puts it:
 
 _Source_: {bdg-link-primary-line}`GNU <https://gcc.gnu.org/onlinedocs/gcc/Function-Names.html>`
 
-::::{tab-set}
-:::{tab-item} Compiler view
-```{literalinclude} ../samples/02_debug.c
-:language: C
-:tab-width: 4
-```
-:::
-:::{tab-item} Preprocessor view
-```{literalinclude} ../samples/02_debug.c
-:language: prepro
-:tab-width: 4
-```
-:::
-:::{tab-item} Preprocessed
-```{literalinclude} ../preprocessed/02_debug.i
-:language: C
-:tab-width: 4
-```
-:::
-::::
-
-:::{dropdown} Output
-:color: info
-:icon: play
-:animate: fade-in-slide-down
-```{literalinclude} ../outputs/02_debug.txt
-```
+:::{preprocessed} 02_debug
 :::
 
 ## Function-like
 
 Macros can also take parameters:
-::::{tab-set}
-:::{tab-item} Compiler view
-```{literalinclude} ../samples/02_functionlike.c
-:language: C
-:tab-width: 4
-```
-:::
-:::{tab-item} Preprocessor view
-```{literalinclude} ../samples/02_functionlike.c
-:language: prepro
-:tab-width: 4
-```
-:::
-:::{tab-item} Preprocessed
-```{literalinclude} ../preprocessed/02_functionlike.i
-:language: C
-:tab-width: 4
-```
-:::
-::::
-
-:::{dropdown} Output
-:color: info
-:icon: play
-:animate: fade-in-slide-down
-```{include} ../outputs/02_functionlike.txt
-```
+:::{preprocessed} 02_functionlike
+:output: markdown
 :::

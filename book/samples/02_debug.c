@@ -1,5 +1,5 @@
-#include <stdio.h>
-#include <stdbool.h>
+#include <stdbool.h> // bool
+#include <stdio.h>   // printf
 
 void foo(void)
 {

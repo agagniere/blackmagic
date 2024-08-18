@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <stdio.h> // printf
 
 /* What did you expect ? */
 int main()

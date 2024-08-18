@@ -43,7 +43,7 @@ class PreprocessedCodeBlock(SphinxDirective):
     option_spec = {
         'no-compiler-view': directives.flag,
         'no-preprocessed': directives.flag,
-        'no-output': directives.flag,
+        'output': lambda argument: directives.choice(argument, ('none', 'literal', 'markdown')),
     }
 
     def literal_include(self, filename: str, options: dict):
@@ -59,30 +59,34 @@ class PreprocessedCodeBlock(SphinxDirective):
 
     def run(self) -> list[nodes.Node]:
         filename = self.arguments[0]
+        output = self.options.get('output', 'literal')
 
         views = []
 
         if 'no-compiler-view' not in self.options:
             views += [('Compiler view',
                        self.literal_include(f'../samples/{filename}.c',
-                                            {'language': 'C', 'linenos': True}))]
+                                            {'language': 'C', 'linenos': True, 'tab-width': 4}))]
 
         views += [('Preprocessor view',
                    self.literal_include(f'../samples/{filename}.c',
-                                        {'language': 'prepro', 'linenos': True}))]
+                                        {'language': 'prepro', 'linenos': True, 'tab-width': 4}))]
 
         if 'no-preprocessed' not in self.options:
             views += [('Preprocessed',
                        self.literal_include(f'../preprocessed/{filename}.i',
-                                            {'language': 'C'}))]
+                                            {'language': 'C', 'tab-width': 4}))]
 
-        if 'no-output' not in self.options:
+        if output == 'markdown':
             views += [('Output',
                        Include(self.name,
                              [f'../outputs/{filename}.txt'],
                              {'parser': MystParser},
                              self.content, self.lineno, self.content_offset,
                              self.block_text, self.state, self.state_machine).run())]
+        elif output == 'literal':
+            views += [('Output',
+                       self.literal_include(f'../outputs/{filename}.txt', {'language': 'text'}))]
 
         return create_tab_set(views)
 

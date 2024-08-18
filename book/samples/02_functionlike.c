@@ -13,7 +13,7 @@
 /** Learn about the memory layout of the termios struct */
 int main()
 {
-	printf("# Termios structure\n| Name | Position | Size |\n|:-|-:|-:|\n");
+	printf("__Termios structure__:\n| Name | Position | Size |\n|:-|-:|-:|\n");
 	printf("|`c_iflag`|%zu|%zu|\n",
 	       offsetof(struct termios, c_iflag),
 	       sizeof_field(struct termios, c_iflag));
