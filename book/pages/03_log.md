@@ -57,13 +57,13 @@ printf("ERROR|`folder/file.c`|`foobar`|42|Failed to open `%s`: %s\n", file_name,
 Starting from this, let's use increasingly andvanced tricks to end-up with the desired interface,
 while remaining functionnaly equivalent to the simplest solution.
 
-## Concatenate string literals at compile-time
+## Split string literals
 
 The first trick we can use is not specific to macros: we have seen, in the list of [phases of translation](00_compilation.md#phases-of-translation), that during phase 6, "Adjacent string literals are concatenated".
 
 What that means is that `"Hello" " World"`{l=C} becomes `"Hello World"`{l=C}. More interestingly, it allows to split a string literal on multiple lines, without the need for a way to escape new lines:
 ```{code-block} C
-:caption: Adjacent string literals with no macros involved
+:caption: Adjacent string literals are concatenated, with no macros involved
 const char help[] =
 	"Usage:\n"
 	"  command [OPTION...] FILE\n\n"
@@ -123,6 +123,62 @@ Next, we have the line number to display. By using the same trick as the functio
 printf("DEBUG"  "|`"  __FILE__  "`|`%s`|%i|"  "Hello world !"            "\n", __func__, __LINE__);
 printf("ERROR"  "|`"  __FILE__  "`|`%s`|%i|"  "Failed to open `%s`: %s"  "\n", __func__, __LINE__, file_name, strerror(errno));
 ```
+
+## Define a simple macro
+
+We can now place the boiler-plate in a macro to be reused:
+
+:::::{card}
+Step 5 - Single-parameter macros
+^^^
+:::{preprocessed} 03_simple_macro
+:no-compiler-view:
+:output: markdown
+:::
+:::::
+
+That is nice, but there is a major problem: We can only log a string literal, known at compile time.
+That means we cannot display the current value of a variable.
+
+How did we solve this problem with the `__func__`{l=C} variable ? We used the formating feature of [printf](https://en.cppreference.com/w/c/io/fprintf) (short for "print formatted", after all).
+
+Why can't we do it here ? Because our macro `log_error`{l=C} currently only takes one parameter, while formatting involves adding more parameters as needed to printf.
+
+How can printf do that ? It uses a [language feature that makes it variadic](https://en.cppreference.com/w/c/variadic) (simply meaning it takes a variable number of arguments).
+
+Can macros do it too ? Well it turns out there is another language feature for macros to be variadic as well.
+
+## Define a variadic macro
+
+A variadic macro is a function-like macro that takes a variable number of arguments.
+
+:::::{dropdown} How to define and use variadic macros ?
+:icon: question
+:color: primary
+:open:
+
+::::{card}
+To define a variadic macro we just need to add an ellipsis (`...`{l=C}) after the mandatory arguments, if any:
+^^^
+:::{preprocessed} 03_vm1
+:no-compiler-view:
+:output: none
+:::
++++
+We can see that `FOO` takes 2 or more arguments while `NOOP` takes any number of arguments
+::::
+
+::::{card}
+The extra arguments can then be pasted using the `__VA_ARGS__` identifier:
+^^^
+:::{preprocessed} 03_vm2
+:no-compiler-view:
+:output: none
+:::
+::::
+:::::
+
+
 
 ## Convert the line number to a string literal
 
