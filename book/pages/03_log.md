@@ -353,3 +353,12 @@ Wait, that is not what we wanted ! We wanted `__LINE__` to be expanded to `8` __
 
 Success !
 
+## Recap
+
+In this chapter we've learned:
+1. Adjacent literal strings are concatenated automatically at compile-time
+1. Logs can be enriched with the magic constants `__FILE__`, `__func__` and `__LINE__`
+1. Function-like macros can be variadic, allowing zero or more extra arguments
+   1. The extra arguements can be pasted with `__VA_ARGS__`
+   1. And `__VA_OPT__()` can be used to remove characters when zero extra arguments are passed
+1. The `#` operator can create a string literal from anything
