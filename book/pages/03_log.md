@@ -65,12 +65,12 @@ while remaining functionnaly equivalent to the simplest solution.
 It could be useful to have a way to automatically include in the log what the computation was, in addition to its result.
 
 An example would be to write:
-```C
+```{code-block} C
 log_eval(2 + 2);
 log_eval(strlen(a) - strlen(b));
 ```
 and expect logs that contain:
-```
+```{code-block} C
 2 + 2 = 4
 strlen(a) - strlen(b) = 8
 ```
@@ -202,7 +202,7 @@ The magic macro `__VA_OPT__` can be used to remove certain characters when `__VA
 :::::
 
 Let's not rush it, as it is tempting to simply add `...` and `__VA_ARGS__` like so:
-```prepro
+```{code-block} prepro
 #define log_log(LEVEL, MESSAGE, ...) \
     printf("|" LEVEL "|`" __FILE__ "`|`%s`|%i|" MESSAGE "\n", __func__, __LINE__, __VA_ARGS__)
 
@@ -215,9 +215,13 @@ This code causes a compilation error when passing no additional parameters: `log
 
 To solve this issue we will use the magic macro `__VA_OPT__`{l=prepro} to remove the comma when `__VA_ARGS__`{l=prepro} is empty:
 
+::::{card}
+Step 6 - Variadic macro
+^^^
 :::{preprocessed} 03_variadic_macro
 :output: markdown
 :::
+::::
 
 ::::{dropdown} History lesson
 :icon: info
@@ -245,58 +249,81 @@ But as you can tell, it adds a lot of limitations.
 ## Bonus feature: Log an expression and its result
 
 With the logging macros of the previous section, we can already log the value of a variable with its name:
-```C
+```{code-block} C
 int answer = 12;
 
 log_debug("answer = %i", answer);
 ```
 But that requires repeating the name of the variable twice, could there be a way to obtain a string from an identifier ?
 
-Well of course ! And we've seen it [here](01_preprocessor.md#the-operators), the preprocessor has the `#` operator, that turns an identifer into a string literal.
-Let's try it:
-:::{preprocessed} 03_eval1
-:output: markdown
+Well of course ! We've seen it [here](01_preprocessor.md#the-operators), the preprocessor has the `#` operator, that turns an identifer into a string literal.
+
+:::{important}
+We have to keep in mind that this operator can only be applied to a parameter of a function-like macro.
 :::
 
-## Convert the line number to a string literal
-
-In a previous step, we started to use `__LINE__` to retrieve the line number, and placed it in the log line at run-time.
-
-But why do it at run-time ? `__LINE__` is a macro that expands to an integer literal, meaning its value is accessible at compile-time. It just isn't a string, so we cannot concatenate it as-is.
-
-This is where [preprocessing operators](01_preprocessor.md#the-operators) come in: in particular the `#` operator, that changes the type of tokens.
-
-However let's not forget that this operator cannot be placed in source code directly, it can only apply to a parameter of a macro.
-
-::::{dropdown} Illustration
+:::::{card}
+Transforming an identifier into a string
+^^^^^
+:::{preprocessed} 03_eval1
+:no-compiler-view:
+:::
+::::{dropdown} How does it work ?
 :color: info
-:icon: paintbrush
-:open:
+:icon: question
 Consider the following line of code:
-```C
-printf("arg = %i\n", 42);
+```{code-block} C
+printf("%s = %i\n", arg_count, arg_count);
 ```
 It would be [tokenized](00_compilation.md#tokenizing) like this:
 :::{card}
 Preprocessing input
 ^^^
 {bdg-primary-line}`printf` {bdg-dark-line}`(`
-{bdg-success-line}`arg = %i\n` {bdg-dark-line}`,` {material-regular}`space_bar` {bdg-danger-line}`42`
+{bdg-success-line}`%s = %i\n` {bdg-dark-line}`,` {material-regular}`space_bar` {bdg-primary-line}`arg_count`
+{bdg-dark-line}`,` {material-regular}`space_bar` {bdg-primary-line}`arg_count`
 {bdg-dark-line}`)` {bdg-dark-line}`;` {material-regular}`keyboard_return`
 :::
 
-What the `#` operator can do is transform the integer literal {bdg-danger-line}`42` into the string literal {bdg-success-line}`42` (as if `"42"` was written instead of `42`)
+What the `#` operator can do is change the token type of {bdg-primary-line}`arg_count` to string literal, {bdg-success-line}`arg_count`, resulting in:
+```{code-block} C
+printf("%s = %i\n", "arg_count", arg_count);
+```
+:::::
 
+OK that is working as expected, what about a computation ?
 
-```C
-#define STRINGIZE(TEXT) #TEXT
+:::::{card}
+Transforming arbitrary code into a string
+^^^^^
+:::{preprocessed} 03_eval2
+:no-compiler-view:
+:::
+::::{dropdown} How does it work ?
+:color: info
+:icon: question
+To be exact, the `#` operator applies to the `VARIABLE` identifier, and creates a string literal from whatever it expands to, which doesn't even need to be valid C !
+:::::
 
-printf("arg = %s\n", STRINGIZE(42));
+Works out of the box, very nice.
+
+Now that it is clear, we can concatenate the string literals at compile time:
+```{code-block} prepro
+#define log_eval_integer(VARIABLE) printf(#VARIABLE " = %i", VARIABLE)
 ```
 
-Once that's done, we no longer need printf to format the integer in the string:
-
-```C
-printf("arg = " STRINGIZE(42) "\n");
+And of course we do not want to have a different macro for every different type, so the macro will take a printf flag as argument:
+```{code-block} prepro
+#define log_eval(FLAG, VARIABLE) printf(#VARIABLE " = %" FLAG, VARIABLE);
 ```
-::::
+
+:::{tip}
+The standard header `inttypes.h` defines macros that expand to a printf flag, that are useful when using fixed-width integer types like `int32_t`, `uint64_t` or `intmax_t`.
+
+_Source_: {bdg-link-primary-line}`cppreference<https://en.cppreference.com/w/c/types/integer>`
+:::
+
+Let's finish this feature and integrate it with the logging macros:
+:::{preprocessed} 03_eval3
+:output: markdown
+:::
