@@ -327,3 +327,29 @@ Let's finish this feature and integrate it with the logging macros:
 :::{preprocessed} 03_eval3
 :output: markdown
 :::
+
+## Convert the line number to a string literal
+
+Currently, the line number of each log entry is placed at run-time, using the `"%i"`{l=C} printf format.
+
+But why do it at run-time ? `__LINE__` is a macro that expands to an integer literal, meaning its value is accessible at compile-time. It just isn't a string, so we cannot concatenate it as-is.
+
+We've just seen how the `#` operator can create a string literal from arbitrary code, let's use it !
+
+`__LINE__` is not an argument of our `log_log` macro, so we can't write `# __LINE__` directly. Instead we'll define a `STRINGIZE` macro that applies `#` to its argument:
+
+:::{preprocessed} 03_stringline1
+:no-compiler-view:
+:::
+
+Wait, that is not what we wanted ! We wanted `__LINE__` to be expanded to `8` __before__ being converted to a string !
+
+> Macro arguments are completely macro-expanded before they are substituted into a macro body, __unless they are stringized or pasted with other tokens__.
+
+
+:::{preprocessed} 03_stringline2
+:no-compiler-view:
+:::
+
+Success !
+
