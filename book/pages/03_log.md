@@ -358,7 +358,25 @@ And so, the solution is to have a macro that:
 :no-compiler-view:
 :::
 
-Success !
+Success ! We can integrate this in our logging macros:
+
+::::{card}
+Step 7 - Line number concaternated at compile-time
+^^^
+:::{preprocessed} 03_stringline3
+:output: markdown
+:::
+::::
+
+Looks like we achieved several of our objectives:
+ - The interface
+ - The markdown table output
+ - The inclusion of debug info (file, function, line)
+ - The bonus objective of logging an expression alongside its result
+
+Two objectives remain:
+ - Configurable log level
+ - Configurable output format
 
 ## Recap
 
