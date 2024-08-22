@@ -8,9 +8,9 @@
 #define log_debug(MESSAGE, ...) log_log("DEBUG", MESSAGE __VA_OPT__(,) __VA_ARGS__)
 #define log_error(MESSAGE, ...) log_log("ERROR", MESSAGE __VA_OPT__(,) __VA_ARGS__)
 
-int main(int ac, char** av)
+int main()
 {
 	printf(MARKDOWN_HEADER);
 	log_debug("Hello world !");
-	log_error("Failed to open %s: %s", "bar.csv", "no such file");
+	log_error("Failed to open `%s`: %s", "bar.csv", "no such file");
 }

@@ -344,8 +344,15 @@ We've just seen how the `#` operator can create a string literal from arbitrary 
 
 Wait, that is not what we wanted ! We wanted `__LINE__` to be expanded to `8` __before__ being converted to a string !
 
+Turns out using the `#` and `##` operators changes how macro arguments are expanded:
+
+{attribution="GCC Documentation"}
 > Macro arguments are completely macro-expanded before they are substituted into a macro body, __unless they are stringized or pasted with other tokens__.
 
+And so, the solution is to have a macro that:
+ - takes `__LINE__` as an argument
+ - but __does not apply the `#` operator__ on it, for the argument to be expanded
+ - and then passes the result to `STRINGIZE`, so that it is converted to a string literal
 
 :::{preprocessed} 03_stringline2
 :no-compiler-view:
@@ -362,3 +369,5 @@ In this chapter we've learned:
    1. The extra arguements can be pasted with `__VA_ARGS__`
    1. And `__VA_OPT__()` can be used to remove characters when zero extra arguments are passed
 1. The `#` operator can create a string literal from anything
+   1. But it affects how macro arguments are expanded
+   1. As a consequence when the arguments are macros themselves a wrapper may be used to force expansion
