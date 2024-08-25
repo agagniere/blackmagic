@@ -1,6 +1,6 @@
-#include <stdio.h>    // printf
+#include <stdio.h> // printf
 
-#define STRINGIZE(ARG) # ARG
+#define STRINGIZE(ARG)         #ARG
 #define STRINGIZE_WRAPPER(ARG) STRINGIZE(ARG)
 
 int main(int arg_count, char** arg_values)

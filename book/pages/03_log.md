@@ -378,6 +378,55 @@ Two objectives remain:
  - Configurable log level
  - Configurable output format
 
+## Configurable log level
+
+While our logs do have a log level associated, there's currently no way to filter out certain levels.
+
+Because we're only creating a simplistic header-only logging library, we will not allow arbitrary filters (like allowing debug and warning but not info and error), only a threshold level.
+
+What that means is that there will be a target log level, and logs as critical or more are outputted, while others are not.
+Which implies that there must be a way to compare levels.
+
+### Run-time comparison
+
+Currently, log levels are just string literals like `"DEBUG"`{l=C} and `"ERROR"`{l=C}, and cannot be compared meaningfully to determine which is "more critical".
+
+Solution: Make log levels integers.
+
+And we are clean coders right ? So we'll define an enum:
+
+```{code-block} C
+:tab-width: 4
+/** Criticality of a log entry */
+enum log_level {
+	NONE    /**< Choose this value as threshold to disable log output */,
+	FATAL   /**< The program will stop */,
+	ERROR   /**< The current operation will be aborted */,
+	WARNING /**< Abnormal situation */,
+	INFO    /**< Significant information */,
+	DEBUG   /**< Only relevant to the developpers */,
+	TRACE   /**< Spam */,
+};
+```
+And a global threshold:
+```{code-block} C
+extern const enum log_level log_level;
+```
+Then we'll just have to compare the level of a log entry to the threshold to know if it needs to be output:
+
+```{code-block} prepro
+#define log_log(LEVEL, MESSAGE, ...)                                                         \
+	if (LEVEL <= log_level) printf("|" STRINGIZE_EVALUATED(LEVEL) "|`" /* [...] */);
+
+#define log_debug(MESSAGE, ...) log_log(DEBUG, MESSAGE __VA_OPT__(, ) __VA_ARGS__)
+
+log_level = DEBUG;
+log_debug("Hello World !"); // Logged
+log_trace("Hello World !"); // Not logged
+```
+Something like that, right ?
+
+
 ## Recap
 
 In this chapter we've learned:

@@ -2,6 +2,6 @@
 
 int main()
 {
-	int i = INTEGERS(4);
+	int i   = INTEGERS(4);
 	int s[] = INTEGERS(2, 5, 8);
 }
