@@ -387,9 +387,9 @@ Because we're only creating a simplistic header-only logging library, we will no
 What that means is that there will be a target log level, and logs as critical or more are outputted, while others are not.
 Which implies that there must be a way to compare levels.
 
-### Run-time comparison
-
 Currently, log levels are just string literals like `"DEBUG"`{l=C} and `"ERROR"`{l=C}, and cannot be compared meaningfully to determine which is "more critical".
+
+### Run-time comparison
 
 Solution: Make log levels integers.
 
@@ -415,17 +415,137 @@ extern const enum log_level log_level;
 Then we'll just have to compare the level of a log entry to the threshold to know if it needs to be output:
 
 ```{code-block} prepro
-#define log_log(LEVEL, MESSAGE, ...)                                                         \
+#define log(LEVEL, MESSAGE, ...)                                                         \
 	if (LEVEL <= log_level) printf("|" STRINGIZE_EVALUATED(LEVEL) "|`" /* [...] */);
 
-#define log_debug(MESSAGE, ...) log_log(DEBUG, MESSAGE __VA_OPT__(, ) __VA_ARGS__)
-
 log_level = DEBUG;
-log_debug("Hello World !"); // Logged
-log_trace("Hello World !"); // Not logged
+log(INFO, "Bonjour");     // Logged
+log(DEBUG, "Hello");      // Logged
+log(TRACE, "Gunten tag"); // Not logged
 ```
 Something like that, right ?
 
+We have to be careful when a macro expands to more than a single statement, because calling a macro may look like a single statement, so users may omit braces in conditions:
+
+:::{preprocessed} 03_condition_trap
+:::
+
+The output is not what was expected, can you see what's wrong in the preprocessed tab ?
+
+::::{dropdown} What's wrong ?
+Let's use the simplest example possible:
+```{code-block} prepro
+#define M A;B;C
+
+if (cond)
+	M;
+```
+expands to:
+```{code-block} C
+if (cond)
+	A;
+B;
+C;
+```
+
+In our case:
+```{code-block} prepro
+#define M if (cond2) A
+
+if (cond1)
+	M;
+else
+	M;
+```
+expands to:
+```{code-block} C
+if (cond1)
+	if (cond2)
+		A;
+	else if (cond2)
+		A;
+```
+::::
+
+"That's why I always put curly braces in my conditions" I hear you say. Fair enough. But there is a simple way to avoid this pitfall without forcing a coding style on the users.
+
+:::::{card}
+First attempt: adding braces in the macro
+^^^
+```{code-block} prepro
+#define log(LEVEL, ...) { if (LEVEL <= threshold) printf(__VA_ARGS__); }
+```
+::::{dropdown} Full code
+:::{preprocessed} 03_condition_fix1
+:::
+::::
+---
+Solves our immediate problem, but introduces another. Can you see it ?
+
+::::{dropdown} What's wrong ?
+```{code-block} prepro
+#define M { A;B;C; }
+
+if (cond)
+	M;
+else
+	D;
+```
+expands to:
+```{code-block} C
+if (cond)
+{
+	A;
+	B;
+	C;
+}
+;
+else
+	D;
+```
+which doesn't compile, because of the extra statement between the `if` and the `else`.
+
+A solution is to not put a `;` at the end of the line:
+```{code-block} C
+if (cond)
+	M
+else
+	D;
+```
+This compiles fine, but introduces an inconsistant syntax. It will not be understood by you text editor, that will become crazy and add indent all code after that.
+::::
+:::::
+
+OK so we would like a way:
+ - to group several statements in a block
+ - follow it with a `;`
+ - but such that it does not add an extra statement
+
+Sounds impossible ?
+
+----
+
+_On a completely unrelated note, did you know about the `do` `while` loop ? It's similar to `while` but evalutates its condition after an iteration, which implies that it iterates at least once.
+Its syntax is_ :
+```{code-block} C
+do {
+	/* statements */
+} while (/* condition */);
+```
+
+Wait, is that a `;` that doesn't add a statement at the end ? And it iterates at least once ? Well, if that's not proof that there is an Intelligent Designer, I don't know what is.
+
+:::::{card}
+Second attempt: Using "do while"
+^^^
+```{code-block} prepro
+#define log(LEVEL, ...) do { if (LEVEL <= threshold) printf(__VA_ARGS__); } while (false);
+```
+:::{preprocessed} 03_condition_fixed
+:::
+:::::
+
+Success !
 
 ## Recap
 
