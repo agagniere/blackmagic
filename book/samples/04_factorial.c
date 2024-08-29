@@ -1,12 +1,12 @@
 #include <stdio.h> // printf
 
-#define eval(x) printf("%s = %llu\n", #x, x)
+#define eval(x) printf("%s = %lu\n", #x, x)
 
 unsigned long _factorial(unsigned short n, unsigned long accumulator)
 {
 	if (n == 1)
 		return accumulator;
-	return _factorial(n - 1, accumulator * n);
+	__attribute__((musttail)) return _factorial(n - 1, accumulator * n);
 }
 
 #define FACTORIAL_(N, ACC, ...) _factorial(N, ACC)
