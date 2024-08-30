@@ -1,6 +1,6 @@
 #pragma once
 
-#include "blackmagic/tools.h"
+#include "blackmagic/token.h" // STRINGIZE
 
 #define NORMAL     0
 #define BOLD       1
@@ -32,4 +32,4 @@
 #define BG_WHITE      107
 
 #define _COLOR_JOIN(A, B) A;B
-#define COLOR(...) PP_STR(\e[FOLD_RIGHT(_COLOR_JOIN, __VA_ARGS__)m)
+#define COLOR(...) STRINGIZE(\e[FOLD_RIGHT(_COLOR_JOIN, __VA_ARGS__)m)
