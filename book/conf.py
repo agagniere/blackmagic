@@ -16,11 +16,11 @@ from lexer import CustomLexer as PreproLexer
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'Black Magic'
-copyright = '2023'
-author = 'Antoine Gagniere'
-release = os.environ.get('PROJECT_VERSION', 'Unknown')
-language = 'en'
+project   = 'Black Magic'
+copyright = '2023-2024'
+author    = 'Antoine Gagniere'
+release   = os.environ.get('PROJECT_VERSION', 'Unknown')
+language  = 'en'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -30,7 +30,8 @@ extensions = [
     'sphinx_copybutton',
     'sphinx_design',
     'sphinxcontrib.mermaid',
-    'preprocessedCodeBlock'
+    'preprocessedCodeBlock',
+    'breathe'
 ]
 
 templates_path = ['_templates']
@@ -63,5 +64,11 @@ myst_words_per_minute = 150
 # mermaid_output_format = 'svg'
 
 # -- Pygment customization ---------------------------------------------------
-
 lexers['prepro'] = PreproLexer()
+
+# -- Breathe and Exhale Options ----------------------------------------------
+
+breathe_projects = {
+    'blackmagic': 'doxygen/xml'
+}
+breathe_default_project = 'blackmagic'
