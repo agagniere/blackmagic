@@ -11,10 +11,10 @@
 
 #define log_log(LEVEL, MESSAGE, ...)                                                         \
 	printf("|" LEVEL "|`" __FILE__ "`|`%s`|" STRINGIZE_EVALUATED(__LINE__) "|" MESSAGE "\n", \
-	       __func__ __VA_OPT__(, ) __VA_ARGS__)
+	       __func__ __VA_OPT__(,) __VA_ARGS__)
 
-#define log_debug(MESSAGE, ...) log_log("DEBUG", MESSAGE __VA_OPT__(, ) __VA_ARGS__)
-#define log_error(MESSAGE, ...) log_log("ERROR", MESSAGE __VA_OPT__(, ) __VA_ARGS__)
+#define log_debug(MESSAGE, ...) log_log("DEBUG", MESSAGE __VA_OPT__(,) __VA_ARGS__)
+#define log_error(MESSAGE, ...) log_log("ERROR", MESSAGE __VA_OPT__(,) __VA_ARGS__)
 
 void foobar(const char* file_name)
 {
