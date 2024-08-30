@@ -4,3 +4,4 @@ sphinx-book-theme
 sphinx-design
 sphinx-copybutton
 sphinxcontrib.mermaid
+breathe
