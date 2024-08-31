@@ -89,19 +89,53 @@
 			LEVEL, __func__ __VA_OPT__(,) __VA_ARGS__)
 #elif LOG_FORMAT == LOG_FORMAT_MARKDOWN
 #	define log_log(LEVEL, IGNORED, MESSAGE, ...) \
-	fprintf(LOG_FILE, "|" LEVEL "|`" __FILE__ "`|`%s`|" STRINGIZE(__LINE__) "|" MESSAGE "\n", \
+	fprintf(LOG_FILE, "|" LEVEL "|`" __FILE__ "`|`%s`|" STRINGIZE(__LINE__) "|" MESSAGE "|\n", \
 	        __func__ __VA_OPT__(,) __VA_ARGS__)
 #endif
 
-#define log_fatal(MESSAGE, ...) \
+#if LOG_LEVEL >= LOG_LEVEL_FATAL
+/** Report a condition that forces to program to terminate */
+#    define log_fatal(MESSAGE, ...) \
 	log_log("FATAL", COLOR(BOLD, WHITE, BG_RED), MESSAGE __VA_OPT__(,) __VA_ARGS__)
-#define log_error(MESSAGE, ...) \
+#else
+#    define log_fatal(M, ...)
+#endif
+
+#if LOG_LEVEL >= LOG_LEVEL_ERROR
+/** Report a condition that forces the current operation to be aborted */
+#    define log_error(MESSAGE, ...) \
 	log_log("ERROR", COLOR(BOLD, RED), MESSAGE __VA_OPT__(,) __VA_ARGS__)
-#define log_warning(MESSAGE, ...) \
+#else
+#    define log_error(M, ...)
+#endif
+
+
+#if LOG_LEVEL >= LOG_LEVEL_WARNING
+/** Report an abnormal condition */
+#    define log_warning(MESSAGE, ...) \
 	log_log("WARN", COLOR(BOLD, YELLOW), MESSAGE __VA_OPT__(,) __VA_ARGS__)
-#define log_info(MESSAGE, ...) \
+#else
+#    define log_warning(M, ...)
+#endif
+
+#if LOG_LEVEL >= LOG_LEVEL_INFO
+/** Report significant information */
+#    define log_info(MESSAGE, ...) \
 	log_log("INFO", COLOR(BOLD, GREEN), MESSAGE __VA_OPT__(,) __VA_ARGS__)
-#define log_debug(MESSAGE, ...) \
+#else
+#    define log_info(M, ...)
+#endif
+
+#if LOG_LEVEL >= LOG_LEVEL_DEBUG
+#    define log_debug(MESSAGE, ...) \
 	log_log("DEBUG", COLOR(BOLD, BLUE), MESSAGE __VA_OPT__(,) __VA_ARGS__)
-#define log_trace(MESSAGE, ...) \
-	log_log("DEBUG", COLOR(NORMAL), MESSAGE __VA_OPT__(,) __VA_ARGS__)
+#else
+#    define log_debug(M, ...)
+#endif
+
+#if LOG_LEVEL >= LOG_LEVEL_TRACE
+#    define log_trace(MESSAGE, ...) \
+	log_log("TRACE", COLOR(NORMAL), MESSAGE __VA_OPT__(,) __VA_ARGS__)
+#else
+#    define log_trace(M, ...)
+#endif
