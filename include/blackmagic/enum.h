@@ -1,19 +1,19 @@
 #pragma once
 
 /**
- * @file enum.h
- * @brief Generate functions for enumerations
+ * @file
+ * Generate functions for enumerations
  */
 
-#include "tools.h"
+#include "blackmagic/token.h" // STRINGIZE
 
-#include <stdbool.h>
+#include <stdbool.h> // bool
 
 #define PP_PAIR_APPLY(F, P) F P
 #define PP_PAIR_ASSIGN(K, V) K = V
 #define PP_PAIR_FIRST(K, V) K
 #define PP_PAIR_SECOND(K, V) V
-#define PP_TO_STRING_CASE(K, V) case (V): return PP_STR(K);
+#define PP_TO_STRING_CASE(K, V) case (V): return STRINGIZE(K);
 
 #define _ECNT(N) _MERGE(N, count)
 #define _EMAX(N) _MERGE(N, upper_bound)

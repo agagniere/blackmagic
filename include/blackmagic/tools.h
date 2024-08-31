@@ -6,7 +6,6 @@
  */
 
 #include "private_tools.h"
-#include "private_for.h"
 
 /** The number of elements of a C array */
 #define PREPRO_ARRAY_LENGTH(A) (sizeof(A) / sizeof(*(A)))
@@ -21,9 +20,6 @@
 /*
 ** Higher level
 */
-
-#define EACH(...)         ARG_COUNT(__VA_ARGS__), __VA_ARGS__
-#define FOR(...)          _FOR(__VA_ARGS__)
 
 #define FOLD_RIGHT(F, ...) _FOLDR(F, __VA_ARGS__)
 

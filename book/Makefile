@@ -7,11 +7,12 @@
 # Input Folders
 SourceFolder  := pages
 SampleFolder  := samples
+HeaderFolder  := ../include
 
 # Input Files
 Pages         := $(shell find $(SourceFolder) -type f \( -name '*.md' -o -name '*.rst' \))
 Pages         += ../README.md
-SourceCode    := $(shell find $(SampleFolder) ../include -type f -name '*.[ch]')
+SourceCode    := $(shell find $(SampleFolder) $(HeaderFolder) -type f -name '*.[ch]')
 
 # Generated Folders
 SphinxFolder  := sphinx
@@ -23,9 +24,10 @@ VenvFolder    := .env
 
 # Generated Files
 DoxygenHtml   := $(DoxygenFolder)/html/index.html
+DoxygenXml    := $(DoxygenFolder)/xml/index.xml
 SphinxMan     := $(SphinxFolder)/man/blackmagic.1
 SphinxHtml    := $(SphinxFolder)/html/index.html
-SphinxPdf     := $(SphinxFolder)/latex/blackmagic.pdf
+SphinxPdf     := $(SphinxFolder)/latexpdf/blackmagic.pdf
 
 # Samples are small programs whose output we want to include in the documentation
 Samples          := $(wildcard $(SampleFolder)/*.c)
@@ -33,11 +35,9 @@ ProcessedSamples := $(Samples:$(SampleFolder)/%.c=$(PreproFolder)/%.i)
 Executables      := $(Samples:$(SampleFolder)/%.c=$(ExecFolder)/%.exe)
 Outputs          := $(Samples:$(SampleFolder)/%.c=$(OutputFolder)/%.txt)
 
-#CPPFLAGS     +=
-#LDFLAGS      +=
-#LDLIBS       +=
+CPPFLAGS    += -I $(HeaderFolder)
 
-Open        ?= xdg-open
+Open        ?= open
 ClangFormat ?= clang-format
 
 SphinxOptions ?= -c . -n
@@ -91,7 +91,7 @@ clean: ## Remove the compiled samples and their outputs
 	$(RM) -r $(OutputFolder) $(ExecFolder) $(PreproFolder)
 
 doc_clean: clean ## Remove all generated documentation
-	$(RM) -r $(SphinxFolder) $(DoxygenFolder) $(PreproFolder) $(OutputFolder) $(ExecFolder)
+	$(RM) -r $(SphinxFolder) $(DoxygenFolder)
 
 full_clean: doc_clean ## Remove all generated files, including python local environment
 	$(RM) -r $(VenvFolder)
@@ -104,8 +104,8 @@ env: $(VenvActivate) ## Install the python virtual environment with dependencies
 
 # Non phony rules
 
-$(DoxygenHtml): Doxyfile.cfg $(Pages) $(SourceCode) Makefile
-	PROJECT_VERSION=$(Version) doxygen $<
+$(DoxygenHtml) $(DoxygenXml) &: Doxyfile.cfg $(SourceCode) Makefile
+	PROJECT_VERSION=$(Version) OUTPUT_DIRECTORY=$(DoxygenFolder) INPUT=$(HeaderFolder) doxygen $<
 
 # Preprocess samples
 $(ProcessedSamples): $(PreproFolder)/%.i: $(SampleFolder)/%.c | $(PreproFolder)
@@ -133,11 +133,6 @@ $(VenvActivate): requirements.txt
 	pip install --requirement $<
 
 # Run sphinx to generate documentation
-$(SphinxMan) $(SphinxHtml): $(SphinxFolder)/%: $(Pages) $(SourceCode) $(ProcessedSamples) $(Outputs) Makefile conf.py | $(VenvActivate)
+$(SphinxPdf) $(SphinxMan) $(SphinxHtml): $(SphinxFolder)/%: $(Pages) $(SourceCode) $(ProcessedSamples) $(Outputs) $(DoxygenXml) Makefile conf.py | $(VenvActivate)
 	test -z "$(VIRTUAL_ENV)" && . $|
 	PROJECT_VERSION=$(Version) $(Sphinx) -M $(*D) "$(SourceFolder)" "$(SphinxFolder)" $(SphinxOptions) $(O)
-
-#
-$(SphinxPdf): $(Pages) $(SourceCode) $(ProcessedSamples) $(Outputs) Makefile conf.py | $(VenvActivate)
-	test -z "$(VIRTUAL_ENV)" && . $|
-	PROJECT_VERSION=$(Version) $(Sphinx) -M latexpdf "$(SourceFolder)" "$(SphinxFolder)" $(SphinxOptions) $(O)
