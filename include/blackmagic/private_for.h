@@ -2,6 +2,7 @@
 
 #define _FOR(N, ...) PP_CAT(_FOR_, N)(__VA_ARGS__)
 
+#define _FOR_0(F, ...)
 #define _FOR_1(A, F, ...) F(__VA_ARGS__, A)
 #define _FOR_2(A, B, F, ...) F(__VA_ARGS__, A) F(__VA_ARGS__, B)
 #define _FOR_3(AA,AB,AC, F, ...) \

@@ -2,12 +2,14 @@
 
 ## Token manipulation
 
-:::{doxygendefine} PREPRO_STRINGIZE_LITERAL
+### Create a string literal
+:::{doxygendefine} LITERAL_STRINGIZE
 :::
-:::{doxygendefine} PREPRO_STRINGIZE
+:::{doxygendefine} STRINGIZE
 :::
 
-:::{doxygendefine} PREPRO_CONCAT_LITERAL
+### Combine tokens
+:::{doxygendefine} LITERAL_CONCAT
 :::
-:::{doxygendefine} PREPRO_CONCAT
+:::{doxygendefine} CONCAT
 :::
