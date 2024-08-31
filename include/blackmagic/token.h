@@ -8,7 +8,8 @@
 
 /**
  * Evaluates as a string literal containing @p TEXT, without performing macro expansion.
- * # Example
+ *
+ * __Example__
  * ```
  * LITERAL_STRINGIZE(__LINE__)
  * ```
@@ -22,7 +23,8 @@
 
 /**
  * Evaluates as a string literal containing @p EXPRESSION with its macros expanded.
- * # Example
+ *
+ * __Example__
  * ```
  * STRINGIZE(__LINE__)
  * ```
