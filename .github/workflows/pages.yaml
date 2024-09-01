@@ -20,6 +20,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Install Doxygen
+        run: apt-get -y update && apt-get -y install doxygen 
       - name: Checkout
         uses: actions/checkout@v4
       - name: Generate html
