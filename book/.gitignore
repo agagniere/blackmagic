@@ -3,5 +3,6 @@
 *.o
 *.txt
 .env
+doxygen
 preprocessed
 sphinx

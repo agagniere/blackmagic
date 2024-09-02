@@ -21,8 +21,6 @@
 ** Higher level
 */
 
-#define FOLD_RIGHT(F, ...) _FOLDR(F, __VA_ARGS__)
-
 #define CAT(...)          FOLD_RIGHT(PP_CAT, __VA_ARGS__)
 #define MERGE(...)        FOLD_RIGHT(_MERGE, __VA_ARGS__)
 
