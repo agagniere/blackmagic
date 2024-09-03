@@ -21,6 +21,7 @@
 /**
  * Choose the file to output logs to.
  * What is expected is a `FILE*` like `stdout` or `stderr`.
+ *
  * Defaults to `stderr`
  */
 #	define LOG_FILE stderr
@@ -33,6 +34,7 @@
 /**
  * Choose the compile-time log verbosity level.
  * Logs that are strictly less critical that this level are removed before compilation.
+ *
  * The default value is @ref LOG_LEVEL_TRACE for debug builds and @ref LOG_LEVEL_INFO for release builds that define `NDEBUG`.
  */
 #		define LOG_LEVEL LOG_LEVEL_TRACE
@@ -92,7 +94,7 @@
 #	define log_log(LEVEL, IGNORED, MESSAGE, ...) \
 		fprintf(LOG_FILE, "|" LEVEL "|`" __FILE__ "`|`%s`|" STRINGIZE(__LINE__) "|" MESSAGE "|\n", __func__ __VA_OPT__(, ) __VA_ARGS__)
 #else
-#	define log_log(L, C, M, ...)
+#	define log_log(L, C, M, ...) /* Logs are disabled */
 #endif
 
 #if LOG_LEVEL >= LOG_LEVEL_FATAL
