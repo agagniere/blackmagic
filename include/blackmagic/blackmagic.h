@@ -26,3 +26,8 @@
  * This directory contains all blackmagic headers.
  * Do not add it directly to the search path for headers, prefer instead the `include` directory
  */
+
+/**
+ * @mainpage
+ * Welcome to the documentation of black magic.
+ */

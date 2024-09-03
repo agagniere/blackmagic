@@ -1,6 +1,7 @@
 #pragma once
 
 #include "blackmagic/token.h" // STRINGIZE
+#include "blackmagic/fold.h" // FOLD
 
 #define NORMAL     0
 #define BOLD       1
@@ -31,5 +32,5 @@
 #define BG_DEFAULT    49
 #define BG_WHITE      107
 
-#define _COLOR_JOIN(A, B) A;B
-#define COLOR(...) STRINGIZE(\e[FOLD_RIGHT(_COLOR_JOIN, __VA_ARGS__)m)
+#define COLOR_JOIN(A, B) A;B
+#define COLOR(...) STRINGIZE(\e[FOLD(COLOR_JOIN __VA_OPT__(,) __VA_ARGS__)m)
