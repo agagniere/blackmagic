@@ -1,4 +1,4 @@
-# Token manipulation
+# Macros for writing macros
 
 ## Create a string literal
 
@@ -12,4 +12,14 @@
 :::{doxygendefine} LITERAL_CONCAT
 :::
 :::{doxygendefine} CONCAT
+:::
+
+## Count arguments
+
+:::{doxygendefine} ARG_COUNT
+:::
+
+## Fold
+
+:::{doxygenfile} fold.h
 :::

@@ -3,7 +3,6 @@
 /**
  * @file
  * Generate code by calling a macro repeatedly
- * @author Antoine GAGNIERE
  */
 
 /** To be used with @ref FOR */

@@ -83,6 +83,7 @@
 #	define log_header() /**< Place this macro once before any log */
 #endif
 
+///@cond
 #if LOG_FORMAT == LOG_FORMAT_CONSOLE
 #	define log_log(LEVEL, IGNORED, MESSAGE, ...) \
 		fprintf(LOG_FILE, "[%5s " __FILE__ ":%s:" STRINGIZE(__LINE__) "] " MESSAGE "\n", LEVEL, __func__ __VA_OPT__(, ) __VA_ARGS__)
@@ -96,6 +97,7 @@
 #else
 #	define log_log(L, C, M, ...) /* Logs are disabled */
 #endif
+///@endcond
 
 #if LOG_LEVEL >= LOG_LEVEL_FATAL
 /** Report a condition that forces to program to terminate */

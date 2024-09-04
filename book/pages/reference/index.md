@@ -1,9 +1,7 @@
 # Reference
 
 :::{toctree}
-token
-arg_count
-fold
+internal
 color
 log
 :::

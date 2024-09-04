@@ -3,13 +3,14 @@
 /**
  * @file
  * Include all blackmagic headers with a single include
+ * @author Antoine GAGNIERE
  */
 
-#include "blockmagic/token.h"
-#include "blockmagic/log.h"
-#include "blockmagic/for.h"
-#include "blockmagic/color.h"
-#include "blockmagic/enum.h"
+#include "blackmagic/token.h"
+#include "blackmagic/log.h"
+#include "blackmagic/for.h"
+#include "blackmagic/color.h"
+#include "blackmagic/enum.h"
 #include "blackmagic/fold.h"
 
 /**
@@ -19,15 +20,18 @@
  * @code{.c}
  * #include <blackmagic/foo.h>
  * @endcode
+ * @author Antoine GAGNIERE
  */
 
 /**
  * @dir blackmagic
  * This directory contains all blackmagic headers.
  * Do not add it directly to the search path for headers, prefer instead the `include` directory
+ * @author Antoine GAGNIERE
  */
 
 /**
  * @mainpage
  * Welcome to the documentation of black magic.
+ * @author Antoine GAGNIERE
  */

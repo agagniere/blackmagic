@@ -79,8 +79,9 @@ man: $(SphinxMan) ## Generate and open the documentation in the terminal
 	man $<
 
 pdf: $(SphinxPdf) ## Generate and open the documentation as a PDF
+	$(Open) $(SphinxFolder)/latex/blackmagic.pdf
 
-doxygen_html html pdf:
+doxygen_html html:
 	$(Open) $< 2>/dev/null
 
 .PHONY: doxygen_html html man pdf

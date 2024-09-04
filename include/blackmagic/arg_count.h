@@ -3,7 +3,6 @@
 /**
  * @file
  * Count the number of arguments of a variadic macro.
- * @author Antoine GAGNIERE
  */
 
 /** Returns the 78th argument */

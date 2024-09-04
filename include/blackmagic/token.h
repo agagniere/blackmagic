@@ -3,7 +3,6 @@
 /**
  * @file
  * Token manipulation.
- * @author Antoine GAGNIERE
  */
 
 /**

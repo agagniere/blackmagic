@@ -2,7 +2,7 @@
 
 /**
  * @file
- *
+ * Human readable ANSI escape code
  */
 
 #include "blackmagic/token.h" // STRINGIZE
@@ -52,6 +52,14 @@
 
 /**
  * Expands to a string literal containig an escape code setting the terminal color.
+ * @section example Example
+ * @code{.c}
+ * COLOR(BOLD, ITALIC, UNDERLINED, BLUE)
+ * @endcode
+ * Evaluates to:
+ * @code{.c}
+ * "\e[1;3;4;34m"
+ * @endcode
  * @since 0.1
  */
 #define COLOR(...) STRINGIZE(\e[FOLD(COLOR_JOIN __VA_OPT__(,) __VA_ARGS__)m)

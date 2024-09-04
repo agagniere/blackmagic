@@ -1,4 +1,0 @@
-# Fold
-
-:::{doxygenfile} fold.h
-:::
