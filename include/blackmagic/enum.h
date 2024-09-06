@@ -9,6 +9,7 @@
 
 #include <stdbool.h> // bool
 
+///@cond
 #define PP_PAIR_APPLY(F, P) F P
 #define PP_PAIR_ASSIGN(K, V) K = V
 #define PP_PAIR_FIRST(K, V) K
@@ -17,6 +18,7 @@
 
 #define _ECNT(N) _MERGE(N, count)
 #define _EMAX(N) _MERGE(N, upper_bound)
+///@endcond
 
 /**
 @code{.c}

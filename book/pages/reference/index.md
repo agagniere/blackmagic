@@ -4,4 +4,5 @@
 internal
 color
 log
+enum
 :::

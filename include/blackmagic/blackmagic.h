@@ -6,12 +6,12 @@
  * @author Antoine GAGNIERE
  */
 
-#include "blackmagic/token.h"
-#include "blackmagic/log.h"
-#include "blackmagic/for.h"
 #include "blackmagic/color.h"
 #include "blackmagic/enum.h"
 #include "blackmagic/fold.h"
+#include "blackmagic/for.h"
+#include "blackmagic/log.h"
+#include "blackmagic/token.h"
 
 /**
  * @dir include
