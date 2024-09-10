@@ -13,6 +13,7 @@
 
 /**
  * Call @p MACRO on each item of the @p LIST, forwarding extra arguments if any.
+ *
  * __Example__
  * @code{.c}
  * FOR(EACH(A, B, C), F, X, Y)
@@ -49,9 +50,17 @@
 	FOR_4(A, B, C, D, M __VA_OPT__(,) __VA_ARGS__) \
 	FOR_4(E, F, G, H, M __VA_OPT__(,) __VA_ARGS__)
 #define FOR_9(A, B, C, D, E, F, G, H, I, M, ...) \
-	M(__VA_ARGS__ __VA_OPT__(,) A) \
-	FOR_8(B, C, D, E, F, G, H, I, M __VA_OPT__(,) __VA_ARGS__)
+	FOR_3(A, B, C, M __VA_OPT__(,) __VA_ARGS__)	\
+	FOR_3(D, E, F, M __VA_OPT__(,) __VA_ARGS__) \
+	FOR_3(G, H, I, M __VA_OPT__(,) __VA_ARGS__)
 #define FOR_10(A, B, C, D, E, F, G, H, I, J, M, ...) \
 	FOR_5(A, B, C, D, E, M __VA_OPT__(,) __VA_ARGS__) \
 	FOR_5(F, G, H, I, J, M __VA_OPT__(,) __VA_ARGS__)
+#define FOR_11(A, B, C, D, E, F, G, H, I, J, K, M, ...)	\
+	M(__VA_ARGS__ __VA_OPT__(,) A) \
+	FOR_10(B, C, D, E, F, G, H, I, J, K, M __VA_OPT__(,) __VA_ARGS__)
+#define FOR_12(A, B, C, D, E, F, G, H, I, J, K, L, M, ...)	\
+	FOR_4(A, B, C, D, M __VA_OPT__(,) __VA_ARGS__) \
+	FOR_4(E, F, G, H, M __VA_OPT__(,) __VA_ARGS__) \
+	FOR_4(I, J, K, L, M __VA_OPT__(,) __VA_ARGS__)
 ///@endcond

@@ -39,14 +39,32 @@
 
 /**
  * Evaluates as a single identifier token, that is @p TEXT1 concatenated with @p TEXT2,
- * not evaluating any macro inside
+ * not evaluating any macro inside.
+ *
+ * __Example__
+ * @code{.c}
+ * LITERAL_CONCAT(temp, __COUNTER__)
+ * @endcode
+ * Evaluates to:
+ * @code{.c}
+ * temp__COUNTER__
+ * @endcode
  * @since 0.2
  */
 #define LITERAL_CONCAT(TEXT1, TEXT2) TEXT1 ## TEXT2
 
 /**
  * Evaluates as a single identifier token,
- * that is the evaluation of @p EXPRESSION1 concatenated with the evaluation of @p EXPRESSION2
+ * that is the evaluation of @p EXPRESSION1 concatenated with the evaluation of @p EXPRESSION2.
+ *
+ * __Example__
+ * @code{.c}
+ * CONCAT(temp, __COUNTER__)
+ * @endcode
+ * May evaluate to:
+ * @code{.c}
+ * temp0
+ * @endcode
  * @since 0.2
  */
 #define CONCAT(EXPRESSION1, EXPRESSION2) LITERAL_CONCAT(EXPRESSION1, EXPRESSION2)

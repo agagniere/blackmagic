@@ -53,7 +53,7 @@ BreakInheritanceList: AfterColon
 CompactNamespaces: 'true'
 ConstructorInitializerAllOnOneLineOrOnePerLine: 'true'
 ContinuationIndentWidth: '0'
-Cpp11BracedListStyle: 'true'
+Cpp11BracedListStyle: 'false'
 DerivePointerAlignment: 'false'
 FixNamespaceComments: 'true'
 KeepEmptyLinesAtTheStartOfBlocks: 'false'

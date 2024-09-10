@@ -5,90 +5,117 @@
  * Generate functions for enumerations
  */
 
-#include "blackmagic/token.h" // STRINGIZE
+#include "blackmagic/codegen.h" // ADD_COMMA_FLAT
+#include "blackmagic/join.h"    // JOIN2
+#include "blackmagic/pair.h"    // PAIR_*
+#include "blackmagic/token.h"   // STRINGIZE
 
 #include <stdbool.h> // bool
+#include <string.h>  // strcmp
 
 ///@cond
-#define PP_PAIR_APPLY(F, P) F P
-#define PP_PAIR_ASSIGN(K, V) K = V
-#define PP_PAIR_FIRST(K, V) K
-#define PP_PAIR_SECOND(K, V) V
-#define PP_TO_STRING_CASE(K, V) case (V): return STRINGIZE(K);
-
-#define _ECNT(N) _MERGE(N, count)
-#define _EMAX(N) _MERGE(N, upper_bound)
+#define CASE_RETURN_STRING(K, V) \
+	case (V): return STRINGIZE(K);
+#define STRCMP_STRINGIZE_RETURN(S, P)           \
+	if (strcmp(STRINGIZE(PAIR_FIRST P), S) == 0) \
+		return PAIR_LAST P;
+#define STRCMP_RETURN(S, P)          \
+	if (strcmp(PAIR_LAST P, S) == 0) \
+		return PAIR_FIRST P;
+#define EV_MAX(NAME) JOIN2(NAME, upper_bound)
+#define ES_MAX(NAME) JOIN2(NAME, count)
 ///@endcond
 
 /**
 @code{.c}
 DECLARE_ENUM_WITH_VALUES(
-    cardinal,
-    (EAST,  1),
-    (WEST,  2),
-    (NORTH, 4),
-    (SOUTH, 8)
+	cardinal,
+	(EAST,	0b0001),
+	(WEST,	0b0010),
+	(NORTH, 0b0100),
+	(SOUTH, 0b1000)
 )
 @endcode
-evaluates to:
+Evaluates to:
 @code{.c}
 enum cardinal
 {
-	East  = 1,
-	West  = 2,
-	North = 4,
-	South = 8,
+	EAST  = 0b0001,
+	WEST  = 0b0010,
+	NORTH = 0b0100,
+	SOUTH = 0b1000,
 	cardinal_upper_bound
 };
-static inline const char* cstring_from_cardinal(enum cardinal value)
+
+static inline const char* cardinal_to_cstring(enum cardinal value)
 {
 	switch (value)
 	{
-	case (1): return "East";
-	case (2): return "West";
-	case (4): return "North";
-	case (8): return "South";
-	default: return ((void*)0);
+	case (0b0001): return "EAST";
+	case (0b0010): return "WEST";
+	case (0b0100): return "NORTH";
+	case (0b1000): return "SOUTH";
+	default: return NULL;
 	}
 }
-static inline _Bool is_valid_cardinal(long value)
+
+static inline bool cardinal_is_valid(long value)
 {
-	return cstring_from_cardinal((enum cardinal)value) != ((void*)0);
+	return cardinal_to_cstring((enum cardinal)value) != NULL;
 }
-static inline _Bool has_next_cardinal(enum cardinal* it)
+
+static inline bool cardinal_has_next(enum cardinal* it)
 {
 	do
 	{
 		*it = (enum cardinal)(1 + *it);
-	} while ((long)*it < (long)cardinal_upper_bound && !is_valid_cardinal((long)*it));
-	return *it < cardinal_upper_bound;
+	} while ((long)*it < (long)cardinal_upper_bound && !cardinal_is_valid((long)*it));
+	return (long)*it < (long)cardinal_upper_bound;
+}
+
+static inline enum cardinal cardinal_from_cstring(const char* string)
+{
+	if (strcmp("EAST", string) == 0)
+		return 0b0001;
+	if (strcmp("WEST", string) == 0)
+		return 0b0010;
+	if (strcmp("NORTH", string) == 0)
+		return 0b0100;
+	if (strcmp("SOUTH", string) == 0)
+		return 0b1000;
+	return cardinal_upper_bound;
 }
 @endcode
 */
-#define DECLARE_ENUM_WITH_VALUES(NAME, ...)	\
-	enum NAME \
-	{ \
-		FOR(EACH(__VA_ARGS__), ADD_COMMA, PP_PAIR_APPLY, PP_PAIR_ASSIGN) \
-		_EMAX(NAME) \
-	}; \
-	static inline const char* _MERGE(cstring_from, NAME) (enum NAME value) \
-	{ \
-		switch (value) \
-		{ \
-		FOR(EACH(__VA_ARGS__), PP_PAIR_APPLY, PP_TO_STRING_CASE) \
-		default: return NULL; \
-		} \
-	} \
-	static inline bool _MERGE(is_valid, NAME) (long value) \
-	{ \
-		return _MERGE(cstring_from, NAME)((enum NAME)value) != NULL; \
-	} \
-	static inline bool _MERGE(has_next, NAME) (enum NAME* it) \
-	{ \
-		do { \
-			*it = (enum NAME)(1 + *it); \
-		} while ((long)*it < (long)_EMAX(NAME) && !_MERGE(is_valid, NAME)((long)*it)); \
-		return *it < _EMAX(NAME); \
+#define DECLARE_ENUM_WITH_VALUES(NAME, ...)                                            \
+	enum NAME                                                                          \
+	{                                                                                  \
+		FOR(EACH(__VA_ARGS__), ADD_COMMA_FLAT, PAIR_ASSIGN) EV_MAX(NAME)               \
+	};                                                                                 \
+	static inline const char* JOIN2(NAME, to_cstring)(enum NAME value)                 \
+	{                                                                                  \
+		switch (value)                                                                 \
+		{                                                                              \
+			FOR(EACH(__VA_ARGS__), PAIR_FLATTEN, CASE_RETURN_STRING)                   \
+		default: return NULL;                                                          \
+		}                                                                              \
+	}                                                                                  \
+	static inline bool JOIN2(NAME, is_valid)(long value)                               \
+	{                                                                                  \
+		return JOIN2(NAME, to_cstring)((enum NAME)value) != NULL;                      \
+	}                                                                                  \
+	static inline bool JOIN2(NAME, has_next)(enum NAME * it)                           \
+	{                                                                                  \
+		do                                                                             \
+		{                                                                              \
+			*it = (enum NAME)(1 + *it);                                                \
+		} while ((long)*it < (long)EV_MAX(NAME) && !JOIN2(NAME, is_valid)((long)*it)); \
+		return (long)*it < (long)EV_MAX(NAME);                                         \
+	}                                                                                  \
+	static inline enum NAME JOIN2(NAME, from_cstring)(const char* string)              \
+	{                                                                                  \
+		FOR(EACH(__VA_ARGS__), STRCMP_STRINGIZE_RETURN, string)                        \
+		return EV_MAX(NAME);                                                           \
 	}
 
 /**
@@ -103,7 +130,7 @@ DECLARE_ENUM_WITH_STRINGS(
     (ITEM_PASTA, "Pasta")
 )
 @endcode
-evaluates to:
+Evaluates to:
 @code{.c}
 enum grocery
 {
@@ -115,56 +142,75 @@ enum grocery
 	ITEM_PASTA,
 	grocery_count
 };
-static inline _Bool is_valid_grocery(long value)
+
+static inline bool grocery_is_valid(long value)
 {
 	return (0 <= value && value < grocery_count);
 }
-static inline const char* cstring_from_grocery(enum grocery value)
+
+static inline const char* grocery_to_cstring(enum grocery value)
 {
 	static const char* const table[] = {
-	    "Egg",
-	    "Milk",
-	    "Bread",
-	    "Soup",
-	    "Yeast",
-	    "Pasta",
+		"Egg", "Milk", "Bread", "Soup", "Yeast", "Pasta",
 	};
-	if (!is_valid_grocery((long)value)) return ((void*)0);
+	if (!grocery_is_valid((long)value))
+		return NULL;
 	return table[value];
 }
-static inline _Bool has_next_grocery(enum grocery* it)
+
+static inline bool grocery_has_next(enum grocery* it)
 {
 	do
 	{
 		*it = (enum grocery)(1 + *it);
-	} while ((long)*it < (long)grocery_count && !is_valid_grocery((long)*it));
-	return *it < grocery_count;
+	} while ((long)*it < (long)grocery_count && !grocery_is_valid((long)*it));
+	return (long)*it < (long)grocery_count;
+}
+
+static inline enum grocery grocery_from_cstring(const char* string)
+{
+	if (strcmp("Egg", string) == 0)
+		return ITEM_EGG;
+	if (strcmp("Milk", string) == 0)
+		return ITEM_MILK;
+	if (strcmp("Bread", string) == 0)
+		return ITEM_BREAD;
+	if (strcmp("Soup", string) == 0)
+		return ITEM_SOUP;
+	if (strcmp("Yeast", string) == 0)
+		return ITEM_YEAST;
+	if (strcmp("Pasta", string) == 0)
+		return ITEM_PASTA;
+	return grocery_upper_bound;
 }
 @endcode
 */
-#define DECLARE_ENUM_WITH_STRINGS(NAME, ...) \
-	enum NAME \
-	{ \
-		FOR(EACH(__VA_ARGS__), ADD_COMMA, PP_PAIR_APPLY, PP_PAIR_FIRST) \
-		_ECNT(NAME) \
-	}; \
-	static inline bool _MERGE(is_valid, NAME) (long value) \
-	{ \
-		return (0 <= value && value < _ECNT(NAME)); \
-	} \
-	static inline const char* _MERGE(cstring_from, NAME) (enum NAME value) \
-	{ \
-		static const char* const table[] = { \
-			FOR(EACH(__VA_ARGS__), ADD_COMMA, PP_PAIR_APPLY, PP_PAIR_SECOND) \
-		}; \
-		if (!_MERGE(is_valid, NAME)((long)value)) \
-			return NULL; \
-		return table[value]; \
-	} \
-	static inline bool _MERGE(has_next, NAME) (enum NAME* it) \
-	{ \
-		do { \
-			*it = (enum NAME)(1 + *it); \
-		} while ((long)*it < (long)_ECNT(NAME) && !_MERGE(is_valid, NAME)((long)*it)); \
-		return *it < _ECNT(NAME); \
+#define DECLARE_ENUM_WITH_STRINGS(NAME, ...)                                                      \
+	enum NAME                                                                                     \
+	{                                                                                             \
+		FOR(EACH(__VA_ARGS__), ADD_COMMA_FLAT, PAIR_FIRST) ES_MAX(NAME)                           \
+	};                                                                                            \
+	static inline bool JOIN2(NAME, is_valid)(long value)                                          \
+	{                                                                                             \
+		return (0 <= value && value < ES_MAX(NAME));                                              \
+	}                                                                                             \
+	static inline const char* JOIN2(NAME, to_cstring)(enum NAME value)                            \
+	{                                                                                             \
+		static const char* const table[] = { FOR(EACH(__VA_ARGS__), ADD_COMMA_FLAT, PAIR_LAST) }; \
+		if (!JOIN2(NAME, is_valid)((long)value))                                                  \
+			return NULL;                                                                          \
+		return table[value];                                                                      \
+	}                                                                                             \
+	static inline bool JOIN2(NAME, has_next)(enum NAME * it)                                      \
+	{                                                                                             \
+		do                                                                                        \
+		{                                                                                         \
+			*it = (enum NAME)(1 + *it);                                                           \
+		} while ((long)*it < (long)ES_MAX(NAME) && !JOIN2(NAME, is_valid)((long)*it));            \
+		return (long)*it < (long)ES_MAX(NAME);                                                    \
+	}                                                                                             \
+	static inline enum NAME JOIN2(NAME, from_cstring)(const char* string)                         \
+	{                                                                                             \
+		FOR(EACH(__VA_ARGS__), STRCMP_RETURN, string)                                             \
+		return ES_MAX(NAME);                                                                      \
 	}
