@@ -26,7 +26,8 @@
 #define ES_MAX(NAME) JOIN2(NAME, count)
 ///@endcond
 
-/**
+/** Declare an enum with custom values, with string conversions.
+@section exEV Example
 @code{.c}
 DECLARE_ENUM_WITH_VALUES(
 	cardinal,
@@ -86,6 +87,8 @@ static inline enum cardinal cardinal_from_cstring(const char* string)
 	return cardinal_upper_bound;
 }
 @endcode
+
+@since 0.1
 */
 #define DECLARE_ENUM_WITH_VALUES(NAME, ...)                                            \
 	enum NAME                                                                          \
@@ -118,7 +121,8 @@ static inline enum cardinal cardinal_from_cstring(const char* string)
 		return EV_MAX(NAME);                                                           \
 	}
 
-/**
+/** Declare an enum with custom strings.
+@section exES Example
 @code{.c}
 DECLARE_ENUM_WITH_STRINGS(
     grocery,
@@ -184,6 +188,8 @@ static inline enum grocery grocery_from_cstring(const char* string)
 	return grocery_upper_bound;
 }
 @endcode
+
+@since 0.1
 */
 #define DECLARE_ENUM_WITH_STRINGS(NAME, ...)                                                      \
 	enum NAME                                                                                     \

@@ -22,5 +22,6 @@
  * @code{.c}
  * prefix_name_2
  * @endcode
+ * @since 0.2
  */
 #define JOIN(...) FOLD(JOIN2 __VA_OPT__(,) __VA_ARGS__)

@@ -382,11 +382,9 @@ Two objectives remain:
 
 While our logs do have a log level associated, there's currently no way to filter out certain levels.
 
-Because we're only creating a simplistic header-only logging library, we will not allow arbitrary filters (like allowing debug and warning but not info and error), only a threshold level.
+Because we're only creating a simplistic header-only logging library, we will not allow arbitrary filters (like outputting debug and warning but not info and error), only a threshold level: only logs as critical as the threshold or more shall be output.
 
-What that means is that there will be a target log level, and logs as critical or more are outputted, while others are not.
-Which implies that there must be a way to compare levels.
-
+This implies that there must be a way to compare levels.
 Currently, log levels are just string literals like `"DEBUG"`{l=C} and `"ERROR"`{l=C}, and cannot be compared meaningfully to determine which is "more critical".
 
 ### Run-time comparison

@@ -5,4 +5,5 @@ internal
 color
 log
 enum
+white
 :::

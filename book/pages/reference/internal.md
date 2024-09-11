@@ -28,3 +28,13 @@
 
 :::{doxygenfile} for.h
 :::
+
+## Manipulate pairs
+
+:::{doxygenfile} pair.h
+:::
+
+## Misc.
+
+:::{doxygenfile} codegen.h
+:::

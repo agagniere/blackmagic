@@ -12,5 +12,6 @@
 
 /** Expand to both elements of a pair following each other */
 #define PAIR_FLATTEN(A, B) A B
+
 /** Expands to an assignation */
 #define PAIR_ASSIGN(A, B) A = B

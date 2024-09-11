@@ -1,7 +1,7 @@
 #pragma once
 
 #include "blackmagic/arg_count.h" // ARG_COUNT
-#include "blackmagic/token.h" // CONCAT
+#include "blackmagic/token.h"     // CONCAT
 
 /**
  * @file
@@ -31,17 +31,22 @@
 #define FOR(LIST, MACRO, ...) FOR_(LIST, MACRO __VA_OPT__(,) __VA_ARGS__)
 
 ///@cond
-#define FOR_(N, ...)  CONCAT(FOR_, N)(__VA_ARGS__)
+#define FOR_(N, ...) CONCAT(FOR_, N)(__VA_ARGS__)
 #define FOR_0(M, ...)
-#define FOR_1(A, M, ...)          M(__VA_ARGS__ __VA_OPT__(,) A)
-#define FOR_2(A, B, M, ...)       M(__VA_ARGS__ __VA_OPT__(,) A) M(__VA_ARGS__ __VA_OPT__(,) B)
-#define FOR_3(A, B, C, M, ...)    M(__VA_ARGS__ __VA_OPT__(,) A) M(__VA_ARGS__ __VA_OPT__(,) B) M(__VA_ARGS__ __VA_OPT__(,) C)
-#define FOR_4(A, B, C, D, M, ...) M(__VA_ARGS__ __VA_OPT__(,) A) M(__VA_ARGS__ __VA_OPT__(,) B) M(__VA_ARGS__ __VA_OPT__(,) C) M(__VA_ARGS__ __VA_OPT__(, ) D)
+#define FOR_1(A, M, ...)    M(__VA_ARGS__ __VA_OPT__(,) A)
+#define FOR_2(A, B, M, ...) M(__VA_ARGS__ __VA_OPT__(,) A) M(__VA_ARGS__ __VA_OPT__(,) B)
+#define FOR_3(A, B, C, M, ...) \
+	M(__VA_ARGS__ __VA_OPT__(,) A) \
+	M(__VA_ARGS__ __VA_OPT__(,) B) \
+	M(__VA_ARGS__ __VA_OPT__(,) C)
+#define FOR_4(A, B, C, D, M, ...) \
+	M(__VA_ARGS__ __VA_OPT__(,) A) M(__VA_ARGS__ __VA_OPT__(,) B) \
+	M(__VA_ARGS__ __VA_OPT__(,) C) M(__VA_ARGS__ __VA_OPT__(,) D)
 #define FOR_5(A, B, C, D, E, M, ...) \
 	M(__VA_ARGS__ __VA_OPT__(,) A) \
 	FOR_4(B, C, D, E, M __VA_OPT__(,) __VA_ARGS__)
 #define FOR_6(A, B, C, D, E, F, M, ...) \
-	FOR_3(A, B, C, M __VA_OPT__(,) __VA_ARGS__)	\
+	FOR_3(A, B, C, M __VA_OPT__(,) __VA_ARGS__) \
 	FOR_3(D, E, F, M __VA_OPT__(,) __VA_ARGS__)
 #define FOR_7(A, B, C, D, E, F, G, M, ...) \
 	M(__VA_ARGS__ __VA_OPT__(,) A) \
@@ -50,17 +55,23 @@
 	FOR_4(A, B, C, D, M __VA_OPT__(,) __VA_ARGS__) \
 	FOR_4(E, F, G, H, M __VA_OPT__(,) __VA_ARGS__)
 #define FOR_9(A, B, C, D, E, F, G, H, I, M, ...) \
-	FOR_3(A, B, C, M __VA_OPT__(,) __VA_ARGS__)	\
+	FOR_3(A, B, C, M __VA_OPT__(,) __VA_ARGS__) \
 	FOR_3(D, E, F, M __VA_OPT__(,) __VA_ARGS__) \
 	FOR_3(G, H, I, M __VA_OPT__(,) __VA_ARGS__)
 #define FOR_10(A, B, C, D, E, F, G, H, I, J, M, ...) \
 	FOR_5(A, B, C, D, E, M __VA_OPT__(,) __VA_ARGS__) \
 	FOR_5(F, G, H, I, J, M __VA_OPT__(,) __VA_ARGS__)
-#define FOR_11(A, B, C, D, E, F, G, H, I, J, K, M, ...)	\
+#define FOR_11(A, B, C, D, E, F, G, H, I, J, K, M, ...) \
 	M(__VA_ARGS__ __VA_OPT__(,) A) \
 	FOR_10(B, C, D, E, F, G, H, I, J, K, M __VA_OPT__(,) __VA_ARGS__)
-#define FOR_12(A, B, C, D, E, F, G, H, I, J, K, L, M, ...)	\
+#define FOR_12(A, B, C, D, E, F, G, H, I, J, K, L, M, ...) \
 	FOR_4(A, B, C, D, M __VA_OPT__(,) __VA_ARGS__) \
 	FOR_4(E, F, G, H, M __VA_OPT__(,) __VA_ARGS__) \
 	FOR_4(I, J, K, L, M __VA_OPT__(,) __VA_ARGS__)
+#define FOR_13(A, B, C, D, E, F, G, H, I, J, K, L, N, M, ...) \
+	M(__VA_ARGS__ __VA_OPT__(,) A) \
+	FOR_12(B, C, D, E, F, G, H, I, J, K, L, N, M __VA_OPT__(,) __VA_ARGS__)
+#define FOR_14(A, B, C, D, E, F, G, H, I, J, K, L, N, O, M, ...) \
+	FOR_7(A, B, C, D, E, F, G, M __VA_OPT__(,) __VA_ARGS__) \
+	FOR_7(H, I, J, K, L, N, O, M __VA_OPT__(,) __VA_ARGS__)
 ///@endcond
