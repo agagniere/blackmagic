@@ -17,9 +17,12 @@
             package = stdenv.mkDerivation
               {
                 name = "blackmagic";
-                src = self;
-                installPhase =
-                  "mkdir --parents $out/include && cp -r include $out";
+                src = ./.;
+                installPhase = ''
+                  runHook preInstall
+                  mkdir --parents $out/include && cp -r include $out;
+                  runHook postInstall
+                '';
               };
           in
           {
