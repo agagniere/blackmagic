@@ -9,3 +9,22 @@ starting with a reminder about what the preprocessor is and how it is integrated
 then building up increasingly complex tools anyone can use in their C projects.
 
 [Read it online !](https://agagniere.github.io/blackmagic/)
+
+## Tools
+Add this project as a dependency to your C project today (using Zig, Nix or Conan) to get:
+- ANSI color codes as a string literal by writing `COLOR(UNDERLINED, BOLD, RED)` [`blackmagic/color.h`](include/blackmagic/color.h)
+- Convert enums to/from strings [`blackmagic/enum.h`](include/blackmagic/enum.h)
+- Logs with a compile-time configurable formtat and level [`blackmagic/log.h`](include/blackmagic/log.h)
+
+## Roadmap
+I would like to explain the following tricks in the book:
+- [x] Logging
+- [ ] Default arguments
+- [ ] Function overloading
+- [ ] Enum to/from string
+- [ ] Serialization / Deserialization of a structure
+- [ ] Unit-tests library
+
+## Extras
+- Sphinx directive to show C code before and after preprocessing
+- Custom pygment lexer to color the code the way the preprocessor sees it
