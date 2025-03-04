@@ -37,11 +37,11 @@ int three = 3;
 printf("Foo was called with %i arguments", 2);
 ```
 
-## First solution
+## Solution
 
 Let's look at the simplest solution:
 
-:::{preprocessed} 05_first
+:::{preprocessed} 06_implementation
 :::
 
 Two macros are involved:
@@ -52,10 +52,10 @@ We can then see that if no arguments is passed to `ARG_COUNT`{l=C}, the 10th arg
 
 It is quite similar to the optional argument trick shown in the previous chapter: a variadic macro allows the user not to provide enough arguement to another macro, that in turn discards extraneous arguments.
 
-## Limitation
+## Usage example
 
 OK, great, we have a macro that can count the number of arguments given to it.
-What about calling it from another macro ?
+What does this enable us to do ?
 
-:::{preprocessed} 05_limitation
+:::{preprocessed} 06_first_use
 :::

@@ -41,7 +41,7 @@ fibonacci(6, 1, 1); // 13
 fibonacci(5, 1, 2); // 13
 
 // Custom sequence
-fibonacci(5, 5, 10); // 40
+fibonacci(4, 5, 10); // 40
 ```
 
 We are going to demonstrate how to achieve a similar interface in C.

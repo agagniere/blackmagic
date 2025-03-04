@@ -16,5 +16,6 @@ Black Magic
    03_log
    04_default
    05_range
+   06_argcount
    quotes
    reference/index
