@@ -28,3 +28,27 @@ I would like to explain the following tricks in the book:
 ## Extras
 - Sphinx directive to show C code before and after preprocessing
 - Custom pygment lexer to color the code the way the preprocessor sees it
+
+## Use it
+
+### With Zig build as your C package manager
+
+Add the dependency in your `build.zig.zon` by running the following command:
+```shell
+zig fetch --save git+https://github.com/agagniere/blackmagic#0.3
+```
+
+Then, in your `build.zig`:
+```zig
+const blackmagic = b.dependency("blackmagic", .{});
+// wherever needed:
+exe.addIncludePath(blackmagic.path("include"));
+```
+
+### With Conan
+
+Add the dependency in your `conanfile.txt`
+```toml
+[requires]
+blackmagic/0.3
+```
