@@ -6,6 +6,7 @@
  */
 
 #include "blackmagic/codegen.h" // ADD_COMMA_FLAT
+#include "blackmagic/for.h"     // FOR EACH
 #include "blackmagic/join.h"    // JOIN2
 #include "blackmagic/pair.h"    // PAIR_*
 #include "blackmagic/token.h"   // STRINGIZE
