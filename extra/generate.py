@@ -10,7 +10,7 @@ def letter_range(n) -> list:
     return [chr(ord('A') + k) for k in range(n)]
 
 for i in range(5):
-    lines = [f"#define FOR_{i}({', '.join(letter_range(i) + ['M'])})"]
+    lines = [f"#define FOR_{i}({', '.join(letter_range(i) + ['M'])}, ...)"]
     lines += [f'M(__VA_ARGS__ __VA_OPT__(,) {c})' for c in letter_range(i)]
     print(' \\\n\t'.join(lines))
 for i in range(5, N):

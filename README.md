@@ -35,7 +35,7 @@ I would like to explain the following tricks in the book:
 
 Add the dependency in your `build.zig.zon` by running the following command:
 ```shell
-zig fetch --save git+https://github.com/agagniere/blackmagic#0.3
+zig fetch --save git+https://github.com/agagniere/blackmagic#master
 ```
 
 Then, in your `build.zig`:

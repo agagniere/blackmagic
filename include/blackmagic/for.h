@@ -32,17 +32,17 @@
 
 ///@cond
 #define FOR_(N, ...) CONCAT(FOR_, N)(__VA_ARGS__)
-#define FOR_0(M)
-#define FOR_1(A, M) \
+#define FOR_0(M, ...)
+#define FOR_1(A, M, ...) \
 	M(__VA_ARGS__ __VA_OPT__(,) A)
-#define FOR_2(A, B, M) \
+#define FOR_2(A, B, M, ...) \
 	M(__VA_ARGS__ __VA_OPT__(,) A) \
 	M(__VA_ARGS__ __VA_OPT__(,) B)
-#define FOR_3(A, B, C, M) \
+#define FOR_3(A, B, C, M, ...) \
 	M(__VA_ARGS__ __VA_OPT__(,) A) \
 	M(__VA_ARGS__ __VA_OPT__(,) B) \
 	M(__VA_ARGS__ __VA_OPT__(,) C)
-#define FOR_4(A, B, C, D, M) \
+#define FOR_4(A, B, C, D, M, ...) \
 	M(__VA_ARGS__ __VA_OPT__(,) A) \
 	M(__VA_ARGS__ __VA_OPT__(,) B) \
 	M(__VA_ARGS__ __VA_OPT__(,) C) \
