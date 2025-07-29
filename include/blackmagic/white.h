@@ -10,7 +10,7 @@
  *
  * __Example__
  * @code{.c}
- * short    foo    = {21, 84, 57};
+ * short    foo[]  = {21, 84, 57};
  * unsigned length = ARRAY_LENGTH(foo);
  * @endcode
  * Will result in `length = 3`

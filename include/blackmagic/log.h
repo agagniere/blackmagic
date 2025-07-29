@@ -75,6 +75,8 @@
 #define LOG_FORMAT_COLOR 2
 /** Print logs as a markdown table */
 #define LOG_FORMAT_MARKDOWN 3
+/** Print logs as a stream of JSON objects */
+#define LOG_FORMAT_JSON 4
 ///@}
 
 #if LOG_FORMAT == LOG_FORMAT_MARKDOWN
@@ -94,6 +96,9 @@
 #elif LOG_FORMAT == LOG_FORMAT_MARKDOWN
 #	define log_log(LEVEL, IGNORED, MESSAGE, ...) \
 		fprintf(LOG_FILE, "|" LEVEL "|`" __FILE__ "`|`%s`|" STRINGIZE(__LINE__) "|" MESSAGE "|\n", __func__ __VA_OPT__(, ) __VA_ARGS__)
+#elif LOG_FORMAT == LOG_FORMAT_JSON
+#define log_log(LEVEL, IGNORED, MESSAGE, ...) \
+	fprintf(LOG_FILE, "---\n{\"level\": \"" LEVEL "\",\"file\": \"" __FILE__ "\", \"function\": \"%s\", \"line\": " STRINGIZE(__LINE__) ", \"message\": \"" MESSAGE "\"}\n", __func__ __VA_OPT__(, ) __VA_ARGS__)
 #else
 #	define log_log(L, C, M, ...) /* Logs are disabled */
 #endif

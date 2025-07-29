@@ -186,7 +186,7 @@ static inline enum grocery grocery_from_cstring(const char* string)
 		return ITEM_YEAST;
 	if (strcmp("Pasta", string) == 0)
 		return ITEM_PASTA;
-	return grocery_upper_bound;
+	return grocery_count;
 }
 @endcode
 
