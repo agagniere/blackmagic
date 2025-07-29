@@ -43,6 +43,8 @@
  * - fold.h
  * @section gen Generating code
  * - enum.h
+ * @section misc Utilities
+ * - log.h
  *
  * @author Antoine GAGNIERE
  */

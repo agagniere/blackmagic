@@ -14,7 +14,11 @@ then building up increasingly complex tools anyone can use in their C projects.
 Add this project as a dependency to your C project today (using Zig, Nix or Conan) to get:
 - ANSI color codes as a string literal by writing `COLOR(UNDERLINED, BOLD, RED)` [`blackmagic/color.h`](include/blackmagic/color.h)
 - Convert enums to/from strings [`blackmagic/enum.h`](include/blackmagic/enum.h)
-- Logs with a compile-time configurable format and level [`blackmagic/log.h`](include/blackmagic/log.h)
+- Logs with a compile-time configurable format and level [`blackmagic/log.h`](include/blackmagic/log.h). Possible formats include:
+   - colored console
+   - JSON
+   - Markdown table
+   - custom callback
 
 ## Roadmap
 I would like to explain the following tricks in the book:

@@ -1,6 +1,6 @@
 .{
     .name = .blackmagic,
-    .version = "0.3.4",
+    .version = "0.4.0",
     .fingerprint = 0x87c7d97c3cab6feb,
     .paths = .{ "build.zig", "build.zig.zon", "include", "README.md", "LICENSE" },
 }
