@@ -68,6 +68,8 @@
  * So if you want to have a run-time threshold in your custom function,
  * be sure to set the compile-time threshold high enough,
  * possibly to @ref LOG_LEVEL_ALL
+ *
+ * @since 0.4
  */
 typedef void(*logging_callback)(unsigned level, const char* level_name, const char* file, const char* function, int line, const char* message, ...);
 
@@ -204,3 +206,26 @@ void LOG_FUNCTION (unsigned level, const char* level_name, const char* file, con
 #define log_force(MESSAGE, ...) \
 	log__log(LOG_LEVEL_NONE, "FORCE", COLOR(BOLD, WHITE, BG_GREEN), \
 	         MESSAGE __VA_OPT__(, ) __VA_ARGS__)
+
+///@cond
+#define _log_value(NAME, FLAG, VALUE) VALUE,
+///@endcond
+
+/** To be used with @ref log_structured */
+#define eval(FLAG, EXPRESSION) (#EXPRESSION, FLAG, EXPRESSION)
+
+#if LOG_FORMAT == LOG_FORMAT_JSON
+#define _log_name(NAME, FLAG, VALUE) "\""NAME "\": %" FLAG ", "
+#define log_structured(LEVEL, MESSAGE, ...) log_ ## LEVEL (MESSAGE "\", " FOR(EACH(__VA_ARGS__), PAIR_FLATTEN, _log_name) "\"bruh\":\"%i", FOR(EACH(__VA_ARGS__), PAIR_FLATTEN, _log_value) 0)
+#else
+///@cond
+#define _log_name(NAME, FLAG, VALUE) NAME " = %" FLAG ", "
+///@endcond
+/**
+ * Structured logging.
+ *
+ * Provide a list of fields of the form (name, flag, value), where flag is the printf format to be used.
+ * The @ref eval macro can be used to have the name be the expression itself
+ */
+#define log_structured(LEVEL, MESSAGE, ...) log_ ## LEVEL (MESSAGE "; " FOR(EACH(__VA_ARGS__), PAIR_FLATTEN, _log_name) , FOR(EACH(__VA_ARGS__), PAIR_FLATTEN, _log_value) 0)
+#endif
