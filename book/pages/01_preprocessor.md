@@ -4,9 +4,9 @@ Let's recap what we have learned so far about the C preprocessor:
  - It is a preliminary compilation step, happening before the compilation proper ([phase 7](phase7))
  - Its input is a stream of tokens
 
-What that means, is that the preprocessor manipulates text, not values:
+What that means is that the preprocessor manipulates text, not values:
  - It cannot use the result of expressions like `1 + 3`{l=C}, `sizeof(int)`{l=C}, or `strlen("Hello")`{l=C}[^strlen] that are evaluated during [phase 7](phase7).
- - What it _can_ do is more akin to string manipulation than math: it is meant to modify / generate code, not to do computation
+ - What it _can_ do is more akin to string manipulation than math: it is meant to modify / generate code, not to perform computation
 
 [^strlen]: While in theory not different from other functions, `strlen` _may_ be computed at compile-time in practice, as an inlined compiler built-in, when its input is a string literal.
 
@@ -20,7 +20,7 @@ Interacting with the preprocessor is done by starting a line with the `#` charac
 : Look for a file called _filename_ in folders provided to the preprocessor[^include] with the `-I` flag, and in standard folders configured at compiler installation.
   Once the file is found, its content is pasted verbatim in place of the `#include`{l=C} line
 
-[^include]: Here we are refering to the preprocessor program, often called `cpp`, that handles phases 1 to 4. More often than not it is called by the compiler, with the relevant flags being forwarded as-is.
+[^include]: Here we are referring to the preprocessor program, often called `cpp`, that handles phases 1 to 4. More often than not it is called by the compiler, with the relevant flags being forwarded as-is.
 
 `#include "`{l=c} _filename_ `"`{l=C}
 : Same as above, but look into the current directory first
@@ -101,7 +101,7 @@ _Source_: {bdg-link-primary-line}`cppreference <https://en.cppreference.com/w/c/
 : Equivalent to `#if !defined(MACRO)`{l=C}
 
 `#elif`{l=C} _condition2_ _B_ `#endif`{l=C}
-: Convenient way to chain multiple conditions without nesting, equivalent to:
+: A convenient way to chain multiple conditions without nesting, equivalent to:
   ```C
   #else
   #  if condition2
@@ -127,7 +127,7 @@ The `#if`{l=C} block needs to be resolved at preprocessor-time, so its condition
 - only integer literals and macros that evaluate to an integer literal can be used in the condition
 - all identifiers unknown to the preprocessor are replaced with `0`{l=C}
 
-Said differently:
+In other words:
 anything that is not a macro is replaced by `0`{l=C}, even if it has a value known at compile time (_e.g._ comparing to an enumerator is actually comparing to 0).
 
 :::{danger}
@@ -140,7 +140,7 @@ It means that typos are silently replaced by `0`{l=C}
 
 We have seen [previously](00_compilation.md#tokenizing) that the input of the preprocessor is a stream of tokens, each with a type.
 
-It should be of no surprise then, that the 2 preprocessor operators are about manipulating tokens.
+It should come as no surprise, then, that both preprocessor operators operate on tokens.
 
 `#`
 : Set token type to string literal
@@ -150,6 +150,6 @@ It should be of no surprise then, that the 2 preprocessor operators are about ma
 : Concatenate 2 tokens
 : {bdg-primary-line}`some` {bdg-primary-line}`thing` {octicon}`arrow-right` {bdg-primary-line}`something`
 
-Those operators can only be used on parameters of function-like macros.
+These operators can only be used on parameters of function-like macros.
 
 _Source_: {bdg-link-primary-line}`cppreference <https://en.cppreference.com/w/c/preprocessor/replace>`

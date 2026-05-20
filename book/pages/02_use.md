@@ -4,7 +4,7 @@ Before defining our own macros, let's see how they are used.
 
 ## Constants
 
-The most basic usage of macros is constants:
+The most basic use of macros is as constants:
 
 :::{preprocessed} 02_constants
 :output: markdown

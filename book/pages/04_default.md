@@ -9,7 +9,7 @@ Let's see how the tricks introduced in the previous chapter can be used to simul
 
 :::{admonition} Definition
 :class: info
-Optional arguments is a language feature that allows the caller of a function not to provide certain arguments, in which case a default value is used, chosen by the callee.
+Optional arguments are a language feature that allows the caller of a function not to provide certain arguments, in which case a default value is used, chosen by the callee.
 :::
 
 Here is an example in C++:
@@ -24,7 +24,7 @@ uint64_t fibonacci(uint8_t n, uint64_t f0 = 0, uint64_t f1 = 1)
 	}
 }
 ```
-This allows having the expected interface with a single argument, while also allowing the caller to choose the first two terms of the sequence.
+This gives callers the expected interface with a single argument, while also allowing the caller to choose the first two terms of the sequence.
 
 The caller may then write:
 ```{code-block} C++
@@ -80,7 +80,7 @@ unsigned long factorial(unsigned char n)
 	return factorial_aux(n, 1);
 }
 ```
-What you can see is that the `factorial`{l=C} function is just a wrapper to provide a default value. Which is perfectly fine as the auxiliary function will be inlined inside, but let's act like it's an unforgivable _faux pas_. Using obscure preprocessor tricks to solve non-existant problems is what we are here for anyway.
+What you can see is that the `factorial`{l=C} function is just a wrapper to provide a default value. This is perfectly fine — the auxiliary function will be inlined — but let's treat it as an unforgivable _faux pas_. Using obscure preprocessor tricks to solve non-existent problems is what we are here for anyway.
 
 Also, if you really care about performance, just use a lookup-table: there's only 20 factorial values that can fit on 64 bits
 :::::
