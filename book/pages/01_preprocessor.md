@@ -1,12 +1,20 @@
 # Preprocessor
 
-Let's recap what we have learned so far about the C preprocessor:
- - It is a preliminary compilation step, happening before the compilation proper ([phase 7](phase7))
- - Its input is a stream of tokens
+The [previous chapter](00_compilation.md) established that the preprocessor receives
+a stream of tokens from [phase 3](phase3). Its output is also a stream of tokens,
+passed directly into [phase 5](phase5).
 
-What that means is that the preprocessor manipulates text, not values:
- - It cannot use the result of expressions like `1 + 3`{l=C}, `sizeof(int)`{l=C}, or `strlen("Hello")`{l=C}[^strlen] that are evaluated during [phase 7](phase7).
- - What it _can_ do is more akin to string manipulation than math: it is meant to modify / generate code, not to perform computation
+The preprocessor is therefore purely a token manipulation tool.
+A source file with no preprocessor directives has a no-op phase 4: the token stream passes
+through unchanged.
+
+What it can do falls into two categories:
+ - **Generate** new tokens: inserting code the programmer didn't write explicitly
+ - **Modify** existing tokens: replace, remove, or transform them
+
+What it *cannot* do is evaluate expressions: `1 + 3`{l=C}, `sizeof(int)`{l=C},
+`strlen("Hello")`{l=C}[^strlen] are all resolved later, during [phase 7](phase7). The
+preprocessor only sees tokens, never their values.
 
 [^strlen]: While in theory not different from other functions, `strlen` _may_ be computed at compile-time in practice, as an inlined compiler built-in, when its input is a string literal.
 
@@ -153,3 +161,18 @@ It should come as no surprise, then, that both preprocessor operators operate on
 These operators can only be used on parameters of function-like macros.
 
 _Source_: {bdg-link-primary-line}`cppreference <https://en.cppreference.com/w/c/preprocessor/replace>`
+
+## Perspective
+
+The directives and operators above are pretty simple primitives: paste a file,
+replace a name, stringify a token, glue two tokens together.
+
+Yet because they operate *before* the language is parsed — on raw tokens, not on types,
+values, or scopes — they are unconstrained by what C itself allows.
+Where the language says "you cannot have optional arguments", the preprocessor can
+generate the right call. Where it says "you cannot iterate at compile-time", the
+preprocessor can unroll the loop. Where it forces repetition, the preprocessor can
+generate the repeated code from a single definition.
+
+With the full set of preprocessor tools catalogued, the [next chapter](02_use.md)
+shows them in action with existing macros — before we write any of our own.

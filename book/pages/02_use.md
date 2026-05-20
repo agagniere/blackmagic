@@ -1,6 +1,7 @@
 # Getting started: using existing macros
 
-Before defining our own macros, let's see how they are used.
+Before writing our own macros, it helps to see what using them looks like.
+Let's start with macros you can start using today, without external dependencies.
 
 ## Constants
 
@@ -46,7 +47,7 @@ There is an ill-advised third option: define the constant as static and define i
 
 ## Debugging constants
 
-Speaking of existing macro constants we can use, there exist certain macro constants, whose value is not always the same...
+Some macro constants are special: their value changes depending on *where* in the source they appear.
 Such behavior can only be achieved from within the compiler, and we will not be able to create our own.
 
 The C standard requires compilers to define certain special macros, without the need to include any header, including:
@@ -77,7 +78,17 @@ _Source_: {bdg-link-primary-line}`GNU <https://gcc.gnu.org/onlinedocs/gcc/Functi
 
 ## Function-like
 
-Macros can also take parameters:
+Macros can also take parameters, making them behave like functions. But they expand at compile-time, with no call overhead and no type constraints:
 :::{preprocessed} 02_functionlike
 :output: markdown
 :::
+
+With a feel for how macros are used, the [next chapter](03_log.md) puts them to work by writing a logging utility from scratch.
+
+## Recap
+
+In this chapter we've learned:
+1. Macros used as constants are replaced by their value before compilation — no runtime cost, no linking required
+1. Some compiler-provided macros (`__FILE__`, `__LINE__`) change value depending on where they appear in the source
+1. `__func__` is not a macro but a runtime constant — it cannot be concatenated with string literals
+1. Function-like macros take parameters and expand at compile-time, with no type constraints
