@@ -400,7 +400,7 @@ enum log_level {
 	ERROR   /**< The current operation will be aborted */,
 	WARNING /**< Abnormal situation */,
 	INFO    /**< Significant information */,
-	DEBUG   /**< Only relevant to the developpers */,
+	DEBUG   /**< Only relevant to the developers */,
 	TRACE   /**< Spam */,
 };
 ```
@@ -521,7 +521,7 @@ Sounds impossible ?
 
 ----
 
-_On a completely unrelated note, did you know about the `do` `while` loop ? It's similar to `while` but evalutates its condition after an iteration, which implies that it iterates at least once.
+_On a completely unrelated note, did you know about the `do` `while` loop ? It's similar to `while` but evaluates its condition after an iteration, which implies that it iterates at least once.
 Its syntax is_ :
 ```{code-block} C
 do {

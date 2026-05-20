@@ -22,7 +22,7 @@ Interacting with the preprocessor is done by starting a line with the `#` charac
 
 [^include]: Here we are referring to the preprocessor program, often called `cpp`, that handles phases 1 to 4. More often than not it is called by the compiler, with the relevant flags being forwarded as-is.
 
-`#include "`{l=c} _filename_ `"`{l=C}
+`#include "`{l=C} _filename_ `"`{l=C}
 : Same as above, but look into the current directory first
 
 _Source_ : {bdg-link-primary-line}`cppreference <https://en.cppreference.com/w/c/preprocessor/include>`
@@ -36,7 +36,7 @@ No assumption is made about the content of the included file, it technically doe
 :icon: light-bulb
 :animate: fade-in-slide-down
 
-To list the folders where you compiler's preprocessor looks for files, you can execute the following command:
+To list the folders where your compiler's preprocessor looks for files, you can execute the following command:
 ```bash
 $(cc -print-prog-name=cpp) -v < /dev/null
 ```

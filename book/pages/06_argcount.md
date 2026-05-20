@@ -34,7 +34,7 @@ int zero  = 0;
 int one   = 1;
 int three = 3;
 
-printf("Foo was called with %i arguments", 2);
+printf("FOO was called with %i arguments", 2);
 ```
 
 ## Solution
