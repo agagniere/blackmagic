@@ -51,7 +51,7 @@
 ///@}
 
 /**
- * Expands to a string literal containig an escape code setting the terminal color.
+ * Expands to a string literal containing an escape code setting the terminal color.
  * @section example Example
  * @code{.c}
  * COLOR(BOLD, ITALIC, UNDERLINED, BLUE)

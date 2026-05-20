@@ -14,7 +14,7 @@ int main(int arg_count, char** arg_values, char** environment)
 	{
 		if ((equal = strchr(*environment, '=')) == NULL)
 		{
-			dprintf(STDERR_FILENO, "Expected an assignation but got \"%s\"\n", *environment);
+			dprintf(STDERR_FILENO, "Expected an assignment but got \"%s\"\n", *environment);
 			return EXIT_FAILURE;
 		}
 		*equal = '\0';

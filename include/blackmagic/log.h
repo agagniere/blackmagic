@@ -83,7 +83,7 @@ typedef void(*logging_callback)(unsigned level, const char* level_name, const ch
 #define LOG_LEVEL_ERROR   3 /**< The current operation will abort */
 #define LOG_LEVEL_WARNING 4 /**< Abnormal situation */
 #define LOG_LEVEL_INFO    6 /**< Significant information */
-#define LOG_LEVEL_DEBUG   8 /**< Only relevant to the developpers */
+#define LOG_LEVEL_DEBUG   8 /**< Only relevant to the developers */
 #define LOG_LEVEL_TRACE  10 /**< Spam */
 #define LOG_LEVEL_ALL    15 /**< Output all logs */
 ///@}
@@ -183,7 +183,7 @@ void LOG_FUNCTION (unsigned level, const char* level_name, const char* file, con
 #endif
 
 #if LOG_LEVEL >= LOG_LEVEL_DEBUG
-/** Report information relevant to the developpers */
+/** Report information relevant to the developers */
 #	define log_debug(MESSAGE, ...) \
 		log__log(LOG_LEVEL_DEBUG, "DEBUG", COLOR(BOLD, BLUE), \
 		         MESSAGE __VA_OPT__(, ) __VA_ARGS__)
