@@ -1,8 +1,6 @@
 # A log library
 
-Let's use all the tricks learned so far to write our first macros.
-
-It will be the occasion to introduce more tricks, and to create a logging utility header that may be used in real projects.
+Let's put the tricks learned so far to work on a first real macro: a logging utility ready for actual projects. We'll pick up a few more tricks along the way.
 
 ## Objective
 
@@ -54,8 +52,8 @@ printf("DEBUG|`folder/file.c`|`main`|12|Hello world !\n");
 printf("ERROR|`folder/file.c`|`foobar`|42|Failed to open `%s`: %s\n", file_name, strerror(errno));
 ```
 
-Starting from this, let's use increasingly advanced tricks to end-up with the desired interface,
-while remaining functionally equivalent to the simplest solution.
+From here, we'll apply increasingly advanced tricks to arrive at the desired interface,
+staying functionally equivalent to the simplest solution.
 
 :::{dropdown} Bonus feature
 :icon: light-bulb
@@ -201,7 +199,7 @@ The magic macro `__VA_OPT__` can be used to remove certain characters when `__VA
 ::::
 :::::
 
-Let's not rush it, as it is tempting to simply add `...` and `__VA_ARGS__` like so:
+The tempting approach is to just add `...` and `__VA_ARGS__` like so:
 ```{code-block} prepro
 #define log_log(LEVEL, MESSAGE, ...) \
     printf("|" LEVEL "|`" __FILE__ "`|`%s`|%i|" MESSAGE "\n", __func__, __LINE__, __VA_ARGS__)
@@ -291,7 +289,7 @@ printf("%s = %i\n", "arg_count", arg_count);
 ```
 :::::
 
-OK that is working as expected, what about a computation ?
+That works as expected, what about a computation ?
 
 :::::{card}
 Transforming arbitrary code into a string
@@ -305,7 +303,7 @@ Transforming arbitrary code into a string
 To be exact, the `#` operator applies to the `VARIABLE` identifier, and creates a string literal from whatever it expands to, which doesn't even need to be valid C !
 :::::
 
-Works out of the box, very nice.
+Works as-is: the `#` operator handles arbitrary tokens, not just identifiers.
 
 Now that it is clear, we can concatenate the string literals at compile time:
 ```{code-block} prepro
@@ -382,7 +380,7 @@ Two objectives remain:
 
 While our logs do have a log level associated, there's currently no way to filter out certain levels.
 
-Because we're only creating a simplistic header-only logging library, we will not allow arbitrary filters (like outputting debug and warning but not info and error), only a threshold level: only logs as critical as the threshold or more shall be output.
+Because we're creating a simple header-only logging library, we will not allow arbitrary filters (like enabling debug and warning while suppressing info and error), just a threshold: only logs at or above it will be printed.
 
 This implies that there must be a way to compare levels.
 Currently, log levels are just string literals like `"DEBUG"`{l=C} and `"ERROR"`{l=C}, and cannot be compared meaningfully to determine which is "more critical".
@@ -421,7 +419,7 @@ log(INFO, "Bonjour");     // Logged
 log(DEBUG, "Hello");      // Logged
 log(TRACE, "Gunten tag"); // Not logged
 ```
-Something like that, right ?
+Works, but do you see the footgun ?
 
 We have to be careful when a macro expands to more than a single statement, because calling a macro may look like a single statement, so users may omit braces in conditions:
 
@@ -510,7 +508,7 @@ if (cond)
 else
 	D;
 ```
-This compiles fine, but introduces an inconsistent syntax. It will not be understood by you text editor, that will become crazy and add indent all code after that.
+This compiles fine, but introduces an inconsistent syntax. It will not be understood by your text editor, that will become crazy and add indent all code after that.
 ::::
 :::::
 
@@ -548,7 +546,7 @@ Success !
 ## Recap
 
 In this chapter we've learned:
-1. Adjacent literal strings are concatenated automatically at compile-time
+1. Adjacent string literals are concatenated automatically at compile-time
 1. Logs can be enriched with the magic constants `__FILE__`, `__func__` and `__LINE__`
 1. Function-like macros can be variadic, allowing zero or more extra arguments
    1. The extra arguments can be pasted with `__VA_ARGS__`
