@@ -4,7 +4,7 @@ Before defining our own macros, let's see how they are used.
 
 ## Constants
 
-The most basic usage of macros is constants:
+The most basic use of macros is as constants:
 
 :::{preprocessed} 02_constants
 :output: markdown
@@ -55,7 +55,7 @@ The C standard requires compilers to define certain special macros, without the 
 
 _Source_: {bdg-link-primary-line}`GNU <https://gcc.gnu.org/onlinedocs/cpp/Standard-Predefined-Macros.html>`
 
-Additionnally, the GNU C extension include:
+Additionally, the GNU C extension include:
 - `__FILE_NAME__` similar to `__FILE__` but only includes the file name, excluding the path
 
 _Source_: {bdg-link-primary-line}`GNU <https://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html>`

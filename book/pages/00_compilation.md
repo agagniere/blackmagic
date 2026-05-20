@@ -10,7 +10,7 @@ The C Standard defines 8 phases of translation, where the output of a phase is t
 1. Interpret the encoding of the source files (_e.g._ replace `\r\n` with `\n`)
 1. Delete newlines preceded by `\`
 3. {#phase3}
-   **Tokenizing**: group characters that belong together, assiging a "type" to each group. ([More on that later](#tokenizing))
+   **Tokenizing**: group characters that belong together, assigning a "type" to each group. ([More on that later](#tokenizing))
 4. {#phase4}
    **Preprocessing**:
    1. The preprocessor is executed
@@ -62,7 +62,7 @@ sequenceDiagram
 
 ## Tokenizing
 
-To best undestand what kind of input [phase 4](phase4) is working with, we must detail what [phase 3](phase3) does.
+To best understand what kind of input [phase 4](phase4) is working with, we must detail what [phase 3](phase3) does.
 (However, _how_ it does it is outside the scope of this book[^fsm])
 
 [^fsm]: If you are interested, learn about finite state machines with this excellent lecture : [Theory of computation](https://youtube.com/playlist?list=PLbtzT1TYeoMjNOGEiaRmm_vMIwUAidnQz&si=iNoQkSVbbMKVzr_P)
@@ -78,7 +78,7 @@ This particular tokenizer recognizes and can emit the following types of tokens:
 | inclusion                   | the name of a file the content of which shall be pasted | {bdg-secondary-line}`<math.h>` {bdg-secondary-line}`"libft.h"`                  |
 | identifier                  | a keyword or name (type, variable, function, ...)       | {bdg-primary-line}`size_t` {bdg-primary-line}`strlen` {bdg-primary-line}`while` |
 | preprocessing number        | integer and floating constants                          | {bdg-danger-line}`42` {bdg-danger-line}`1.61` {bdg-danger-line}`3.E-12`         |
-| operator or ponctuator      |                                                         | {bdg-dark-line}`+` {bdg-dark-line}`{` {bdg-dark-line}`<<=`                      |
+| operator or punctuator      |                                                         | {bdg-dark-line}`+` {bdg-dark-line}`{` {bdg-dark-line}`<<=`                      |
 | string or character literal |                                                         | {bdg-success-line}`Nice name` {bdg-success-line}`A`                             |
 | space                       |                                                         | {material-regular}`space_bar`                                                   |
 | newline                     |                                                         | {material-regular}`keyboard_return`                                             |
@@ -123,7 +123,7 @@ A stream of tokens
 :::
 
 ```{important}
-The characters `"` and `'` are never emmited as tokens, their presence in the source code affects the type of the token that will be emitted:
+The characters `"` and `'` are never emitted as tokens, their presence in the source code affects the type of the token that will be emitted:
 | Input                   | Output                                                                                                                                        |
 |:------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------|
 | `print(my_name)`{l=C}   | {bdg-primary-line}`print` {bdg-dark-line}`(` {bdg-primary-line}`my_name` {bdg-dark-line}`)`                                                   |
