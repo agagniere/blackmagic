@@ -39,7 +39,7 @@ ERROR|`folder/file.c`|`foobar`|42|Failed to open `baz.csv`: No such file or dire
 
 That will be rendered here as:
 :::{card}
-Mardown table rendered
+Markdown table rendered
 ^^^
 | Level | File            | Function | Line | Message                                             |
 |:------|:----------------|:---------|-----:|:----------------------------------------------------|
@@ -54,8 +54,8 @@ printf("DEBUG|`folder/file.c`|`main`|12|Hello world !\n");
 printf("ERROR|`folder/file.c`|`foobar`|42|Failed to open `%s`: %s\n", file_name, strerror(errno));
 ```
 
-Starting from this, let's use increasingly andvanced tricks to end-up with the desired interface,
-while remaining functionnaly equivalent to the simplest solution.
+Starting from this, let's use increasingly advanced tricks to end-up with the desired interface,
+while remaining functionally equivalent to the simplest solution.
 
 :::{dropdown} Bonus feature
 :icon: light-bulb
@@ -133,7 +133,7 @@ printf("ERROR"  "|`"  __FILE__  "`|`%s`|"  "42"  "|"  "Failed to open `%s`: %s" 
 As you can see, it is slightly less trivial than the previous step, as it involves adding an argument to `printf`, before the user provided arguments, if any.
 
 :::{note}
-`__func__` and `__FUNCTION__` are two names of the exact same variable, so they can be used interchangably. But the lower case `__func__` emphasize the fact that it is not a compile-time macro, as opposed to `__FILE__`.
+`__func__` and `__FUNCTION__` are two names of the exact same variable, so they can be used interchangeably. But the lower case `__func__` emphasize the fact that it is not a compile-time macro, as opposed to `__FILE__`.
 :::
 
 Next, we have the line number to display. By using the same trick as the function name, we can include it at run-time:
@@ -161,7 +161,7 @@ That is nice, but we also want to be able to pass additional arguments to printf
 Printf can take a [variable number of arguments](https://en.cppreference.com/w/c/io/fprintf), making it what is called a "variadic function".
 It is made possible by [a language feature](https://en.cppreference.com/w/c/variadic), that affects how parameters are placed on the stack and accessed by the callee.
 
-Fortunatly, the C language also features a way for macros to be variadic, which is the next trick we'll be using.
+Fortunately, the C language also features a way for macros to be variadic, which is the next trick we'll be using.
 
 ## Define a variadic macro
 
@@ -361,7 +361,7 @@ And so, the solution is to have a macro that:
 Success ! We can integrate this in our logging macros:
 
 ::::{card}
-Step 7 - Line number concaternated at compile-time
+Step 7 - Line number concatenated at compile-time
 ^^^
 :::{preprocessed} 03_stringline3
 :output: markdown
@@ -510,7 +510,7 @@ if (cond)
 else
 	D;
 ```
-This compiles fine, but introduces an inconsistant syntax. It will not be understood by you text editor, that will become crazy and add indent all code after that.
+This compiles fine, but introduces an inconsistent syntax. It will not be understood by you text editor, that will become crazy and add indent all code after that.
 ::::
 :::::
 
@@ -551,7 +551,7 @@ In this chapter we've learned:
 1. Adjacent literal strings are concatenated automatically at compile-time
 1. Logs can be enriched with the magic constants `__FILE__`, `__func__` and `__LINE__`
 1. Function-like macros can be variadic, allowing zero or more extra arguments
-   1. The extra arguements can be pasted with `__VA_ARGS__`
+   1. The extra arguments can be pasted with `__VA_ARGS__`
    1. And `__VA_OPT__()` can be used to remove characters when zero extra arguments are passed
 1. The `#` operator can create a string literal from anything
    1. But it affects how macro arguments are expanded
