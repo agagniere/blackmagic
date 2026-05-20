@@ -80,7 +80,7 @@ unsigned long factorial(unsigned char n)
 	return factorial_aux(n, 1);
 }
 ```
-What you can see is that the `factorial`{l=C} function is just a wrapper to provide a default value. Which is perfectly fine as the auxillary function will be inlined inside, but let's act like it's an unforgivable _faux pas_. Using obscure preprocessor tricks to solve non-existant problems is what we are here for anyway.
+What you can see is that the `factorial`{l=C} function is just a wrapper to provide a default value. Which is perfectly fine as the auxiliary function will be inlined inside, but let's act like it's an unforgivable _faux pas_. Using obscure preprocessor tricks to solve non-existant problems is what we are here for anyway.
 
 Also, if you really care about performance, just use a lookup-table: there's only 20 factorial values that can fit on 64 bits
 :::::

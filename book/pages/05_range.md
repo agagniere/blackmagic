@@ -5,7 +5,7 @@
 This page is a draft
 :::
 
-OK so we now know how to have a few optional arguments with a default value, but what if we want to do something entierly different depending on the number of arguments provided ?
+OK so we now know how to have a few optional arguments with a default value, but what if we want to do something entirely different depending on the number of arguments provided ?
 
 ## Objective
 
@@ -23,7 +23,7 @@ How will it look like in C ? Well it's up to you, here are a few propositions:
 :::::{tab-set}
 ::::{tab-item} Syntax 1
 ```{code-block} C
-:caption: Indented correctly by you text editor by default
+:caption: Indented correctly by your text editor by default
 for (int in_range(i, 5))
 	/* 0 1 2 3 4 */;
 for (int in_range(i, 3, 8))

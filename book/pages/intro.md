@@ -3,7 +3,7 @@
 If you are reading this book, it means you already know what the C preprocessor is, right ? ...right ? Did you even write C before ?
 
 Yes ? Then let's start from there. The preprocessor is what you interact with when you start a line with `#`.
-It is used most notably to `#incude`{l=C} an other file, _i.e._ to paste the verbatim content of that file, in place of the include directive.
+It is used most notably to `#include`{l=C} another file, _i.e._ to paste the verbatim content of that file, in place of the include directive.
 
 Let's say that again, what the preprocessor does, is to replace an expression, like `#include <toto.h>`{l=C} with characters, here the content of `toto.h`.
 

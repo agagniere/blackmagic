@@ -4,7 +4,7 @@ Let's recap what we have learned so far about the C preprocessor:
  - It is a preliminary compilation step, happening before the compilation proper ([phase 7](phase7))
  - Its input is a stream of tokens
 
-What that  means, is that the preprocessor manipulates text, not values:
+What that means, is that the preprocessor manipulates text, not values:
  - It cannot use the result of expressions like `1 + 3`{l=C}, `sizeof(int)`{l=C}, or `strlen("Hello")`{l=C}[^strlen] that are evaluated during [phase 7](phase7).
  - What it _can_ do is more akin to string manipulation than math: it is meant to modify / generate code, not to do computation
 
@@ -81,7 +81,7 @@ _Source_: {bdg-link-secondary-line}`stack overflow <https://stackoverflow.com/qu
 #### Function-like
 
 `#define`{l=C} _identifier_`(`{l=C}_parameters_`)`{l=C} _replacement_
-: After this line, anytime _identifier_(_values_) appears in the source code, it will be replaced by _replacement_, replacing any occurence of a _parameter_ by the _value_ provided by the caller.
+: After this line, anytime _identifier_(_values_) appears in the source code, it will be replaced by _replacement_, replacing any occurrence of a _parameter_ by the _value_ provided by the caller.
 
 `#define`{l=C} _identifier_`(`{l=C}_parameters_`, ...)`{l=C} _replacement_
 : Similar to the previous definition, but zero or more extra parameters can be supplied. The identifier `__VA_ARGS__`{l=C} will be replaced by those extra parameters.
@@ -111,10 +111,10 @@ _Source_: {bdg-link-primary-line}`cppreference <https://en.cppreference.com/w/c/
   ```
 
 `#elifdef`{l=C} _MACRO_
-: Added in C23 for constistency, equivalent to `#elif defined(MACRO)`{l=C}
+: Added in C23 for consistency, equivalent to `#elif defined(MACRO)`{l=C}
 
 `#elifndef`{l=C} _MACRO_
-: Added in C23 for constistency, equivalent to `#elif !defined(MACRO)`{l=C}
+: Added in C23 for consistency, equivalent to `#elif !defined(MACRO)`{l=C}
 
 _Source_: {bdg-link-primary-line}`cppreference <https://en.cppreference.com/w/c/preprocessor/conditional>`
 

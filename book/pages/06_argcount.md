@@ -48,9 +48,9 @@ Two macros are involved:
 - The `ARG_10`{l=C} macro takes any number of arguments, and expands to the tenth argument.
 - The `ARG_COUNT`{l=C} macro takes any number of arguments, forwards them to `ARG_10`{l=C}, adding the 10 arguments `9, 8, 7, 6, 5, 4, 3, 2, 1, 0`{l=C}.
 
-We can then see that if no arguments is passed to `ARG_COUNT`{l=C}, the 10th argument is `0`, and for every argument added, the extra arguements are pushed to the right.
+We can then see that if no arguments is passed to `ARG_COUNT`{l=C}, the 10th argument is `0`, and for every argument added, the extra arguments are pushed to the right.
 
-It is quite similar to the optional argument trick shown in the previous chapter: a variadic macro allows the user not to provide enough arguement to another macro, that in turn discards extraneous arguments.
+It is quite similar to the optional argument trick shown in the previous chapter: a variadic macro allows the user not to provide enough arguments to another macro, that in turn discards extraneous arguments.
 
 ## Usage example
 
