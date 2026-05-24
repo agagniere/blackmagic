@@ -1,8 +1,7 @@
 # C Compilation
 
 The compilation of a C program consists of several steps, called _translation phases_.
-Preprocessing is one of those phases, and to better understand what can and cannot be done with the preprocessor,
-we'll have to learn a bit about what each phase does, and how they are integrated together.
+Preprocessing is one of those phases. To understand what it can and cannot do, one must first understand where it fits in that sequence: what each surrounding phase produces and receives, and how they are integrated together.
 
 ## Phases of translation
 
@@ -90,7 +89,7 @@ When a comment is encountered, a single space ({material-regular}`space_bar`) is
 If adjacent newlines are encountered, a single one may be emitted.
 ```
 
-It's easier to understand with an example:
+This is best illustrated with an example:
 
 ::::{card}
 Source file
@@ -133,11 +132,11 @@ The characters `"` and `'` are never emitted as tokens, their presence in the so
 | `x = 'a';`{l=C}         | {bdg-primary-line}`x` {material-regular}`space_bar` {bdg-dark-line}`=` {material-regular}`space_bar` {bdg-success-line}`a` {bdg-dark-line}`;` |
 ```
 
-With this model of token streams in mind, we can now look at what the preprocessor does with them.
+With this model of token streams in mind, the [next chapter](01_preprocessor.md) covers what the preprocessor does with them.
 
 ## Recap
 
-In this chapter we've learned:
+This chapter covered:
 1. C compilation consists of 8 translation phases, of which preprocessing is phase 4
 1. The tokenizer (phase 3) groups characters into typed tokens; the preprocessor never sees raw characters
 1. String and character delimiters (`"` and `'`) affect the *type* of the token emitted, but are never tokens themselves
