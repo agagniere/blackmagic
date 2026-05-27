@@ -64,7 +64,7 @@ Related compiler-provided identifiers include:
 - `__PRETTY_FUNCTION__` is similar but includes the whole signature, including return type and parameters
 
 :::{warning}
-They are not macros, but runtime constants. As the GNU documentation puts it:
+`__FUNCTION__` and `__PRETTY_FUNCTION__` are not macros, but runtime constants. As the GNU documentation puts it:
 > These identifiers are variables, not preprocessor macros, and may not be used to initialize char arrays or be concatenated with string literals.
 :::
 

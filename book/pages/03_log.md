@@ -65,12 +65,12 @@ It could be useful to have a way to automatically include in the log what the co
 An example would be to write:
 ```{code-block} C
 log_eval(2 + 2);
-log_eval(strlen(a) - strlen(b));
+log_eval(strlen(s));
 ```
 and expect logs that contain:
 ```{code-block} C
 2 + 2 = 4
-strlen(a) - strlen(b) = 8
+strlen(s) = 8
 ```
 :::
 
@@ -253,12 +253,14 @@ int answer = 12;
 log_debug("answer = %i", answer);
 ```
 This requires repeating the variable name, once inside a string literal, once as an identifier to get its value.
-The preprocessor's `#` operator, introduced in [an earlier section](01_preprocessor.md#the-operators), can produce a string literal from a token.
-So we just have to make the macro repeat its argument twice, using the `#` operator on it the first time
+
+To do better, we can use the preprocessor operator `#`, introduced [in an earlier section](01_preprocessor.md#the-operators), which can produce a string literal from one or more tokens.
 
 :::{important}
 We have to keep in mind that this operator can only be applied to a parameter of a function-like macro.
 :::
+
+We simply define a function-like macro with an argument, then use the argument twice, applying the `#` operator on one of the occurences.
 
 :::::{card}
 Transforming an identifier into a string
