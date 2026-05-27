@@ -21,9 +21,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Doxygen
-        run: sudo apt-get -y update && sudo apt-get -y install doxygen 
+        run: sudo apt-get -y update && sudo apt-get -y install doxygen
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
       - name: Generate html
         run: Open=echo ClangFormat=clang-format-18 CC=clang-18 make -C book html
       - name: Upload artifact
