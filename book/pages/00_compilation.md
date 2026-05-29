@@ -1,14 +1,13 @@
 # C Compilation
 
-The compilation of a C program is made out of several steps, called _translation phases_.
-Preprocessing is one of such phases, and to better understand what can and cannot be done with the preprocessor,
-we'll have to learn a bit about what each phase does, and how they are integrated together.
+The compilation of a C program consists of several steps, called _translation phases_.
+Preprocessing is one of those phases. To understand what it can and cannot do, one must first understand where it fits in that sequence: what each surrounding phase produces and receives, and how they are integrated together.
 
 ## Phases of translation
 
 The C Standard defines 8 phases of translation, where the output of a phase is the input of the next :
 1. Interpret the encoding of the source files (_e.g._ replace `\r\n` with `\n`)
-1. Delete newlines preceded by `\`
+2. Delete newlines preceded by `\`
 3. {#phase3}
    **Tokenizing**: group characters that belong together, assigning a "type" to each group. ([More on that later](#tokenizing))
 4. {#phase4}
@@ -16,12 +15,13 @@ The C Standard defines 8 phases of translation, where the output of a phase is t
    1. The preprocessor is executed
    1. Each file introduced with the `#include`{l=C} directive goes through phases 1 through 4, recursively.
    1. At the end of this phase, all preprocessor directives are removed from the source.
-1. Escape sequences in string literals are interpreted (_e.g._ the two adjacent characters `\` `n` are replaced by a single byte with the value 10)
+5. {#phase5}
+   Escape sequences in string literals are interpreted (_e.g._ the two adjacent characters `\` `n` are replaced by a single byte with the value 10)
 6. {#phase6}
    Adjacent string literals are concatenated
 7. {#phase7}
    **Compilation**: the tokens are syntactically and semantically analyzed and translated as a translation unit.
-1. **Linking**: Translation units and library components needed to satisfy external references are collected into a program image which contains information needed for execution in its execution environment (the OS).
+8. **Linking**: Translation units and library components needed to satisfy external references are collected into a program image which contains information needed for execution in its execution environment (the OS).
 
 _Source_ : {bdg-link-primary-line}`cppreference <https://en.cppreference.com/w/c/language/translation_phases>`
 
@@ -89,7 +89,7 @@ When a comment is encountered, a single space ({material-regular}`space_bar`) is
 If adjacent newlines are encountered, a single one may be emitted.
 ```
 
-It's easier to understand with an example:
+This is best illustrated with an example:
 
 ::::{card}
 Source file
@@ -131,3 +131,13 @@ The characters `"` and `'` are never emitted as tokens, their presence in the so
 | `x = a;`{l=C}           | {bdg-primary-line}`x` {material-regular}`space_bar` {bdg-dark-line}`=` {material-regular}`space_bar` {bdg-primary-line}`a` {bdg-dark-line}`;` |
 | `x = 'a';`{l=C}         | {bdg-primary-line}`x` {material-regular}`space_bar` {bdg-dark-line}`=` {material-regular}`space_bar` {bdg-success-line}`a` {bdg-dark-line}`;` |
 ```
+
+With this model of token streams in mind, the [next chapter](01_preprocessor.md) covers what the preprocessor does with them.
+
+## Recap
+
+This chapter covered:
+1. C compilation consists of 8 translation phases, of which preprocessing is phase 4
+1. The tokenizer (phase 3) groups characters into typed tokens; the preprocessor never sees raw characters
+1. String and character delimiters (`"` and `'`) affect the *type* of the token emitted, but are never tokens themselves
+1. Adjacent string literals are concatenated in phase 6, before compilation proper

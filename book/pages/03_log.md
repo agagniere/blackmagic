@@ -1,6 +1,6 @@
 # A log library
 
-Let's put the tricks learned so far to work on a first real macro: a logging utility ready for actual projects. We'll pick up a few more tricks along the way.
+This chapter applies the techniques introduced so far to a practical macro: a logging utility suitable for real projects. Additional techniques are introduced as needed.
 
 ## Objective
 
@@ -65,12 +65,12 @@ It could be useful to have a way to automatically include in the log what the co
 An example would be to write:
 ```{code-block} C
 log_eval(2 + 2);
-log_eval(strlen(a) - strlen(b));
+log_eval(strlen(s));
 ```
 and expect logs that contain:
 ```{code-block} C
 2 + 2 = 4
-strlen(a) - strlen(b) = 8
+strlen(s) = 8
 ```
 :::
 
@@ -102,7 +102,7 @@ In addition to the user-provided string, a variable part of the log output is th
 
 We don't want the user to have to provide it, as it would then have no guarantee of being up to date and would therefore be useless.
 
-Luckily, the compiler can provide this information, as we have seen in the [last chapter](02_use.md#debugging-constants).
+Conveniently, the compiler can provide this information, as we have seen in the [last chapter](02_use.md#debugging-constants).
 Most conveniently, it is provided as a string literal, allowing us to concatenate it with the rest of the string at compile-time:
 ```{code-block} C
 :caption: Step 2 - Ask the compiler for the file name
@@ -116,7 +116,7 @@ In this instance, we use `__FILE__` and not `__FILE_NAME__`, to be able to diffe
 
 ## Current function and line
 
-OK, the file name was easy, but what about the function name ?
+The file name was straightforward; the function name presents a different challenge.
 
 As seen in the [last chapter](02_use.md#debugging-constants), the name of the function is provided by a magic constant `__func__`.
 But as it is not a string literal, it cannot be concatenated at compile-time.
@@ -128,7 +128,7 @@ printf("DEBUG"  "|`"  __FILE__  "`|`%s`|"  "12"  "|"  "Hello world !"           
 printf("ERROR"  "|`"  __FILE__  "`|`%s`|"  "42"  "|"  "Failed to open `%s`: %s"  "\n", __func__, file_name, strerror(errno));
 ```
 
-As you can see, it is slightly less trivial than the previous step, as it involves adding an argument to `printf`, before the user provided arguments, if any.
+This step is slightly more involved than the previous one, as it involves adding an argument to `printf` before the user-provided arguments, if any.
 
 :::{note}
 `__func__` and `__FUNCTION__` are two names of the exact same variable, so they can be used interchangeably. But the lower case `__func__` emphasize the fact that it is not a compile-time macro, as opposed to `__FILE__`.
@@ -252,13 +252,15 @@ int answer = 12;
 
 log_debug("answer = %i", answer);
 ```
-But that requires repeating the name of the variable twice, could there be a way to obtain a string from an identifier ?
+This requires repeating the variable name, once inside a string literal, once as an identifier to get its value.
 
-Well of course ! We've seen it [here](01_preprocessor.md#the-operators), the preprocessor has the `#` operator, that turns an identifer into a string literal.
+To do better, we can use the preprocessor operator `#`, introduced [in an earlier section](01_preprocessor.md#the-operators), which can produce a string literal from one or more tokens.
 
 :::{important}
 We have to keep in mind that this operator can only be applied to a parameter of a function-like macro.
 :::
+
+We simply define a function-like macro with an argument, then use the argument twice, applying the `#` operator on one of the occurences.
 
 :::::{card}
 Transforming an identifier into a string
@@ -289,7 +291,7 @@ printf("%s = %i\n", "arg_count", arg_count);
 ```
 :::::
 
-That works as expected, what about a computation ?
+This behaves as expected. The same approach extends to arbitrary expressions.
 
 :::::{card}
 Transforming arbitrary code into a string
@@ -303,7 +305,7 @@ Transforming arbitrary code into a string
 To be exact, the `#` operator applies to the `VARIABLE` identifier, and creates a string literal from whatever it expands to, which doesn't even need to be valid C !
 :::::
 
-Works as-is: the `#` operator handles arbitrary tokens, not just identifiers.
+This also works correctly: the `#` operator applies to arbitrary token sequences, not just identifiers.
 
 Now that it is clear, we can concatenate the string literals at compile time:
 ```{code-block} prepro
@@ -366,7 +368,7 @@ Step 7 - Line number concatenated at compile-time
 :::
 ::::
 
-Looks like we achieved several of our objectives:
+At this point, several of the stated objectives have been met:
  - The interface
  - The markdown table output
  - The inclusion of debug info (file, function, line)
@@ -389,7 +391,7 @@ Currently, log levels are just string literals like `"DEBUG"`{l=C} and `"ERROR"`
 
 Solution: Make log levels integers.
 
-And we are clean coders right ? So we'll define an enum:
+A well-typed representation is preferable: an enum provides named constants with implicit integer ordering:
 
 ```{code-block} C
 :tab-width: 4
@@ -419,7 +421,7 @@ log(INFO, "Bonjour");     // Logged
 log(DEBUG, "Hello");      // Logged
 log(TRACE, "Gunten tag"); // Not logged
 ```
-Works, but do you see the footgun ?
+This is functional, but introduces a subtle hazard.
 
 We have to be careful when a macro expands to more than a single statement, because calling a macro may look like a single statement, so users may omit braces in conditions:
 
@@ -463,7 +465,7 @@ if (cond1)
 ```
 ::::
 
-"That's why I always put curly braces in my conditions" I hear you say. Fair enough. But there is a simple way to avoid this pitfall without forcing a coding style on the users.
+A coding convention of always using braces around conditionals would prevent this specific issue. However, it is possible to make the macro safe regardless of the caller's style.
 
 :::::{card}
 First attempt: adding braces in the macro
@@ -519,17 +521,10 @@ OK so we would like a way:
 
 Sounds impossible ?
 
-----
-
-_On a completely unrelated note, did you know about the `do` `while` loop ? It's similar to `while` but evaluates its condition after an iteration, which implies that it iterates at least once.
-Its syntax is_ :
-```{code-block} C
-do {
-	/* statements */
-} while (/* condition */);
-```
-
-Wait, is that a `;` that doesn't add a statement at the end ? And it iterates at least once ? Well, if that's not proof that there is an Intelligent Designer, I don't know what is.
+While we don't need to loop, the `do`-`while` construct has a quirk:
+its syntax requires a semicolon after the closing condition, making that semicolon part of the construct itself.
+In our instance, it allows the caller's natural trailing semicolon to be absorbed, not creating an extra statement that would break the `if`-`else`.
+Also important for our use-case, its body is a compound statement, and can be executed exactly once by simply hard-coding its condition to 0.
 
 :::::{card}
 Second attempt: Using "do while"
@@ -543,6 +538,29 @@ Second attempt: Using "do while"
 
 Success !
 
+## Configurable output format
+
+The output format is currently hardcoded to markdown.
+To let the user choose, we use the same pattern as for the log level: named constants,
+a default value via `#ifndef`, and `#if` to select the implementation.
+
+:::::{card}
+Step 8 - Configurable output format
+^^^
+:::{preprocessed} 03_output_format
+:::
+:::::
+
+The user picks the format at compile time, either via a compiler flag:
+```{code-block} bash
+cc -DLOG_FORMAT=LOG_FORMAT_MARKDOWN main.c
+```
+or by defining it before the include:
+```{code-block} C
+#define LOG_FORMAT LOG_FORMAT_MARKDOWN
+#include "log.h"
+```
+
 ## Recap
 
 In this chapter we've learned:
@@ -554,3 +572,5 @@ In this chapter we've learned:
 1. The `#` operator can create a string literal from anything
    1. But it affects how macro arguments are expanded
    1. As a consequence when the arguments are macros themselves a wrapper may be used to force expansion
+1. A macro that expands to multiple statements should be wrapped in `do { ... } while (false)` to behave safely in all contexts
+1. `#ifndef` / `#if` let the user configure a header's behaviour at compile time — log level and output format are both examples of this pattern

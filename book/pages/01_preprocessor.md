@@ -1,12 +1,20 @@
 # Preprocessor
 
-Let's recap what we have learned so far about the C preprocessor:
- - It is a preliminary compilation step, happening before the compilation proper ([phase 7](phase7))
- - Its input is a stream of tokens
+The [previous chapter](00_compilation.md) established that the preprocessor receives
+a stream of tokens from [phase 3](phase3). Its output is also a stream of tokens,
+passed directly into [phase 5](phase5).
 
-What that means is that the preprocessor manipulates text, not values:
- - It cannot use the result of expressions like `1 + 3`{l=C}, `sizeof(int)`{l=C}, or `strlen("Hello")`{l=C}[^strlen] that are evaluated during [phase 7](phase7).
- - What it _can_ do is more akin to string manipulation than math: it is meant to modify / generate code, not to perform computation
+The preprocessor is therefore purely a token manipulation tool.
+A source file with no preprocessor directives has a no-op phase 4: the token stream passes
+through unchanged.
+
+What it can do falls into two categories:
+ - **Generate** new tokens: inserting code the programmer didn't write explicitly
+ - **Modify** existing tokens: replace, remove, or transform them
+
+What it *cannot* do is evaluate expressions: `1 + 3`{l=C}, `sizeof(int)`{l=C},
+`strlen("Hello")`{l=C}[^strlen] are all resolved later, during [phase 7](phase7). The
+preprocessor only sees tokens, never their values.
 
 [^strlen]: While in theory not different from other functions, `strlen` _may_ be computed at compile-time in practice, as an inlined compiler built-in, when its input is a string literal.
 
@@ -73,7 +81,7 @@ _Source_: {bdg-link-secondary-line}`stack overflow <https://stackoverflow.com/qu
 #### Object-like
 
 `#define`{l=C} _identifier_ _replacement_
-: After this line, anytime _identifier_ appears in the source code, it will be replaced by _replacement_
+: After this directive, each occurrence of _identifier_ in the source code is replaced by _replacement_.
 
 `#define`{l=C} _identifier_
 : Equivalent to `#define identifier 1`{l=prepro}
@@ -81,7 +89,7 @@ _Source_: {bdg-link-secondary-line}`stack overflow <https://stackoverflow.com/qu
 #### Function-like
 
 `#define`{l=C} _identifier_`(`{l=C}_parameters_`)`{l=C} _replacement_
-: After this line, anytime _identifier_(_values_) appears in the source code, it will be replaced by _replacement_, replacing any occurrence of a _parameter_ by the _value_ provided by the caller.
+: After this directive, each occurrence of _identifier_(_values_) in the source code is replaced by _replacement_, with each _parameter_ name substituted by the corresponding _value_ at the invocation site.
 
 `#define`{l=C} _identifier_`(`{l=C}_parameters_`, ...)`{l=C} _replacement_
 : Similar to the previous definition, but zero or more extra parameters can be supplied. The identifier `__VA_ARGS__`{l=C} will be replaced by those extra parameters.
@@ -101,7 +109,7 @@ _Source_: {bdg-link-primary-line}`cppreference <https://en.cppreference.com/w/c/
 : Equivalent to `#if !defined(MACRO)`{l=C}
 
 `#elif`{l=C} _condition2_ _B_ `#endif`{l=C}
-: A convenient way to chain multiple conditions without nesting, equivalent to:
+: An alternative form for chaining multiple conditions without nesting, equivalent to:
   ```C
   #else
   #  if condition2
@@ -138,9 +146,7 @@ It means that typos are silently replaced by `0`{l=C}
 
 ## The operators
 
-We have seen [previously](00_compilation.md#tokenizing) that the input of the preprocessor is a stream of tokens, each with a type.
-
-It should come as no surprise, then, that both preprocessor operators operate on tokens.
+Both operators act directly on tokens: it's the only unit the preprocessor works with.
 
 `#`
 : Set token type to string literal
@@ -153,3 +159,15 @@ It should come as no surprise, then, that both preprocessor operators operate on
 These operators can only be used on parameters of function-like macros.
 
 _Source_: {bdg-link-primary-line}`cppreference <https://en.cppreference.com/w/c/preprocessor/replace>`
+
+## Perspective
+
+The directives and operators above are a small set of low-level primitives: file inclusion,
+name substitution, token stringification, and token concatenation.
+
+Yet because they operate *before* the language is parsed — on raw tokens, not on types,
+values, or scopes — they are unconstrained by what C itself allows.
+The preprocessor cannot change the language, but it can generate whatever C code is needed,
+making restrictions invisible at the source level.
+
+With the full set of preprocessor tools catalogued, [chapter 2](02_use.md) illustrates their use through existing macros; [chapter 3](03_log.md) then applies them to construct a logging utility.
