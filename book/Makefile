@@ -20,7 +20,6 @@ DoxygenFolder := doxygen
 PreproFolder  := preprocessed
 ExecFolder    := cache
 OutputFolder  := outputs
-VenvFolder    := .env
 
 # Generated Files
 DoxygenHtml   := $(DoxygenFolder)/html/index.html
@@ -41,10 +40,7 @@ Open        ?= open
 ClangFormat ?= clang-format
 
 SphinxOptions ?= -c . -n
-Sphinx        ?= sphinx-build
-
-VenvName     := sphinx
-VenvActivate := $(VenvFolder)/bin/activate
+Sphinx        := uv run sphinx-build
 
 Version ?= $(shell git tag --sort '-version:refname' --merged | head -1)
 
@@ -95,13 +91,14 @@ doc_clean: clean ## Remove all generated documentation
 	$(RM) -r $(SphinxFolder) $(DoxygenFolder)
 
 full_clean: doc_clean ## Remove all generated files, including python local environment
-	$(RM) -r $(VenvFolder)
+	$(RM) -r .venv
 
 .PHONY: clean doc_clean full_clean
 
 ##@ Misc
 
-env: $(VenvActivate) ## Install the python virtual environment with dependencies
+env: pyproject.toml ## Sync python dependencies
+	uv sync
 
 # Non phony rules
 
@@ -113,7 +110,7 @@ $(ProcessedSamples): $(PreproFolder)/%.i: $(SampleFolder)/%.c | $(PreproFolder)
 	temp="$(@D)/_raw_$(@F)" ; \
 	$(CC) -E $(CPPFLAGS) -CC $< -o "$$temp" ; \
 	discard=$$(grep -E "^[#].*?$(<F)" "$$temp" -n | cut -d':' -f1 | tail -1) ; \
-	tail +$$(( $$discard + 1 )) "$$temp" | $(ClangFormat) > $@
+	tail --lines +$$(( $$discard + 1 )) "$$temp" | $(ClangFormat) > $@
 
 # Compile code samples
 $(Executables): $(ExecFolder)/%.exe: $(SampleFolder)/%.c | $(ExecFolder)
@@ -127,13 +124,6 @@ $(Outputs): $(OutputFolder)/%.txt: $(ExecFolder)/%.exe | $(OutputFolder)
 $(ExecFolder) $(OutputFolder) $(PreproFolder):
 	mkdir -p $@
 
-# Create a virtual environment with dependencies
-$(VenvActivate): requirements.txt
-	test -d $(VenvFolder) || python3 -m venv --prompt $(VenvName) --upgrade-deps $(VenvFolder)
-	. $@
-	pip install --requirement $<
-
 # Run sphinx to generate documentation
-$(SphinxPdf) $(SphinxMan) $(SphinxHtml): $(SphinxFolder)/%: $(Pages) $(SourceCode) $(ProcessedSamples) $(Outputs) $(DoxygenXml) Makefile conf.py | $(VenvActivate)
-	test -z "$(VIRTUAL_ENV)" && . $|
+$(SphinxPdf) $(SphinxMan) $(SphinxHtml): $(SphinxFolder)/%: $(Pages) $(SourceCode) $(ProcessedSamples) $(Outputs) $(DoxygenXml) Makefile conf.py
 	PROJECT_VERSION=$(Version) $(Sphinx) -M $(*D) "$(SourceFolder)" "$(SphinxFolder)" $(SphinxOptions) $(O)

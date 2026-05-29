@@ -17,7 +17,7 @@ from lexer import CustomLexer as PreproLexer
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project   = 'Black Magic'
-copyright = '2023-2024'
+copyright = '2023-2026'
 author    = 'Antoine Gagniere'
 release   = os.environ.get('PROJECT_VERSION', 'Unknown')
 language  = 'en'
