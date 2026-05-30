@@ -65,6 +65,16 @@ raw_help: ## Display the help without color
 
 .PHONY: default help raw_help
 
+##@ Samples
+
+preprocess: $(ProcessedSamples) ## Preprocess samples to visualize the compiler's input
+
+compile: $(Executables) ## Compile the preprocessed samples into binary
+
+run: $(Outputs) ## Execute samples an store their output
+
+.PHONY: preprocess compile run
+
 ##@ Generate documentation
 
 doxygen_html: $(DoxygenHtml) ## Generate and open a techical documentation website
@@ -100,7 +110,7 @@ full_clean: doc_clean ## Remove all generated files, including python local envi
 env: pyproject.toml ## Sync python dependencies
 	uv sync
 
-# Non phony rules
+# Concrete rules
 
 $(DoxygenHtml) $(DoxygenXml) &: Doxyfile.cfg $(SourceCode) Makefile
 	PROJECT_VERSION=$(Version) OUTPUT_DIRECTORY=$(DoxygenFolder) INPUT=$(HeaderFolder) doxygen $<
