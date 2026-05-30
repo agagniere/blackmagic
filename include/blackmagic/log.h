@@ -68,6 +68,8 @@
  * So if you want to have a run-time threshold in your custom function,
  * be sure to set the compile-time threshold high enough,
  * possibly to @ref LOG_LEVEL_ALL
+ *
+ * @since 0.4
  */
 typedef void(*logging_callback)(unsigned level, const char* level_name, const char* file, const char* function, int line, const char* message, ...);
 
